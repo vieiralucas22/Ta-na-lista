@@ -16,11 +16,18 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
@@ -31,6 +38,7 @@ import androidx.compose.ui.unit.sp
 import com.example.tanalista.R
 import com.example.tanalista.ui.theme.BackgroundColor
 import com.example.tanalista.ui.theme.ButtonBackground
+import com.example.tanalista.ui.theme.GrayBackground
 import com.example.tanalista.ui.theme.Green
 import com.example.tanalista.ui.theme.Purple
 import com.example.tanalista.ui.theme.White
@@ -63,7 +71,7 @@ fun CartView() {
 
 @Composable
 fun HeaderHome() {
-    Column(modifier = Modifier.padding(24.dp)) {
+    Column(modifier = Modifier.padding(24.dp, 32.dp)) {
         Row(
             modifier = Modifier
                 .fillMaxWidth(), horizontalArrangement = Arrangement.Start
@@ -107,15 +115,19 @@ fun HeaderHome() {
 
 @Composable
 fun ListHome() {
+    var isChecked by rememberSaveable { mutableStateOf(false) }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(
-                color = BackgroundColor,
+                color = White,
                 shape = RoundedCornerShape(24.dp, 24.dp, 0.dp, 0.dp)
             )
             .padding(24.dp)
-    ) { }
+    ) {
+
+    }
 }
 
 @Composable
@@ -128,16 +140,68 @@ fun HeaderSubPageButton(
     iconTint: Color = White
 ) {
     Button(modifier = modifier, colors = buttonColors, onClick = {}) {
-        Row (modifier = Modifier.padding(0.dp, 4.dp)){
+        Row(
+            modifier = Modifier.padding(0.dp, 4.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
             Icon(
-                modifier = Modifier.size(20.dp),
+                modifier = Modifier.size(18.dp),
                 painter = painterResource(iconResourceId),
                 contentDescription = "Icon",
                 tint = iconTint
             )
             Spacer(Modifier.width(10.dp))
-            Text(text = text, color = textColor, fontSize = 16.sp)
+            Text(text = text, color = textColor, fontSize = 18.sp)
         }
+    }
+}
+
+@Composable
+fun ProductItem(
+    title: String = "",
+    price: String = "",
+    iconResourceId: Int = 0,
+    isChecked: Boolean = false,
+    onCheckedChange: (Boolean) -> Unit
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(color = GrayBackground, shape = RoundedCornerShape(20.dp))
+            .padding(12.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+
+            Icon(
+                painter = painterResource(iconResourceId),
+                contentDescription = "Icon",
+                tint = Purple
+            )
+
+            Spacer(Modifier.width(8.dp))
+
+            Column {
+                Text(
+                    text = title,
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.SemiBold,
+                    color = ButtonBackground
+                )
+                Spacer(Modifier.height(4.dp))
+                Text(text = price, fontSize = 12.sp)
+            }
+        }
+
+        Checkbox(
+            modifier = Modifier.background(
+                color = Color.Transparent,
+                shape = RoundedCornerShape(999.dp)
+            ),
+            checked = isChecked,
+            onCheckedChange = onCheckedChange
+        )
     }
 }
 
