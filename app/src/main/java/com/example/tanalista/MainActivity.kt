@@ -4,40 +4,39 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteScaffold
-import androidx.compose.material3.adaptive.navigationsuite.NavigationSuiteType
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.PreviewScreenSizes
-import androidx.compose.ui.unit.dp
+import androidx.lifecycle.ViewModelProvider
 import com.example.tanalista.ui.views.CartView
 import com.example.tanalista.ui.views.ChatView
 import com.example.tanalista.ui.views.ProfileView
+import com.example.tanalista.viewmodel.HomeViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
+        val homeViewModel = ViewModelProvider.create(this)[HomeViewModel::class.java]
+
         setContent {
 
-            MyApplicationApp()
+            MyApplicationApp(homeViewModel)
         }
     }
 }
 
-@PreviewScreenSizes
 @Composable
-fun MyApplicationApp() {
-    var currentDestination by rememberSaveable { mutableStateOf(AppDestinations.HOME) }
+fun MyApplicationApp(homeViewModel: HomeViewModel) {
 
+    var currentDestination by rememberSaveable { mutableStateOf(AppDestinations.HOME) }
     NavigationSuiteScaffold(
         navigationSuiteItems = {
             AppDestinations.entries.forEach {
@@ -57,7 +56,7 @@ fun MyApplicationApp() {
         },
         ) {
         when (currentDestination) {
-            AppDestinations.HOME -> CartView()
+            AppDestinations.HOME -> CartView(homeViewModel)
             AppDestinations.CHAT -> ChatView()
             AppDestinations.PROFILE -> ProfileView()
         }

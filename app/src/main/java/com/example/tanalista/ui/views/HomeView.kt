@@ -22,7 +22,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.saveable.rememberSaveable
@@ -42,10 +41,11 @@ import com.example.tanalista.ui.theme.GrayBackground
 import com.example.tanalista.ui.theme.Green
 import com.example.tanalista.ui.theme.Purple
 import com.example.tanalista.ui.theme.White
+import com.example.tanalista.viewmodel.HomeViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun CartView() {
+fun CartView(homeViewModel: HomeViewModel) {
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(
@@ -203,11 +203,4 @@ fun ProductItem(
             onCheckedChange = onCheckedChange
         )
     }
-}
-
-
-@Preview
-@Composable
-fun CartViewPreview() {
-    CartView()
 }
