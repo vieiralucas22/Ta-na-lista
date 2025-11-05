@@ -12,6 +12,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
@@ -23,15 +25,13 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.tanalista.R
@@ -63,7 +63,7 @@ fun CartView(homeViewModel: HomeViewModel) {
                     .background(ButtonBackground)
             ) {
                 HeaderHome()
-                ListHome()
+                ListHome(homeViewModel)
             }
         }
     )
@@ -114,8 +114,8 @@ fun HeaderHome() {
 }
 
 @Composable
-fun ListHome() {
-    var isChecked by rememberSaveable { mutableStateOf(false) }
+fun ListHome(homeViewModel: HomeViewModel) {
+    val productItems by homeViewModel.allProducts.observeAsState()
 
     Column(
         modifier = Modifier
@@ -126,7 +126,25 @@ fun ListHome() {
             )
             .padding(24.dp)
     ) {
-
+        productItems?.let { product ->
+            LazyColumn(content = {
+                itemsIndexed(product) { index, item ->
+                    ProductItem(
+                        item.name,
+                        item.price.toString(),
+                        R.drawable.ic_drink,
+                        item.isInCart,
+                        {
+                                homeViewModel.moveProductBetweenLists(it, item)
+                        })
+                }
+            })
+        } ?: Text(
+            modifier = Modifier.fillMaxWidth(),
+            text = "No items",
+            textAlign = TextAlign.Center,
+            fontSize = 16.sp
+        )
     }
 }
 
@@ -167,6 +185,7 @@ fun ProductItem(
     Row(
         modifier = Modifier
             .fillMaxWidth()
+            .padding(0.dp,0.dp,0.dp, 4.dp)
             .background(color = GrayBackground, shape = RoundedCornerShape(20.dp))
             .padding(12.dp),
         horizontalArrangement = Arrangement.SpaceBetween,

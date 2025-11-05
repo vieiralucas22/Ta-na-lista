@@ -6,5 +6,6 @@ enum class ProductCategory {
     Clean,
     Barbecue,
     Utilities,
-    Toilet
+    Toilet,
+    Undefined
 }
