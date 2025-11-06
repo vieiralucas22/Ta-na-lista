@@ -1,6 +1,9 @@
 package com.example.tanalista.viewmodel
 
 import android.app.Application
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
@@ -11,8 +14,9 @@ import kotlinx.coroutines.launch
 class HomeViewModel (application: Application) : AndroidViewModel(application) {
 
     private val productRepository = ProductRepository(application.applicationContext)
-
     val allProducts = productRepository.getAllProducts().asLiveData()
+
+    var isDialogOpen by mutableStateOf(false)
 
     fun moveProductBetweenLists(isChecked: Boolean, product: ProductEntity) {
 
@@ -22,6 +26,16 @@ class HomeViewModel (application: Application) : AndroidViewModel(application) {
             else
                 productRepository.removeProductFromCart(product)
         }
+    }
+
+    fun openDialog()
+    {
+        isDialogOpen = true
+    }
+
+    fun closeDialog()
+    {
+        isDialogOpen = false
     }
 
 }

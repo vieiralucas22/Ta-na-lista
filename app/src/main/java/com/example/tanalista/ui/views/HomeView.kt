@@ -35,6 +35,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.tanalista.R
+import com.example.tanalista.ui.dialogs.CartDialog
 import com.example.tanalista.ui.theme.BackgroundColor
 import com.example.tanalista.ui.theme.ButtonBackground
 import com.example.tanalista.ui.theme.GrayBackground
@@ -49,11 +50,11 @@ fun CartView(homeViewModel: HomeViewModel) {
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { }
+                onClick = { homeViewModel.openDialog() }
             ) {
                 Icon(
                     painter = painterResource(R.drawable.ic_plus),
-                    contentDescription = "Adicionar"
+                    contentDescription = "Icon"
                 )
             }
         }, content = {
@@ -64,6 +65,7 @@ fun CartView(homeViewModel: HomeViewModel) {
             ) {
                 HeaderHome()
                 ListHome(homeViewModel)
+                CartDialog(homeViewModel)
             }
         }
     )
@@ -135,7 +137,7 @@ fun ListHome(homeViewModel: HomeViewModel) {
                         R.drawable.ic_drink,
                         item.isInCart,
                         {
-                                homeViewModel.moveProductBetweenLists(it, item)
+                            homeViewModel.moveProductBetweenLists(it, item)
                         })
                 }
             })
@@ -185,7 +187,7 @@ fun ProductItem(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(0.dp,0.dp,0.dp, 4.dp)
+            .padding(0.dp, 0.dp, 0.dp, 4.dp)
             .background(color = GrayBackground, shape = RoundedCornerShape(20.dp))
             .padding(12.dp),
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -219,7 +221,8 @@ fun ProductItem(
                 shape = RoundedCornerShape(999.dp)
             ),
             checked = isChecked,
-            onCheckedChange = onCheckedChange
-        )
+            onCheckedChange = onCheckedChange,
+
+            )
     }
 }
