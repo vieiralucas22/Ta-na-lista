@@ -20,6 +20,7 @@ import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -42,9 +43,9 @@ fun CartDialog(viewModel: HomeViewModel) {
     var quantity by remember { mutableStateOf("") }
     var price by remember { mutableStateOf("") }
     var isDropdownExpanded by remember { mutableStateOf(false) }
-    val options = listOf("Alimentos", "Higiene", "Limpeza", "Bebidas", "Outros")
-    var selectedOption by remember { mutableStateOf(options[0]) }
+    var selectedOption by remember { mutableStateOf("Select a category") }
     var canAddToCart by remember { mutableStateOf(false) }
+    val categories by viewModel.allCategories.collectAsState()
 
     if (viewModel.isDialogOpen) {
         Dialog(onDismissRequest = { viewModel.closeDialog() }) {
@@ -102,11 +103,11 @@ fun CartDialog(viewModel: HomeViewModel) {
                         expanded = isDropdownExpanded,
                         onDismissRequest = { isDropdownExpanded = false }
                     ) {
-                        options.forEach { option ->
+                        categories.forEach { option ->
                             DropdownMenuItem(
-                                text = { Text(option) },
+                                text = { Text(option.categoryName) },
                                 onClick = {
-                                    selectedOption = option
+                                    selectedOption = option.categoryName
                                     isDropdownExpanded = false
                                 }
                             )

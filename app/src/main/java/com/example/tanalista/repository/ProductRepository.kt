@@ -20,6 +20,5 @@ class ProductRepository (context: Context) {
 
     suspend fun removeProductFromCart(product: ProductEntity) {
         productDao.removeProductFromCart(product.id)
-
     }
 }
