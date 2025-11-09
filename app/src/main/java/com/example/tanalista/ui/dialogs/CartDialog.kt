@@ -19,6 +19,7 @@ import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -33,6 +34,8 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import com.example.tanalista.ui.theme.ButtonBackground
+import com.example.tanalista.ui.theme.White
 import com.example.tanalista.viewmodel.HomeViewModel
 
 
@@ -91,12 +94,19 @@ fun CartDialog(viewModel: HomeViewModel) {
                     OutlinedTextField(
                         value = selectedOption,
                         onValueChange = {},
+                        enabled = false,
                         label = { Text("Category") },
                         trailingIcon = {
                             ExposedDropdownMenuDefaults.TrailingIcon(expanded = isDropdownExpanded)
                         },
                         modifier = Modifier
-                            .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryEditable, true)
+                            .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryEditable, true),
+                        colors = TextFieldDefaults.colors(
+                            disabledContainerColor = White,
+                            disabledLabelColor = ButtonBackground,
+                            disabledIndicatorColor = ButtonBackground,
+                            disabledTextColor = ButtonBackground
+                        )
                     )
 
                     ExposedDropdownMenu(
