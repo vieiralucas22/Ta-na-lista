@@ -18,6 +18,7 @@ import com.example.tanalista.ui.views.CartView
 import com.example.tanalista.ui.views.ChatView
 import com.example.tanalista.ui.views.ProfileView
 import com.example.tanalista.viewmodel.HomeViewModel
+import com.example.tanalista.viewmodel.dialog.CartDialogViewModel
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,16 +26,16 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
 
         val homeViewModel = ViewModelProvider.create(this)[HomeViewModel::class.java]
+        val cartDialogViewModel = ViewModelProvider.create(this)[CartDialogViewModel::class.java]
 
         setContent {
-
-            MyApplicationApp(homeViewModel)
+            MyApplicationApp(homeViewModel, cartDialogViewModel)
         }
     }
 }
 
 @Composable
-fun MyApplicationApp(homeViewModel: HomeViewModel) {
+fun MyApplicationApp(homeViewModel: HomeViewModel, cartDialogViewModel: CartDialogViewModel, ) {
 
     var currentDestination by rememberSaveable { mutableStateOf(AppDestinations.HOME) }
     NavigationSuiteScaffold(
@@ -56,7 +57,7 @@ fun MyApplicationApp(homeViewModel: HomeViewModel) {
         },
         ) {
         when (currentDestination) {
-            AppDestinations.HOME -> CartView(homeViewModel)
+            AppDestinations.HOME -> CartView(homeViewModel, cartDialogViewModel)
             AppDestinations.CHAT -> ChatView()
             AppDestinations.PROFILE -> ProfileView()
         }

@@ -36,12 +36,11 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.example.tanalista.ui.theme.ButtonBackground
 import com.example.tanalista.ui.theme.White
-import com.example.tanalista.viewmodel.HomeViewModel
-
+import com.example.tanalista.viewmodel.dialog.CartDialogViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CartDialog(viewModel: HomeViewModel) {
+fun CartDialog(viewModel: CartDialogViewModel) {
     var productName by remember { mutableStateOf("") }
     var quantity by remember { mutableStateOf("") }
     var price by remember { mutableStateOf("") }

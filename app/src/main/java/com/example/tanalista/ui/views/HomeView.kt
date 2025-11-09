@@ -1,6 +1,7 @@
 package com.example.tanalista.ui.views
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -43,14 +44,15 @@ import com.example.tanalista.ui.theme.Green
 import com.example.tanalista.ui.theme.Purple
 import com.example.tanalista.ui.theme.White
 import com.example.tanalista.viewmodel.HomeViewModel
+import com.example.tanalista.viewmodel.dialog.CartDialogViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun CartView(homeViewModel: HomeViewModel) {
+fun CartView(homeViewModel: HomeViewModel, cartDialogViewModel: CartDialogViewModel) {
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { homeViewModel.openDialog() }
+                onClick = { cartDialogViewModel.openDialog() }
             ) {
                 Icon(
                     painter = painterResource(R.drawable.ic_plus),
@@ -65,7 +67,7 @@ fun CartView(homeViewModel: HomeViewModel) {
             ) {
                 HeaderHome()
                 ListHome(homeViewModel)
-                CartDialog(homeViewModel)
+                CartDialog(cartDialogViewModel)
             }
         }
     )
@@ -117,7 +119,7 @@ fun HeaderHome() {
 
 @Composable
 fun ListHome(homeViewModel: HomeViewModel) {
-    val productItems by homeViewModel.allProducts.observeAsState()
+   // val productItems by homeViewModel.allProducts.observeAsState()
 
     Column(
         modifier = Modifier
@@ -126,27 +128,30 @@ fun ListHome(homeViewModel: HomeViewModel) {
                 color = White,
                 shape = RoundedCornerShape(24.dp, 24.dp, 0.dp, 0.dp)
             )
-            .padding(24.dp)
+            .padding(24.dp),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        productItems?.let { product ->
-            LazyColumn(content = {
-                itemsIndexed(product) { index, item ->
-                    ProductItem(
-                        item.name,
-                        item.price.toString(),
-                        R.drawable.ic_drink,
-                        item.isInCart,
-                        {
-                            homeViewModel.moveProductBetweenLists(it, item)
-                        })
-                }
-            })
-        } ?: Text(
-            modifier = Modifier.fillMaxWidth(),
-            text = "No items",
-            textAlign = TextAlign.Center,
-            fontSize = 16.sp
-        )
+//        productItems?.let { product ->
+//            LazyColumn(content = {
+//                itemsIndexed(product) { index, item ->
+//                    ProductItem(
+//                        item.name,
+//                        item.price.toString(),
+//                        R.drawable.ic_drink,
+//                        item.isInCart,
+//                        {
+//                            homeViewModel.moveProductBetweenLists(it, item)
+//                        })
+//                }
+//            })
+//        } ?: Text(
+//            modifier = Modifier.fillMaxWidth(),
+//            text = "No items",
+//            textAlign = TextAlign.Center,
+//            fontSize = 16.sp
+//        )
+        EmptyCartSection()
     }
 }
 
@@ -224,5 +229,18 @@ fun ProductItem(
             onCheckedChange = onCheckedChange,
 
             )
+    }
+}
+
+@Composable
+fun EmptyCartSection() {
+    Column (modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
+
+        Image(painter = painterResource(R.drawable.empty_cart), contentDescription = "Empty cart")
+
+        Text(
+            text = "Please click on the below button to add items in your list!",
+            textAlign = TextAlign.Center,
+            fontSize = 16.sp)
     }
 }
