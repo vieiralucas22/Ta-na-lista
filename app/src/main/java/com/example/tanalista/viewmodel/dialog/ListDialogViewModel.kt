@@ -7,12 +7,16 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tanalista.repository.ProductCategoryRepository
+import com.example.tanalista.repository.ProductRepository
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 
-class CartDialogViewModel(application: Application) : AndroidViewModel(application){
+class ListDialogViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val productCategoryRepository = ProductCategoryRepository(application.applicationContext)
+    private val productCategoryRepository =
+        ProductCategoryRepository(application.applicationContext)
+    private val productRepository = ProductRepository(application.applicationContext)
 
     val allCategories = productCategoryRepository.getAllCategories().stateIn(
         viewModelScope,
@@ -22,13 +26,21 @@ class CartDialogViewModel(application: Application) : AndroidViewModel(applicati
 
     var isDialogOpen by mutableStateOf(false)
 
-    fun openDialog()
-    {
+    fun openDialog() {
         isDialogOpen = true
     }
 
-    fun closeDialog()
-    {
+    fun closeDialog() {
         isDialogOpen = false
+    }
+
+    fun addItemToList(
+        productName: String,
+        quantity: String,
+        price: String,
+        category: String,
+        isInCart: Boolean
+    ) {
+
     }
 }

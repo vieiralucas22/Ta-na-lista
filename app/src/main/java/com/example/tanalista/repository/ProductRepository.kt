@@ -9,13 +9,13 @@ class ProductRepository (context: Context) {
 
     val productDao = TaNaListaDatabase.getDatabase(context).ProductDao()
 
-    fun getAllProducts() : Flow<List<ProductEntity>>{
+    fun getAllProducts() : Flow<List<ProductEntity>> {
         return productDao.getAllProducts()
     }
 
-    suspend fun addProductToCart(product: ProductEntity)
+    fun getAllListProducts() : Flow<List<ProductEntity>>
     {
-        productDao.addProductToCart(product.id)
+        return productDao.getAllProducts();
     }
 
     suspend fun removeProductFromCart(product: ProductEntity) {

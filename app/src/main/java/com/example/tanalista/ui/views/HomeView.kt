@@ -44,15 +44,15 @@ import com.example.tanalista.ui.theme.Green
 import com.example.tanalista.ui.theme.Purple
 import com.example.tanalista.ui.theme.White
 import com.example.tanalista.viewmodel.HomeViewModel
-import com.example.tanalista.viewmodel.dialog.CartDialogViewModel
+import com.example.tanalista.viewmodel.dialog.ListDialogViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun CartView(homeViewModel: HomeViewModel, cartDialogViewModel: CartDialogViewModel) {
+fun CartView(homeViewModel: HomeViewModel, listDialogViewModel: ListDialogViewModel) {
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { cartDialogViewModel.openDialog() }
+                onClick = { listDialogViewModel.openDialog() }
             ) {
                 Icon(
                     painter = painterResource(R.drawable.ic_plus),
@@ -67,7 +67,7 @@ fun CartView(homeViewModel: HomeViewModel, cartDialogViewModel: CartDialogViewMo
             ) {
                 HeaderHome()
                 ListHome(homeViewModel)
-                CartDialog(cartDialogViewModel)
+                CartDialog(listDialogViewModel)
             }
         }
     )
@@ -119,7 +119,7 @@ fun HeaderHome() {
 
 @Composable
 fun ListHome(homeViewModel: HomeViewModel) {
-   // val productItems by homeViewModel.allProducts.observeAsState()
+    //val productItems by homeViewModel.allListProducts.observeAsState()
 
     Column(
         modifier = Modifier
@@ -145,12 +145,7 @@ fun ListHome(homeViewModel: HomeViewModel) {
 //                        })
 //                }
 //            })
-//        } ?: Text(
-//            modifier = Modifier.fillMaxWidth(),
-//            text = "No items",
-//            textAlign = TextAlign.Center,
-//            fontSize = 16.sp
-//        )
+//        } ?: EmptyCartSection()
         EmptyCartSection()
     }
 }

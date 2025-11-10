@@ -36,16 +36,16 @@ import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.example.tanalista.ui.theme.ButtonBackground
 import com.example.tanalista.ui.theme.White
-import com.example.tanalista.viewmodel.dialog.CartDialogViewModel
+import com.example.tanalista.viewmodel.dialog.ListDialogViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CartDialog(viewModel: CartDialogViewModel) {
+fun CartDialog(viewModel: ListDialogViewModel) {
     var productName by remember { mutableStateOf("") }
     var quantity by remember { mutableStateOf("") }
     var price by remember { mutableStateOf("") }
     var isDropdownExpanded by remember { mutableStateOf(false) }
-    var selectedOption by remember { mutableStateOf("Select a category") }
+    var category by remember { mutableStateOf("Select a category") }
     var canAddToCart by remember { mutableStateOf(false) }
     val categories by viewModel.allCategories.collectAsState()
 
@@ -69,8 +69,8 @@ fun CartDialog(viewModel: CartDialogViewModel) {
                 OutlinedTextField(
                     value = quantity,
                     onValueChange = { quantity = it },
-                    label = { Text(text = "Quantity")},
-                    keyboardOptions = KeyboardOptions (
+                    label = { Text(text = "Quantity") },
+                    keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Decimal,
                     )
                 )
@@ -79,7 +79,7 @@ fun CartDialog(viewModel: CartDialogViewModel) {
                     value = price,
                     onValueChange = { price = it },
                     label = { Text(text = "Price") },
-                    keyboardOptions = KeyboardOptions (
+                    keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Decimal,
                     )
                 )
@@ -91,7 +91,7 @@ fun CartDialog(viewModel: CartDialogViewModel) {
                     onExpandedChange = { isDropdownExpanded = !isDropdownExpanded }
                 ) {
                     OutlinedTextField(
-                        value = selectedOption,
+                        value = category,
                         onValueChange = {},
                         enabled = false,
                         label = { Text("Category") },
@@ -116,7 +116,7 @@ fun CartDialog(viewModel: CartDialogViewModel) {
                             DropdownMenuItem(
                                 text = { Text(option.categoryName) },
                                 onClick = {
-                                    selectedOption = option.categoryName
+                                    category = option.categoryName
                                     isDropdownExpanded = false
                                 }
                             )
@@ -124,7 +124,11 @@ fun CartDialog(viewModel: CartDialogViewModel) {
                     }
                 }
 
-                Row (modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.End){
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.End
+                ) {
 
                     Text(text = "Add to cart?", fontWeight = FontWeight.SemiBold)
 
@@ -133,12 +137,28 @@ fun CartDialog(viewModel: CartDialogViewModel) {
                             color = Color.Transparent
                         ),
                         checked = canAddToCart,
-                        onCheckedChange = {canAddToCart = it},
+                        onCheckedChange = { canAddToCart = it },
                     )
                 }
 
-                Row (modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
-                    Button(modifier = Modifier.padding(8.dp).weight(1f), onClick = {},) {
+                Row(
+                    modifier = Modifier.fillMaxWidth(),
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    Button(
+                        modifier = Modifier
+                            .padding(8.dp)
+                            .weight(1f),
+                        onClick = {
+                            viewModel.addItemToList(
+                                productName,
+                                quantity,
+                                price,
+                                category,
+                                isInCart = canAddToCart
+                            )
+                        },
+                    ) {
                         Text(text = "Save", fontSize = 18.sp)
                     }
                 }
