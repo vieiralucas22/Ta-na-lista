@@ -16,3 +16,5 @@ val White = Color(0xffffffff)
 val Green = Color(0xffaff41e)
 val Purple = Color(0xff603aed)
 val GrayBackground = Color(0xffeeeeec)
+val Error = Color(0xFFEF0221)
+

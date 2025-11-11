@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.example.tanalista.ui.theme.ButtonBackground
+import com.example.tanalista.ui.theme.Error
 import com.example.tanalista.ui.theme.White
 import com.example.tanalista.viewmodel.dialog.ListDialogViewModel
 
@@ -54,12 +55,19 @@ fun CartDialog(viewModel: ListDialogViewModel) {
                 OutlinedTextField(
                     value = viewModel.productName,
                     onValueChange = { viewModel.productName = it },
-                    label = { Text(text = "Product name") }
+                    label = { Text(text = "Product name") },
+                    isError = viewModel.isInvalid,
+                    colors = TextFieldDefaults.colors(
+                        errorIndicatorColor = Error,
+                        errorContainerColor = White,
+                        unfocusedContainerColor = White,
+                        focusedContainerColor = White,
+                    )
                 )
 
                 OutlinedTextField(
                     value = viewModel.quantity,
-                    onValueChange = { viewModel.quantity = it },
+                    onValueChange = { viewModel.handleWithQuantityValueChange(it) },
                     label = { Text(text = "Quantity") },
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Decimal,
@@ -68,7 +76,7 @@ fun CartDialog(viewModel: ListDialogViewModel) {
 
                 OutlinedTextField(
                     value = viewModel.price,
-                    onValueChange = { viewModel.price = it },
+                    onValueChange = {viewModel.handleWithPriceValueChange(it)},
                     label = { Text(text = "Price") },
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Decimal,
@@ -141,16 +149,10 @@ fun CartDialog(viewModel: ListDialogViewModel) {
                             .padding(8.dp)
                             .weight(1f),
                         onClick = {
-                            viewModel.addItemToList(
-                                viewModel.productName,
-                                viewModel.quantity,
-                                viewModel.price,
-                                viewModel.category,
-                                isInCart = viewModel.canAddToCart
-                            )
+                            viewModel.addItemToList()
                         },
                     ) {
-                        Text(text = "Save", fontSize = 18.sp)
+                        Text(text = "Add", fontSize = 18.sp)
                     }
                 }
             }

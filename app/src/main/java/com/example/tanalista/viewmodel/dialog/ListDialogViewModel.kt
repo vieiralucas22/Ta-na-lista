@@ -32,6 +32,7 @@ class ListDialogViewModel(application: Application) : AndroidViewModel(applicati
     var isDropdownExpanded by mutableStateOf(false)
     var category by  mutableStateOf("Select a category")
     var canAddToCart by mutableStateOf(false)
+    var isInvalid by mutableStateOf(false)
 
     fun openDialog() {
         isDialogOpen = true
@@ -39,23 +40,52 @@ class ListDialogViewModel(application: Application) : AndroidViewModel(applicati
 
     fun closeDialog() {
         isDialogOpen = false
+        clearFields()
     }
 
-    fun addItemToList(
-        name: String,
-        quantity: String,
-        price: String,
-        category: String,
-        isInCart: Boolean
-    ) {
+    fun addItemToList() {
 
-        val listItemDTO = ListItemDTO (name, quantity.toInt(), price.toDouble(), category, isInCart)
+        if (shouldAbortAddItemToList()) return
+
+        price = price.replace(",",".")
+
+        val listItemDTO = ListItemDTO (productName, quantity.toInt(), price.toDouble(), category, canAddToCart)
 
         viewModelScope.launch {
             productListRepository.addProductInList(listItemDTO)
         }
 
         clearFields()
+    }
+
+    fun handleWithQuantityValueChange(input : String)
+    {
+        quantity = input.replace(",", "").replace("-","").replace(" ", "").replace(".", "").trim()
+    }
+
+    fun handleWithPriceValueChange(input : String)
+    {
+        var filterInput = input.replace(",", ".").replace("-","").replace(" ", "").trim()
+
+        if (filterInput == ".") {
+            filterInput = "0."
+        }
+
+        val integerPart = filterInput.split(".")[0].trim()
+        val decimalPart = filterInput.split(".").getOrNull(1)?.take(2) ?: ""
+
+        price = when {
+            filterInput.endsWith(".") && decimalPart.isEmpty() -> "$integerPart."
+            decimalPart.isNotEmpty() -> "$integerPart.$decimalPart"
+            else -> integerPart
+        }
+    }
+
+    fun shouldAbortAddItemToList() : Boolean
+    {
+        isInvalid = productName.isEmpty()
+
+        return productName.isEmpty()
     }
 
     fun clearFields()
@@ -65,5 +95,6 @@ class ListDialogViewModel(application: Application) : AndroidViewModel(applicati
         price = ""
         category = "Select a category"
         canAddToCart = false
+        isInvalid = false
     }
 }

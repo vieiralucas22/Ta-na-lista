@@ -141,7 +141,7 @@ fun ListHome(homeViewModel: HomeViewModel) {
                     itemsIndexed(product) { index, item ->
                         ProductItem(
                             item.name,
-                            item.productPrice.toString(),
+                            item.productPrice,
                             R.drawable.ic_drink,
                             false,
                             {
@@ -184,7 +184,7 @@ fun HeaderSubPageButton(
 @Composable
 fun ProductItem(
     title: String = "",
-    price: String = "",
+    price: Double = 0.0,
     iconResourceId: Int = 0,
     isChecked: Boolean = false,
     onCheckedChange: (Boolean) -> Unit,
@@ -217,7 +217,7 @@ fun ProductItem(
                     color = ButtonBackground
                 )
                 Spacer(Modifier.height(4.dp))
-                Text(text = price, fontSize = 12.sp)
+                Text(text = "R$ %.2f".format(price), fontSize = 12.sp)
             }
         }
 
