@@ -23,9 +23,6 @@ import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -41,12 +38,6 @@ import com.example.tanalista.viewmodel.dialog.ListDialogViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CartDialog(viewModel: ListDialogViewModel) {
-    var productName by remember { mutableStateOf("") }
-    var quantity by remember { mutableStateOf("") }
-    var price by remember { mutableStateOf("") }
-    var isDropdownExpanded by remember { mutableStateOf(false) }
-    var category by remember { mutableStateOf("Select a category") }
-    var canAddToCart by remember { mutableStateOf(false) }
     val categories by viewModel.allCategories.collectAsState()
 
     if (viewModel.isDialogOpen) {
@@ -61,14 +52,14 @@ fun CartDialog(viewModel: ListDialogViewModel) {
                 Text(text = "Add a new item", fontSize = 12.sp, fontWeight = FontWeight.SemiBold)
 
                 OutlinedTextField(
-                    value = productName,
-                    onValueChange = { productName = it },
+                    value = viewModel.productName,
+                    onValueChange = { viewModel.productName = it },
                     label = { Text(text = "Product name") }
                 )
 
                 OutlinedTextField(
-                    value = quantity,
-                    onValueChange = { quantity = it },
+                    value = viewModel.quantity,
+                    onValueChange = { viewModel.quantity = it },
                     label = { Text(text = "Quantity") },
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Decimal,
@@ -76,8 +67,8 @@ fun CartDialog(viewModel: ListDialogViewModel) {
                 )
 
                 OutlinedTextField(
-                    value = price,
-                    onValueChange = { price = it },
+                    value = viewModel.price,
+                    onValueChange = { viewModel.price = it },
                     label = { Text(text = "Price") },
                     keyboardOptions = KeyboardOptions(
                         keyboardType = KeyboardType.Decimal,
@@ -87,16 +78,16 @@ fun CartDialog(viewModel: ListDialogViewModel) {
                 Spacer(Modifier.height(4.dp))
 
                 ExposedDropdownMenuBox(
-                    expanded = isDropdownExpanded,
-                    onExpandedChange = { isDropdownExpanded = !isDropdownExpanded }
+                    expanded = viewModel.isDropdownExpanded,
+                    onExpandedChange = { viewModel.isDropdownExpanded = !viewModel.isDropdownExpanded }
                 ) {
                     OutlinedTextField(
-                        value = category,
+                        value = viewModel.category,
                         onValueChange = {},
                         enabled = false,
                         label = { Text("Category") },
                         trailingIcon = {
-                            ExposedDropdownMenuDefaults.TrailingIcon(expanded = isDropdownExpanded)
+                            ExposedDropdownMenuDefaults.TrailingIcon(expanded = viewModel.isDropdownExpanded)
                         },
                         modifier = Modifier
                             .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryEditable, true),
@@ -109,15 +100,15 @@ fun CartDialog(viewModel: ListDialogViewModel) {
                     )
 
                     ExposedDropdownMenu(
-                        expanded = isDropdownExpanded,
-                        onDismissRequest = { isDropdownExpanded = false }
+                        expanded = viewModel.isDropdownExpanded,
+                        onDismissRequest = { viewModel.isDropdownExpanded = false }
                     ) {
                         categories.forEach { option ->
                             DropdownMenuItem(
                                 text = { Text(option.categoryName) },
                                 onClick = {
-                                    category = option.categoryName
-                                    isDropdownExpanded = false
+                                    viewModel.category = option.categoryName
+                                    viewModel.isDropdownExpanded = false
                                 }
                             )
                         }
@@ -136,8 +127,8 @@ fun CartDialog(viewModel: ListDialogViewModel) {
                         modifier = Modifier.background(
                             color = Color.Transparent
                         ),
-                        checked = canAddToCart,
-                        onCheckedChange = { canAddToCart = it },
+                        checked = viewModel.canAddToCart,
+                        onCheckedChange = { viewModel.canAddToCart = it },
                     )
                 }
 
@@ -151,11 +142,11 @@ fun CartDialog(viewModel: ListDialogViewModel) {
                             .weight(1f),
                         onClick = {
                             viewModel.addItemToList(
-                                productName,
-                                quantity,
-                                price,
-                                category,
-                                isInCart = canAddToCart
+                                viewModel.productName,
+                                viewModel.quantity,
+                                viewModel.price,
+                                viewModel.category,
+                                isInCart = viewModel.canAddToCart
                             )
                         },
                     ) {

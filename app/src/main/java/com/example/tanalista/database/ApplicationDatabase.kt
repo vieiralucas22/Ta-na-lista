@@ -5,10 +5,14 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.sqlite.db.SupportSQLiteDatabase
+import com.example.tanalista.database.dao.ListDao
 import com.example.tanalista.database.dao.ProductCategoryDao
 import com.example.tanalista.database.dao.ProductDao
+import com.example.tanalista.database.dao.ProductListDao
+import com.example.tanalista.database.model.ListEntity
 import com.example.tanalista.database.model.ProductCategoryEntity
 import com.example.tanalista.database.model.ProductEntity
+import com.example.tanalista.database.model.ProductListEntity
 import com.example.tanalista.enums.ProductCategory
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -16,22 +20,24 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-@Database(entities = [ProductEntity::class, ProductCategoryEntity::class], version = 1)
-abstract class TaNaListaDatabase : RoomDatabase() {
+@Database(entities = [ProductEntity::class, ProductCategoryEntity::class, ListEntity::class, ProductListEntity::class], version = 1)
+abstract class ApplicationDatabase : RoomDatabase() {
 
     abstract fun ProductDao() : ProductDao
     abstract fun ProductCategoryDao() : ProductCategoryDao
+    abstract fun ListDao() : ListDao
+    abstract fun ProductListDao() : ProductListDao
 
     companion object {
-        val DB_NAME = "taNaListaDB"
-        lateinit var INSTANCE: TaNaListaDatabase
+        val DB_NAME = "ApplicationDB"
+        lateinit var INSTANCE: ApplicationDatabase
 
-        fun getDatabase(context: Context): TaNaListaDatabase {
+        fun getDatabase(context: Context): ApplicationDatabase {
 
             if (!::INSTANCE.isInitialized) {
-                synchronized(TaNaListaDatabase::class)
+                synchronized(ApplicationDatabase::class)
                 {
-                    INSTANCE = Room.databaseBuilder(context, TaNaListaDatabase::class.java, DB_NAME)
+                    INSTANCE = Room.databaseBuilder(context, ApplicationDatabase::class.java, DB_NAME)
                         .addCallback(DatabaseCallback(context))
                         .build()
                 }
@@ -50,6 +56,7 @@ abstract class TaNaListaDatabase : RoomDatabase() {
             CoroutineScope(Dispatchers.IO).launch {
                 populateProductCategoryDatabase(context)
                 populateProductDatabase(context)
+                populateListDatabase(context)
             }
         }
 
@@ -80,6 +87,13 @@ abstract class TaNaListaDatabase : RoomDatabase() {
                 entity.categoryName = category.name
                 categoryDao.insertProductCategory(entity)
             }
+        }
+
+        private suspend fun populateListDatabase(context: Context)
+        {
+            val listDao = getDatabase(context).ListDao()
+
+            listDao.insertList(ListEntity("Mercado"))
         }
     }
 }

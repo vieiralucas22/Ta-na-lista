@@ -119,7 +119,8 @@ fun HeaderHome() {
 
 @Composable
 fun ListHome(homeViewModel: HomeViewModel) {
-    //val productItems by homeViewModel.allListProducts.observeAsState()
+    val productItems by homeViewModel.allProductsInCurrentList.observeAsState()
+    val isEmpty = productItems.isNullOrEmpty()
 
     Column(
         modifier = Modifier
@@ -129,24 +130,28 @@ fun ListHome(homeViewModel: HomeViewModel) {
                 shape = RoundedCornerShape(24.dp, 24.dp, 0.dp, 0.dp)
             )
             .padding(24.dp),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = if (isEmpty) Arrangement.Center else Arrangement.Top,
     ) {
-//        productItems?.let { product ->
-//            LazyColumn(content = {
-//                itemsIndexed(product) { index, item ->
-//                    ProductItem(
-//                        item.name,
-//                        item.price.toString(),
-//                        R.drawable.ic_drink,
-//                        item.isInCart,
-//                        {
-//                            homeViewModel.moveProductBetweenLists(it, item)
-//                        })
-//                }
-//            })
-//        } ?: EmptyCartSection()
-        EmptyCartSection()
+        productItems?.let { product ->
+            if (isEmpty) {
+                EmptyCartSection()
+            } else {
+                LazyColumn(content = {
+                    itemsIndexed(product) { index, item ->
+                        ProductItem(
+                            item.name,
+                            item.productPrice.toString(),
+                            R.drawable.ic_drink,
+                            false,
+                            {
+                                //homeViewModel.moveProductBetweenLists(it, item)
+                            },
+                            item.quantity)
+                    }
+                })
+            }
+        } ?: EmptyCartSection()
     }
 }
 
@@ -182,7 +187,8 @@ fun ProductItem(
     price: String = "",
     iconResourceId: Int = 0,
     isChecked: Boolean = false,
-    onCheckedChange: (Boolean) -> Unit
+    onCheckedChange: (Boolean) -> Unit,
+    quantity : Int = 0
 ) {
     Row(
         modifier = Modifier
@@ -205,7 +211,7 @@ fun ProductItem(
 
             Column {
                 Text(
-                    text = title,
+                    text = "$title ($quantity un)",
                     fontSize = 14.sp,
                     fontWeight = FontWeight.SemiBold,
                     color = ButtonBackground

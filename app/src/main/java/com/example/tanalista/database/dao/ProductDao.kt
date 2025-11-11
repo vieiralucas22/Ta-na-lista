@@ -11,15 +11,12 @@ import kotlinx.coroutines.flow.Flow
 interface ProductDao {
 
     @Insert (onConflict = REPLACE)
-    suspend fun insertProduct(product : ProductEntity)
+    suspend fun insertProduct(product : ProductEntity): Long
 
     @Query("select * from Product")
     fun getAllProducts() : Flow<List<ProductEntity>>
 
-    @Query("UPDATE Product SET isInCart = 1 WHERE id = :id")
-    suspend fun addProductToCart(id :Int)
-
-    @Query("UPDATE Product SET isInCart = 0 WHERE id = :id")
-    suspend fun removeProductFromCart(id :Int)
+    @Query("select * from Product where id = :id")
+    fun getProductById(id : Int) : ProductEntity
 
 }

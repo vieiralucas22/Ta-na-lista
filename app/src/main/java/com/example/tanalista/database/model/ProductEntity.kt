@@ -7,14 +7,8 @@ import androidx.room.Entity
 data class ProductEntity(
 
     @ColumnInfo
-    val name : String,
+    var name : String = "",
     @ColumnInfo
-    val price : Double,
-    @ColumnInfo
-    val quantity : Int,
-    @ColumnInfo
-    val isInCart : Boolean,
-    @ColumnInfo
-    val category: String
+    var category: String = ""
 
 )  : BaseEntity()

@@ -58,7 +58,7 @@ fun MyApplicationApp(homeViewModel: HomeViewModel, listDialogViewModel: ListDial
         ) {
         when (currentDestination) {
             AppDestinations.HOME -> CartView(homeViewModel, listDialogViewModel)
-            AppDestinations.CHAT -> ChatView()
+//            AppDestinations.CHAT -> ChatView()
             AppDestinations.PROFILE -> ProfileView()
         }
     }
@@ -68,7 +68,7 @@ enum class AppDestinations(
     val label: String,
     val resourceId: Int,
 ) {
-    CHAT("Chat", R.drawable.ic_chat),
+    //CHAT("Chat", R.drawable.ic_chat),
     HOME("Home", R.drawable.ic_home),
     PROFILE("Profile", R.drawable.ic_profile),
 }
