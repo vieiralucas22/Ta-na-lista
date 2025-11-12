@@ -20,6 +20,8 @@ class ListDialogViewModel(application: Application) : AndroidViewModel(applicati
         ProductCategoryRepository(application.applicationContext)
     private val productListRepository = ProductListRepository(application.applicationContext)
 
+    private lateinit var currentListItem: ListItemDTO
+
     val allCategories = productCategoryRepository.getAllCategories().stateIn(
         viewModelScope,
         SharingStarted.WhileSubscribed(5000),
@@ -36,6 +38,8 @@ class ListDialogViewModel(application: Application) : AndroidViewModel(applicati
     var isInvalidProductName by mutableStateOf(false)
     var isInvalidQuantity by mutableStateOf(false)
     var isInvalidPrice by mutableStateOf(false)
+    var textButtonDialog by mutableStateOf("Add")
+
 
     fun openDialog() {
         isDialogOpen = true
@@ -46,13 +50,28 @@ class ListDialogViewModel(application: Application) : AndroidViewModel(applicati
         clearFields()
     }
 
+    fun editDialog(listItem: ListItemDTO) {
+
+        currentListItem = listItem
+
+        productName = currentListItem.name
+        category = currentListItem.category
+        price = currentListItem.productPrice.toString()
+        quantity = currentListItem.quantity.toString()
+        canAddToCart = currentListItem.isInCart
+
+        textButtonDialog = "Update"
+
+        openDialog()
+    }
+
     fun addItemToList() {
 
         if (shouldAbortAddItemToList()) return
 
         price = price.replace(",", ".")
 
-        val listItemDTO = ListItemDTO(
+        currentListItem = ListItemDTO(
             name = productName,
             quantity = quantity.ifEmpty { "0" }.toInt(),
             productPrice = price.ifEmpty { "0.0" }.toDouble(),
@@ -61,10 +80,10 @@ class ListDialogViewModel(application: Application) : AndroidViewModel(applicati
         )
 
         viewModelScope.launch {
-            productListRepository.addProductInList(listItemDTO)
+            productListRepository.addProductInList(currentListItem)
         }
 
-        clearFields()
+        closeDialog()
     }
 
     fun handleWithQuantityValueChange(input: String) {
@@ -101,5 +120,6 @@ class ListDialogViewModel(application: Application) : AndroidViewModel(applicati
         category = "Select a category"
         canAddToCart = false
         isInvalidProductName = false
+        textButtonDialog = "Add"
     }
 }

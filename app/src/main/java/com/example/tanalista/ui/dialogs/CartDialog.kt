@@ -144,7 +144,7 @@ fun CartDialog(viewModel: ListDialogViewModel) {
                             viewModel.addItemToList()
                         },
                     ) {
-                        Text(text = "Add", fontSize = 18.sp)
+                        Text(text = viewModel.textButtonDialog, fontSize = 18.sp)
                     }
                 }
             }

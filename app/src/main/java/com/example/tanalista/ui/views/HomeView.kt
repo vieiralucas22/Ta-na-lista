@@ -3,6 +3,7 @@ package com.example.tanalista.ui.views
 import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -65,7 +66,7 @@ fun CartView(homeViewModel: HomeViewModel, listDialogViewModel: ListDialogViewMo
                     .background(ButtonBackground)
             ) {
                 HeaderHome()
-                ListHome(homeViewModel)
+                ListHome(homeViewModel, listDialogViewModel)
                 CartDialog(listDialogViewModel)
             }
         }
@@ -117,7 +118,7 @@ fun HeaderHome() {
 }
 
 @Composable
-fun ListHome(homeViewModel: HomeViewModel) {
+fun ListHome(homeViewModel: HomeViewModel, listDialogViewModel: ListDialogViewModel) {
     val productItems by homeViewModel.allProductsInCurrentList.observeAsState()
     val isEmpty = productItems.isNullOrEmpty()
 
@@ -142,14 +143,19 @@ fun ListHome(homeViewModel: HomeViewModel) {
                             item.name,
                             item.productPrice,
                             homeViewModel.getCategoryIcon(item.category),
+                            addItemToCartList =
                             {
                                 homeViewModel.moveProductBetweenLists(item, true)
                             },
+                            removeItemToCartList =
                             {
                                 homeViewModel.moveProductBetweenLists(item, false)
                             },
                             item.quantity,
-                            item.isInCart
+                            item.isInCart,
+                            onClick = {
+                                listDialogViewModel.editDialog(item)
+                            }
                         )
                     }
                 })
@@ -192,16 +198,21 @@ fun ProductItem(
     addItemToCartList: () -> Unit,
     removeItemToCartList: () -> Unit,
     quantity: Int = 0,
-    isInCart: Boolean = false
+    isInCart: Boolean = false,
+    onClick: () -> Unit
 ) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .padding(0.dp, 0.dp, 0.dp, 4.dp)
             .background(color = GrayBackground, shape = RoundedCornerShape(20.dp))
-            .padding(12.dp),
+            .padding(12.dp)
+            .combinedClickable(
+                onClick = onClick,
+            ),
         horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
+
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
 
