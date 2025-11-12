@@ -32,7 +32,9 @@ class ListDialogViewModel(application: Application) : AndroidViewModel(applicati
     var isDropdownExpanded by mutableStateOf(false)
     var category by  mutableStateOf("Select a category")
     var canAddToCart by mutableStateOf(false)
-    var isInvalid by mutableStateOf(false)
+    var isInvalidProductName by mutableStateOf(false)
+    var isInvalidQuantity by mutableStateOf(false)
+    var isInvalidPrice by mutableStateOf(false)
 
     fun openDialog() {
         isDialogOpen = true
@@ -49,7 +51,7 @@ class ListDialogViewModel(application: Application) : AndroidViewModel(applicati
 
         price = price.replace(",",".")
 
-        val listItemDTO = ListItemDTO (productName, quantity.toInt(), price.toDouble(), category, canAddToCart)
+        val listItemDTO = ListItemDTO (name = productName,quantity= quantity.toInt(), productPrice =  price.toDouble(), category =  category, isInCart =  canAddToCart)
 
         viewModelScope.launch {
             productListRepository.addProductInList(listItemDTO)
@@ -83,9 +85,11 @@ class ListDialogViewModel(application: Application) : AndroidViewModel(applicati
 
     fun shouldAbortAddItemToList() : Boolean
     {
-        isInvalid = productName.isEmpty()
+        isInvalidProductName = productName.isEmpty()
+        isInvalidPrice = price.isEmpty()
+        isInvalidQuantity = quantity.isEmpty()
 
-        return productName.isEmpty()
+        return isInvalidProductName || isInvalidPrice || isInvalidQuantity
     }
 
     fun clearFields()
@@ -95,6 +99,8 @@ class ListDialogViewModel(application: Application) : AndroidViewModel(applicati
         price = ""
         category = "Select a category"
         canAddToCart = false
-        isInvalid = false
+        isInvalidProductName = false
+        isInvalidPrice = false
+        isInvalidQuantity = false
     }
 }

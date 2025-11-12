@@ -52,42 +52,34 @@ fun CartDialog(viewModel: ListDialogViewModel) {
 
                 Text(text = "Add a new item", fontSize = 12.sp, fontWeight = FontWeight.SemiBold)
 
-                OutlinedTextField(
-                    value = viewModel.productName,
-                    onValueChange = { viewModel.productName = it },
-                    label = { Text(text = "Product name") },
-                    isError = viewModel.isInvalid,
-                    colors = TextFieldDefaults.colors(
-                        errorIndicatorColor = Error,
-                        errorContainerColor = White,
-                        unfocusedContainerColor = White,
-                        focusedContainerColor = White,
-                    )
+                OutlinedTextFieldDialog(
+                    viewModel.productName, viewModel.isInvalidProductName, { viewModel.productName = it },
+                    KeyboardType.Text, "Product name"
                 )
 
-                OutlinedTextField(
-                    value = viewModel.quantity,
-                    onValueChange = { viewModel.handleWithQuantityValueChange(it) },
-                    label = { Text(text = "Quantity") },
-                    keyboardOptions = KeyboardOptions(
-                        keyboardType = KeyboardType.Decimal,
-                    )
+                OutlinedTextFieldDialog(
+                    viewModel.quantity,
+                    viewModel.isInvalidQuantity,
+                    { viewModel.handleWithQuantityValueChange(it) },
+                    KeyboardType.Decimal,
+                    "Quantity"
                 )
 
-                OutlinedTextField(
-                    value = viewModel.price,
-                    onValueChange = {viewModel.handleWithPriceValueChange(it)},
-                    label = { Text(text = "Price") },
-                    keyboardOptions = KeyboardOptions(
-                        keyboardType = KeyboardType.Decimal,
-                    )
+                OutlinedTextFieldDialog(
+                    viewModel.price,
+                    viewModel.isInvalidPrice,
+                    { viewModel.handleWithPriceValueChange(it) },
+                    KeyboardType.Decimal,
+                    "Price"
                 )
 
                 Spacer(Modifier.height(4.dp))
 
                 ExposedDropdownMenuBox(
                     expanded = viewModel.isDropdownExpanded,
-                    onExpandedChange = { viewModel.isDropdownExpanded = !viewModel.isDropdownExpanded }
+                    onExpandedChange = {
+                        viewModel.isDropdownExpanded = !viewModel.isDropdownExpanded
+                    }
                 ) {
                     OutlinedTextField(
                         value = viewModel.category,
@@ -158,4 +150,29 @@ fun CartDialog(viewModel: ListDialogViewModel) {
             }
         }
     }
+}
+
+@Composable
+fun OutlinedTextFieldDialog(
+    value: String,
+    isInvalid: Boolean,
+    onValueChange: (String) -> Unit,
+    keyboardType: KeyboardType,
+    label: String
+) {
+    OutlinedTextField(
+        value = value,
+        onValueChange = onValueChange,
+        label = { Text(text = label) },
+        isError = isInvalid,
+        colors = TextFieldDefaults.colors(
+            errorIndicatorColor = Error,
+            errorContainerColor = White,
+            unfocusedContainerColor = White,
+            focusedContainerColor = White,
+        ),
+        keyboardOptions = KeyboardOptions(
+            keyboardType = keyboardType
+        )
+    )
 }

@@ -19,7 +19,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Checkbox
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
@@ -143,11 +142,15 @@ fun ListHome(homeViewModel: HomeViewModel) {
                             item.name,
                             item.productPrice,
                             R.drawable.ic_drink,
-                            false,
                             {
-                                //homeViewModel.moveProductBetweenLists(it, item)
+                                homeViewModel.moveProductBetweenLists(item, true)
                             },
-                            item.quantity)
+                            {
+                                homeViewModel.moveProductBetweenLists(item, false)
+                            },
+                            item.quantity,
+                            item.isInCart
+                        )
                     }
                 })
             }
@@ -186,9 +189,10 @@ fun ProductItem(
     title: String = "",
     price: Double = 0.0,
     iconResourceId: Int = 0,
-    isChecked: Boolean = false,
-    onCheckedChange: (Boolean) -> Unit,
-    quantity : Int = 0
+    addItemToCartList: () -> Unit,
+    removeItemToCartList: () -> Unit,
+    quantity: Int = 0,
+    isInCart: Boolean = false
 ) {
     Row(
         modifier = Modifier
@@ -221,27 +225,60 @@ fun ProductItem(
             }
         }
 
-        Checkbox(
-            modifier = Modifier.background(
-                color = Color.Transparent,
-                shape = RoundedCornerShape(999.dp)
-            ),
-            checked = isChecked,
-            onCheckedChange = onCheckedChange,
-
-            )
+        CartInButton(addItemToCartList, isInCart)
+        CartOutButton(removeItemToCartList, isInCart)
     }
 }
 
 @Composable
 fun EmptyCartSection() {
-    Column (modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
+    Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
 
         Image(painter = painterResource(R.drawable.empty_cart), contentDescription = "Empty cart")
 
         Text(
             text = "Please click on the below button to add items in your list!",
             textAlign = TextAlign.Center,
-            fontSize = 16.sp)
+            fontSize = 16.sp
+        )
     }
 }
+
+@Composable
+fun CartInButton(addItemToCartList: () -> Unit, isInCart: Boolean) {
+    if (!isInCart) {
+        Button(onClick = addItemToCartList)
+        {
+            Icon(
+                modifier = Modifier.size(18.dp),
+                painter = painterResource(R.drawable.ic_cart_in),
+                contentDescription = "App Icon",
+                tint = Color.White
+            )
+        }
+    }
+}
+
+@Composable
+fun CartOutButton(addItemToCartList: () -> Unit, isInCart: Boolean) {
+    if (isInCart) {
+        Button(onClick = addItemToCartList)
+        {
+            Icon(
+                modifier = Modifier.size(18.dp),
+                painter = painterResource(R.drawable.ic_cart_out),
+                contentDescription = "App Icon",
+                tint = Color.White
+            )
+        }
+    }
+}
+
+
+
+
+
+
+
+
+

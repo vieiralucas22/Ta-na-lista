@@ -22,7 +22,7 @@ import androidx.room.ForeignKey
 data class ProductListEntity(
     val listId: Long = 0,
     val productId: Long = 0,
-    val quantity: Int = 0,
-    val productPrice: Double = 0.0,
-    val isInCart: Boolean = false
+    var quantity: Int = 0,
+    var productPrice: Double = 0.0,
+    var isInCart: Boolean = false
 )

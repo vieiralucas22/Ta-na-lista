@@ -35,8 +35,26 @@ class ProductListRepository(context: Context) {
         productListDao.insert(productListEntity)
     }
 
-    fun getAllProductsFromList(id: Int): Flow<List<ListItemDTO>> {
+    fun getAllProductsFromList(id: Long): Flow<List<ListItemDTO>> {
         return productListDao.getProductsInList(id)
+    }
+
+    suspend fun addProductInCart(listItem: ListItemDTO) {
+
+        val listItem = productListDao.getProductInListByIds(listItem.listId, listItem.productId)
+
+        listItem.isInCart = true
+
+        productListDao.insert(listItem)
+    }
+
+    suspend fun removeProductInCart(listItem: ListItemDTO) {
+
+        val listItem = productListDao.getProductInListByIds(listItem.listId, listItem.productId)
+
+        listItem.isInCart = false
+
+        productListDao.insert(listItem)
     }
 
     private suspend fun getProductId(product: ProductEntity?, listItemDTO: ListItemDTO): Long {
@@ -46,5 +64,4 @@ class ProductListRepository(context: Context) {
 
         return productDao.insertProduct(ProductEntity(listItemDTO.name, listItemDTO.category))
     }
-
 }
