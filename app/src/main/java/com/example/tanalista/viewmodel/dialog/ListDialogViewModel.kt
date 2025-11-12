@@ -7,6 +7,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tanalista.database.model.dto.ListItemDTO
+import com.example.tanalista.enums.ProductCategory
 import com.example.tanalista.repository.ProductCategoryRepository
 import com.example.tanalista.repository.ProductListRepository
 import kotlinx.coroutines.flow.SharingStarted
@@ -26,11 +27,11 @@ class ListDialogViewModel(application: Application) : AndroidViewModel(applicati
     )
 
     var isDialogOpen by mutableStateOf(false)
-    var productName by  mutableStateOf("")
-    var quantity by  mutableStateOf("")
+    var productName by mutableStateOf("")
+    var quantity by mutableStateOf("")
     var price by mutableStateOf("")
     var isDropdownExpanded by mutableStateOf(false)
-    var category by  mutableStateOf("Select a category")
+    var category by mutableStateOf("Select a category")
     var canAddToCart by mutableStateOf(false)
     var isInvalidProductName by mutableStateOf(false)
     var isInvalidQuantity by mutableStateOf(false)
@@ -49,9 +50,15 @@ class ListDialogViewModel(application: Application) : AndroidViewModel(applicati
 
         if (shouldAbortAddItemToList()) return
 
-        price = price.replace(",",".")
+        price = price.replace(",", ".")
 
-        val listItemDTO = ListItemDTO (name = productName,quantity= quantity.toInt(), productPrice =  price.toDouble(), category =  category, isInCart =  canAddToCart)
+        val listItemDTO = ListItemDTO(
+            name = productName,
+            quantity = quantity.ifEmpty { "0" }.toInt(),
+            productPrice = price.ifEmpty { "0.0" }.toDouble(),
+            category = if (category == "Select a category") ProductCategory.Undefined.toString() else category,
+            isInCart = canAddToCart
+        )
 
         viewModelScope.launch {
             productListRepository.addProductInList(listItemDTO)
@@ -60,14 +67,12 @@ class ListDialogViewModel(application: Application) : AndroidViewModel(applicati
         clearFields()
     }
 
-    fun handleWithQuantityValueChange(input : String)
-    {
-        quantity = input.replace(",", "").replace("-","").replace(" ", "").replace(".", "").trim()
+    fun handleWithQuantityValueChange(input: String) {
+        quantity = input.replace(",", "").replace("-", "").replace(" ", "").replace(".", "").trim()
     }
 
-    fun handleWithPriceValueChange(input : String)
-    {
-        var filterInput = input.replace(",", ".").replace("-","").replace(" ", "").trim()
+    fun handleWithPriceValueChange(input: String) {
+        var filterInput = input.replace(",", ".").replace("-", "").replace(" ", "").trim()
 
         if (filterInput == ".") {
             filterInput = "0."
@@ -83,24 +88,18 @@ class ListDialogViewModel(application: Application) : AndroidViewModel(applicati
         }
     }
 
-    fun shouldAbortAddItemToList() : Boolean
-    {
+    fun shouldAbortAddItemToList(): Boolean {
         isInvalidProductName = productName.isEmpty()
-        isInvalidPrice = price.isEmpty()
-        isInvalidQuantity = quantity.isEmpty()
 
-        return isInvalidProductName || isInvalidPrice || isInvalidQuantity
+        return isInvalidProductName
     }
 
-    fun clearFields()
-    {
+    fun clearFields() {
         productName = ""
         quantity = ""
         price = ""
         category = "Select a category"
         canAddToCart = false
         isInvalidProductName = false
-        isInvalidPrice = false
-        isInvalidQuantity = false
     }
 }

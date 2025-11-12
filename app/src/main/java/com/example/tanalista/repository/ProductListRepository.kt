@@ -29,7 +29,8 @@ class ProductListRepository(context: Context) {
                 productId,
                 listItemDTO.quantity,
                 listItemDTO.productPrice,
-                listItemDTO.isInCart
+                listItemDTO.isInCart,
+                listItemDTO.category
             )
 
         productListDao.insert(productListEntity)
