@@ -37,18 +37,25 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.tanalista.R
 import com.example.tanalista.ui.dialogs.CartDialog
+import com.example.tanalista.ui.dialogs.DeleteListItemDialog
 import com.example.tanalista.ui.theme.BackgroundColor
 import com.example.tanalista.ui.theme.ButtonBackground
+import com.example.tanalista.ui.theme.Error
 import com.example.tanalista.ui.theme.GrayBackground
 import com.example.tanalista.ui.theme.Green
 import com.example.tanalista.ui.theme.Purple
 import com.example.tanalista.ui.theme.White
 import com.example.tanalista.viewmodel.HomeViewModel
+import com.example.tanalista.viewmodel.dialog.DeleteListItemDialogViewModel
 import com.example.tanalista.viewmodel.dialog.ListDialogViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun CartView(homeViewModel: HomeViewModel, listDialogViewModel: ListDialogViewModel) {
+fun CartView(
+    homeViewModel: HomeViewModel,
+    listDialogViewModel: ListDialogViewModel,
+    deleteDialogViewModel: DeleteListItemDialogViewModel
+) {
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(
@@ -66,8 +73,9 @@ fun CartView(homeViewModel: HomeViewModel, listDialogViewModel: ListDialogViewMo
                     .background(ButtonBackground)
             ) {
                 HeaderHome()
-                ListHome(homeViewModel, listDialogViewModel)
+                ListHome(homeViewModel, listDialogViewModel, deleteDialogViewModel)
                 CartDialog(listDialogViewModel)
+                DeleteListItemDialog(deleteDialogViewModel)
             }
         }
     )
@@ -118,7 +126,11 @@ fun HeaderHome() {
 }
 
 @Composable
-fun ListHome(homeViewModel: HomeViewModel, listDialogViewModel: ListDialogViewModel) {
+fun ListHome(
+    homeViewModel: HomeViewModel,
+    listDialogViewModel: ListDialogViewModel,
+    deleteDialogViewModel: DeleteListItemDialogViewModel
+) {
     val productItems by homeViewModel.allProductsInCurrentList.observeAsState()
     val isEmpty = productItems.isNullOrEmpty()
 
@@ -155,6 +167,9 @@ fun ListHome(homeViewModel: HomeViewModel, listDialogViewModel: ListDialogViewMo
                             item.isInCart,
                             onClick = {
                                 listDialogViewModel.editDialog(item)
+                            },
+                            onLongClick = {
+                                deleteDialogViewModel.openDialog(item)
                             }
                         )
                     }
@@ -199,7 +214,8 @@ fun ProductItem(
     removeItemToCartList: () -> Unit,
     quantity: Int = 0,
     isInCart: Boolean = false,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    onLongClick: () -> Unit
 ) {
     Row(
         modifier = Modifier
@@ -209,6 +225,7 @@ fun ProductItem(
             .padding(12.dp)
             .combinedClickable(
                 onClick = onClick,
+                onLongClick = onLongClick
             ),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
@@ -276,7 +293,7 @@ fun CartInButton(addItemToCartList: () -> Unit, isInCart: Boolean) {
 fun CartOutButton(addItemToCartList: () -> Unit, isInCart: Boolean) {
     if (isInCart) {
         Button(colors = ButtonDefaults.buttonColors(
-            containerColor = Purple
+            containerColor = Error
         ), onClick = addItemToCartList)
         {
             Icon(

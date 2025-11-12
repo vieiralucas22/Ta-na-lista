@@ -1,6 +1,7 @@
 package com.example.tanalista.database.dao
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
@@ -21,4 +22,7 @@ interface ProductListDao {
 
     @Query("SELECT * FROM ProductList WHERE listId=:listId AND productId=:productId")
     suspend fun getProductInListByIds(listId: Long, productId: Long): ProductListEntity
+
+    @Delete
+    suspend fun deleteProductList(productListEntity: ProductListEntity)
 }

@@ -65,4 +65,11 @@ class ProductListRepository(context: Context) {
 
         return productDao.insertProduct(ProductEntity(listItemDTO.name, listItemDTO.category))
     }
+
+    suspend fun deleteProductFromList(listItem: ListItemDTO)
+    {
+        val listItem = productListDao.getProductInListByIds(listItem.listId, listItem.productId)
+
+        productListDao.deleteProductList(listItem)
+    }
 }
