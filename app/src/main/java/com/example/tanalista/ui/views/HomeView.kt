@@ -141,7 +141,7 @@ fun ListHome(homeViewModel: HomeViewModel) {
                         ProductItem(
                             item.name,
                             item.productPrice,
-                            R.drawable.ic_drink,
+                            homeViewModel.getCategoryIcon(item.category),
                             {
                                 homeViewModel.moveProductBetweenLists(item, true)
                             },
@@ -247,7 +247,9 @@ fun EmptyCartSection() {
 @Composable
 fun CartInButton(addItemToCartList: () -> Unit, isInCart: Boolean) {
     if (!isInCart) {
-        Button(onClick = addItemToCartList)
+        Button(colors = ButtonDefaults.buttonColors(
+            containerColor = Purple
+        ), onClick = addItemToCartList)
         {
             Icon(
                 modifier = Modifier.size(18.dp),
@@ -262,7 +264,9 @@ fun CartInButton(addItemToCartList: () -> Unit, isInCart: Boolean) {
 @Composable
 fun CartOutButton(addItemToCartList: () -> Unit, isInCart: Boolean) {
     if (isInCart) {
-        Button(onClick = addItemToCartList)
+        Button(colors = ButtonDefaults.buttonColors(
+            containerColor = Purple
+        ), onClick = addItemToCartList)
         {
             Icon(
                 modifier = Modifier.size(18.dp),
