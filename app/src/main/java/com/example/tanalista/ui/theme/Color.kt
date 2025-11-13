@@ -14,7 +14,12 @@ val ButtonBackground = Color(0xff0a0a1a)
 val ButtonDeleteBackground = Color(0xfffb412e)
 val White = Color(0xffffffff)
 val Green = Color(0xffaff41e)
+val ToggleButtonListChecked = Color(0xFF8DC511)
+val ToggleButtonListDisabled = Color(0xFFA1CC5A)
 val Purple = Color(0xff603aed)
+val ToggleButtonCartChecked = Color(0xFF4428BB)
+val ToggleButtonCartDisable= Color(0xFF7258E1)
+
 val GrayBackground = Color(0xffeeeeec)
 val Error = Color(0xFFEF0221)
 

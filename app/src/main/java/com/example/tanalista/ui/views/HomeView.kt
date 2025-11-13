@@ -18,10 +18,11 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconToggleButton
+import androidx.compose.material3.IconToggleButtonColors
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -44,6 +45,10 @@ import com.example.tanalista.ui.theme.Error
 import com.example.tanalista.ui.theme.GrayBackground
 import com.example.tanalista.ui.theme.Green
 import com.example.tanalista.ui.theme.Purple
+import com.example.tanalista.ui.theme.ToggleButtonCartChecked
+import com.example.tanalista.ui.theme.ToggleButtonCartDisable
+import com.example.tanalista.ui.theme.ToggleButtonListChecked
+import com.example.tanalista.ui.theme.ToggleButtonListDisabled
 import com.example.tanalista.ui.theme.White
 import com.example.tanalista.viewmodel.HomeViewModel
 import com.example.tanalista.viewmodel.dialog.DeleteListItemDialogViewModel
@@ -72,7 +77,7 @@ fun CartView(
                     .fillMaxSize()
                     .background(ButtonBackground)
             ) {
-                HeaderHome()
+                HeaderHome(homeViewModel)
                 ListHome(homeViewModel, listDialogViewModel, deleteDialogViewModel)
                 CartDialog(listDialogViewModel)
                 DeleteListItemDialog(deleteDialogViewModel)
@@ -82,7 +87,7 @@ fun CartView(
 }
 
 @Composable
-fun HeaderHome() {
+fun HeaderHome(homeViewModel: HomeViewModel) {
     Column(modifier = Modifier.padding(24.dp, 32.dp)) {
         Row(
             modifier = Modifier
@@ -106,19 +111,49 @@ fun HeaderHome() {
             modifier = Modifier
                 .fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(5.dp)
         ) {
-            HeaderSubPageButton(
+
+            HeaderToggleButton(
                 text = "List",
                 modifier = Modifier.weight(1f),
-                buttonColors = ButtonDefaults.buttonColors(containerColor = Green),
+                colors = IconToggleButtonColors(
+                    containerColor = Green,
+                    checkedContentColor = ToggleButtonListChecked,
+                    contentColor = Green,
+                    disabledContainerColor = GrayBackground,
+                    disabledContentColor = ToggleButtonListDisabled,
+                    checkedContainerColor = ToggleButtonListChecked
+                ),
                 textColor = ButtonBackground,
                 iconResourceId = R.drawable.ic_list,
-                iconTint = ButtonBackground
+                iconTint = ButtonBackground,
+                onCheckedChange = { isChecked ->
+                    if (isChecked) {
+                        homeViewModel.showAllProductsInList()
+                    }
+                },
+                isChecked = homeViewModel.isListToggleButtonChecked
             )
-            HeaderSubPageButton(
+
+            HeaderToggleButton(
                 text = "Cart",
                 modifier = Modifier.weight(1f),
-                buttonColors = ButtonDefaults.buttonColors(containerColor = Purple),
-                iconResourceId = R.drawable.ic_cart
+                colors = IconToggleButtonColors(
+                    containerColor = Purple,
+                    checkedContentColor = ToggleButtonCartChecked,
+                    contentColor = Purple,
+                    disabledContainerColor = ToggleButtonCartDisable,
+                    disabledContentColor = White,
+                    checkedContainerColor = ToggleButtonCartChecked
+                ),
+                textColor = White,
+                iconResourceId = R.drawable.ic_cart,
+                iconTint = White,
+                onCheckedChange = { isChecked ->
+                    if (isChecked) {
+                        homeViewModel.showAllProductsInCart()
+                    }
+                },
+                isChecked = homeViewModel.isCartToggleButtonChecked
             )
         }
 
@@ -131,7 +166,7 @@ fun ListHome(
     listDialogViewModel: ListDialogViewModel,
     deleteDialogViewModel: DeleteListItemDialogViewModel
 ) {
-    val productItems by homeViewModel.allProductsInCurrentList.observeAsState()
+    val productItems by homeViewModel.allProductsInCurrentPage.observeAsState()
     val isEmpty = productItems.isNullOrEmpty()
 
     Column(
@@ -156,13 +191,13 @@ fun ListHome(
                             item.productPrice,
                             homeViewModel.getCategoryIcon(item.category),
                             addItemToCartList =
-                            {
-                                homeViewModel.moveProductBetweenLists(item, true)
-                            },
+                                {
+                                    homeViewModel.moveProductBetweenLists(item, true)
+                                },
                             removeItemToCartList =
-                            {
-                                homeViewModel.moveProductBetweenLists(item, false)
-                            },
+                                {
+                                    homeViewModel.moveProductBetweenLists(item, false)
+                                },
                             item.quantity,
                             item.isInCart,
                             onClick = {
@@ -180,15 +215,22 @@ fun ListHome(
 }
 
 @Composable
-fun HeaderSubPageButton(
+fun HeaderToggleButton(
     text: String,
     modifier: Modifier,
-    buttonColors: ButtonColors,
+    colors: IconToggleButtonColors,
     textColor: Color = White,
     iconResourceId: Int,
-    iconTint: Color = White
+    iconTint: Color = White,
+    onCheckedChange: (Boolean) -> Unit,
+    isChecked: Boolean
 ) {
-    Button(modifier = modifier, colors = buttonColors, onClick = {}) {
+    IconToggleButton(
+        modifier = modifier,
+        checked = isChecked,
+        onCheckedChange = onCheckedChange,
+        colors = colors,
+    ) {
         Row(
             modifier = Modifier.padding(0.dp, 4.dp),
             verticalAlignment = Alignment.CenterVertically
@@ -230,7 +272,7 @@ fun ProductItem(
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically,
 
-    ) {
+        ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
 
             Icon(
@@ -275,9 +317,11 @@ fun EmptyCartSection() {
 @Composable
 fun CartInButton(addItemToCartList: () -> Unit, isInCart: Boolean) {
     if (!isInCart) {
-        Button(colors = ButtonDefaults.buttonColors(
-            containerColor = Purple
-        ), onClick = addItemToCartList)
+        Button(
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Purple
+            ), onClick = addItemToCartList
+        )
         {
             Icon(
                 modifier = Modifier.size(18.dp),
@@ -292,9 +336,11 @@ fun CartInButton(addItemToCartList: () -> Unit, isInCart: Boolean) {
 @Composable
 fun CartOutButton(addItemToCartList: () -> Unit, isInCart: Boolean) {
     if (isInCart) {
-        Button(colors = ButtonDefaults.buttonColors(
-            containerColor = Error
-        ), onClick = addItemToCartList)
+        Button(
+            colors = ButtonDefaults.buttonColors(
+                containerColor = Error
+            ), onClick = addItemToCartList
+        )
         {
             Icon(
                 modifier = Modifier.size(18.dp),

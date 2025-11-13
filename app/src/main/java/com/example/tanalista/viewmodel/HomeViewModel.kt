@@ -1,6 +1,9 @@
 package com.example.tanalista.viewmodel
 
 import android.app.Application
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
@@ -14,7 +17,10 @@ class HomeViewModel (application: Application) : AndroidViewModel(application) {
 
     private val productListRepository = ProductListRepository(application.applicationContext)
 
-    val allProductsInCurrentList = productListRepository.getAllProductsFromList(1).asLiveData()
+    var allProductsInCurrentPage by mutableStateOf(productListRepository.getAllProductsFromList(1).asLiveData())
+
+    var isListToggleButtonChecked by mutableStateOf(true)
+    var isCartToggleButtonChecked by mutableStateOf(false)
 
     fun moveProductBetweenLists(listItem: ListItemDTO, isMovedToCart: Boolean) {
 
@@ -24,6 +30,24 @@ class HomeViewModel (application: Application) : AndroidViewModel(application) {
             else
                 productListRepository.removeProductInCart(listItem)
         }
+    }
+
+    fun showAllProductsInList()
+    {
+        viewModelScope.launch {
+            allProductsInCurrentPage = productListRepository.getAllProductsFromList(1).asLiveData()
+        }
+        isCartToggleButtonChecked = false
+        isListToggleButtonChecked = true
+    }
+
+    fun showAllProductsInCart()
+    {
+        viewModelScope.launch {
+            allProductsInCurrentPage = productListRepository.getAllProductsFromCart(1).asLiveData()
+        }
+        isCartToggleButtonChecked = true
+        isListToggleButtonChecked = false
     }
 
     fun getCategoryIcon(category: String): Int {

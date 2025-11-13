@@ -40,6 +40,10 @@ class ProductListRepository(context: Context) {
         return productListDao.getProductsInList(id)
     }
 
+    fun getAllProductsFromCart(id: Long): Flow<List<ListItemDTO>> {
+        return productListDao.getProductsInCart(id)
+    }
+
     suspend fun addProductInCart(listItem: ListItemDTO) {
 
         val listItem = productListDao.getProductInListByIds(listItem.listId, listItem.productId)
