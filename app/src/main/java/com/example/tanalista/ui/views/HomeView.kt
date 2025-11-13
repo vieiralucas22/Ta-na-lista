@@ -95,7 +95,7 @@ fun HeaderHome(homeViewModel: HomeViewModel) {
         ) {
             Column {
                 Text(
-                    text = "R$ 1000.00",
+                    text = "R$ %.2f".format(homeViewModel.totalValue),
                     fontSize = 32.sp,
                     fontWeight = FontWeight.SemiBold,
                     color = BackgroundColor

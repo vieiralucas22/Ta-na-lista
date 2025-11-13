@@ -2,6 +2,7 @@ package com.example.tanalista.viewmodel
 
 import android.app.Application
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableDoubleStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
@@ -21,6 +22,11 @@ class HomeViewModel (application: Application) : AndroidViewModel(application) {
 
     var isListToggleButtonChecked by mutableStateOf(true)
     var isCartToggleButtonChecked by mutableStateOf(false)
+    var totalValue by mutableDoubleStateOf(0.0)
+
+    init {
+        updateTotalCartValue()
+    }
 
     fun moveProductBetweenLists(listItem: ListItemDTO, isMovedToCart: Boolean) {
 
@@ -48,6 +54,20 @@ class HomeViewModel (application: Application) : AndroidViewModel(application) {
         }
         isCartToggleButtonChecked = true
         isListToggleButtonChecked = false
+    }
+
+    fun updateTotalCartValue()
+    {
+        viewModelScope.launch {
+            productListRepository.getAllProductsFromCart(1)
+                .collect { products ->
+                    totalValue = 0.0
+
+                    products.forEach { product->
+                        totalValue += product.quantity * product.productPrice;
+                    }
+                }
+        }
     }
 
     fun getCategoryIcon(category: String): Int {
