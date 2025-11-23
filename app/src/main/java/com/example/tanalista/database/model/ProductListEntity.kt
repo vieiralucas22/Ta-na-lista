@@ -23,6 +23,7 @@ import com.example.tanalista.enums.ProductCategory
 data class ProductListEntity(
     val listId: Long = 0,
     val productId: Long = 0,
+    var name : String = "",
     var quantity: Int = 0,
     var productPrice: Double = 0.0,
     var isInCart: Boolean = false,

@@ -63,7 +63,7 @@ fun MyApplicationApp(
         when (currentDestination) {
             AppDestinations.HOME -> CartView(homeViewModel, listDialogViewModel, deleteDialogViewModel)
 //            AppDestinations.CHAT -> ChatView()
-            AppDestinations.PROFILE -> ProfileView()
+//            AppDestinations.PROFILE -> ProfileView()
         }
     }
 }
@@ -74,5 +74,5 @@ enum class AppDestinations(
 ) {
     //CHAT("Chat", R.drawable.ic_chat),
     HOME("Home", R.drawable.ic_home),
-    PROFILE("Profile", R.drawable.ic_profile),
+//    PROFILE("Profile", R.drawable.ic_profile),
 }

@@ -29,7 +29,7 @@ abstract class ApplicationDatabase : RoomDatabase() {
     abstract fun ProductListDao() : ProductListDao
 
     companion object {
-        val DB_NAME = "ApplicationDB"
+        const val DB_NAME = "ApplicationDB2"
         lateinit var INSTANCE: ApplicationDatabase
 
         fun getDatabase(context: Context): ApplicationDatabase {

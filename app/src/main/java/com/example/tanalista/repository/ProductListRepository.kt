@@ -13,12 +13,20 @@ class ProductListRepository(context: Context) {
     private val productListDao = ApplicationDatabase.getDatabase(context).ProductListDao()
     val productDao = ApplicationDatabase.getDatabase(context).ProductDao()
 
-    suspend fun addProductInList(listItemDTO: ListItemDTO) {
+    suspend fun addOrUpdateProductInList(listItemDTO: ListItemDTO?) {
+
+        if (listItemDTO == null) return
 
         val allProducts = productDao.getAllProducts().first()
 
-        val existingProduct = allProducts.find {
+        var existingProduct = allProducts.find {
             it.name.equals(listItemDTO.name.trim(), ignoreCase = true)
+        }
+
+        if (isUpdate(listItemDTO)) {
+            existingProduct = allProducts.find {
+                it.id == listItemDTO.productId && listItemDTO.listId.toInt() == 1
+            }
         }
 
         val productId = getProductId(existingProduct, listItemDTO)
@@ -27,6 +35,7 @@ class ProductListRepository(context: Context) {
             ProductListEntity(
                 1,
                 productId,
+                listItemDTO.name,
                 listItemDTO.quantity,
                 listItemDTO.productPrice,
                 listItemDTO.isInCart,
@@ -63,6 +72,7 @@ class ProductListRepository(context: Context) {
     }
 
     private suspend fun getProductId(product: ProductEntity?, listItemDTO: ListItemDTO): Long {
+
         if (product != null) {
             return product.id
         }
@@ -70,10 +80,12 @@ class ProductListRepository(context: Context) {
         return productDao.insertProduct(ProductEntity(listItemDTO.name, listItemDTO.category))
     }
 
-    suspend fun deleteProductFromList(listItem: ListItemDTO)
-    {
+    suspend fun deleteProductFromList(listItem: ListItemDTO) {
         val listItem = productListDao.getProductInListByIds(listItem.listId, listItem.productId)
 
         productListDao.deleteProductList(listItem)
     }
+
+    private fun isUpdate(listItemDTO: ListItemDTO): Boolean =
+        listItemDTO.productId.toInt() != 0 && listItemDTO.listId.toInt() != 0
 }

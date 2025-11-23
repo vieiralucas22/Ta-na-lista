@@ -141,7 +141,7 @@ fun CartDialog(viewModel: ListDialogViewModel) {
                             .padding(8.dp)
                             .weight(1f),
                         onClick = {
-                            viewModel.addItemToList()
+                            viewModel.addOrUpdateItemToList()
                         },
                     ) {
                         Text(text = viewModel.textButtonDialog, fontSize = 18.sp)

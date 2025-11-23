@@ -20,7 +20,7 @@ class ListDialogViewModel(application: Application) : AndroidViewModel(applicati
         ProductCategoryRepository(application.applicationContext)
     private val productListRepository = ProductListRepository(application.applicationContext)
 
-    private lateinit var currentListItem: ListItemDTO
+    private var currentListItem: ListItemDTO? = null
 
     val allCategories = productCategoryRepository.getAllCategories().stateIn(
         viewModelScope,
@@ -51,36 +51,29 @@ class ListDialogViewModel(application: Application) : AndroidViewModel(applicati
     }
 
     fun editDialog(listItem: ListItemDTO) {
-
         currentListItem = listItem
 
-        productName = currentListItem.name
-        category = currentListItem.category
-        price = currentListItem.productPrice.toString()
-        quantity = currentListItem.quantity.toString()
-        canAddToCart = currentListItem.isInCart
+        productName = currentListItem?.name.toString()
+        category = currentListItem?.category.toString()
+        price = currentListItem?.productPrice.toString()
+        quantity = currentListItem?.quantity.toString()
+        canAddToCart = currentListItem?.isInCart == true
 
         textButtonDialog = "Update"
 
         openDialog()
     }
 
-    fun addItemToList() {
+    fun addOrUpdateItemToList() {
 
         if (shouldAbortAddItemToList()) return
 
         price = price.replace(",", ".")
 
-        currentListItem = ListItemDTO(
-            name = productName,
-            quantity = quantity.ifEmpty { "0" }.toInt(),
-            productPrice = price.ifEmpty { "0.0" }.toDouble(),
-            category = if (category == "Select a category") ProductCategory.Undefined.toString() else category,
-            isInCart = canAddToCart
-        )
+        currentListItem = if (currentListItem == null) createNewItem() else getItemUpdated()
 
         viewModelScope.launch {
-            productListRepository.addProductInList(currentListItem)
+            productListRepository.addOrUpdateProductInList(currentListItem)
         }
 
         closeDialog()
@@ -121,5 +114,28 @@ class ListDialogViewModel(application: Application) : AndroidViewModel(applicati
         canAddToCart = false
         isInvalidProductName = false
         textButtonDialog = "Add"
+        currentListItem = null
+    }
+
+    fun createNewItem(): ListItemDTO {
+        return ListItemDTO(
+            name = productName,
+            quantity = quantity.ifEmpty { "0" }.toInt(),
+            productPrice = price.ifEmpty { "0.0" }.toDouble(),
+            category = if (category == "Select a category") ProductCategory.Undefined.toString() else category,
+            isInCart = canAddToCart
+        )
+    }
+
+    fun getItemUpdated(): ListItemDTO {
+        return ListItemDTO(
+            productId = currentListItem!!.productId,
+            listId = currentListItem!!.listId,
+            name = productName,
+            quantity = quantity.ifEmpty { "0" }.toInt(),
+            productPrice = price.ifEmpty { "0.0" }.toDouble(),
+            category = if (category == "Select a category") ProductCategory.Undefined.toString() else category,
+            isInCart = canAddToCart
+        )
     }
 }
