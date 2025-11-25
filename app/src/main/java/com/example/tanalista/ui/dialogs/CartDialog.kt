@@ -39,7 +39,6 @@ import com.example.tanalista.viewmodel.dialog.ListDialogViewModel
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CartDialog(viewModel: ListDialogViewModel) {
-    val categories by viewModel.allCategories.collectAsState()
 
     if (viewModel.isDialogOpen) {
         Dialog(onDismissRequest = { viewModel.closeDialog() }) {
@@ -52,10 +51,46 @@ fun CartDialog(viewModel: ListDialogViewModel) {
 
                 Text(text = "Add a new item", fontSize = 12.sp, fontWeight = FontWeight.SemiBold)
 
-                OutlinedTextFieldDialog(
-                    viewModel.productName, viewModel.isInvalidProductName, { viewModel.productName = it },
-                    KeyboardType.Text, "Product name"
-                )
+                ExposedDropdownMenuBox(
+                    expanded = viewModel.isProductNameDropdownExpanded,
+                    onExpandedChange = {
+                        viewModel.isProductNameDropdownExpanded = !viewModel.isProductNameDropdownExpanded
+                    }
+                ) {
+                    OutlinedTextField(
+                        value = viewModel.productName,
+                        onValueChange = { viewModel.suggestNewProducts(it) },
+                        label = { Text("Product name") },
+                        isError = viewModel.isInvalidProductName,
+                        trailingIcon = {
+                            ExposedDropdownMenuDefaults.TrailingIcon(expanded = viewModel.isProductNameDropdownExpanded)
+                        },
+                        keyboardOptions = KeyboardOptions(
+                            keyboardType = KeyboardType.Text
+                        ),
+                        modifier = Modifier
+                            .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryEditable, true),
+                    )
+
+                    viewModel.productsSuggestion.value.let { it ->
+                        ExposedDropdownMenu(
+                            expanded = viewModel.isProductNameDropdownExpanded,
+                            onDismissRequest = { viewModel.isProductNameDropdownExpanded = false }
+                        ) {
+                            it?.forEach { option ->
+                                DropdownMenuItem(
+                                    text = { Text(option.name) },
+                                    onClick = {
+                                        viewModel.productName = option.name
+                                        viewModel.isProductNameDropdownExpanded = false
+                                    }
+                                )
+                            }
+                        }
+
+                    }
+
+                }
 
                 OutlinedTextFieldDialog(
                     viewModel.quantity,
@@ -75,45 +110,7 @@ fun CartDialog(viewModel: ListDialogViewModel) {
 
                 Spacer(Modifier.height(4.dp))
 
-                ExposedDropdownMenuBox(
-                    expanded = viewModel.isDropdownExpanded,
-                    onExpandedChange = {
-                        viewModel.isDropdownExpanded = !viewModel.isDropdownExpanded
-                    }
-                ) {
-                    OutlinedTextField(
-                        value = viewModel.category,
-                        onValueChange = {},
-                        enabled = false,
-                        label = { Text("Category") },
-                        trailingIcon = {
-                            ExposedDropdownMenuDefaults.TrailingIcon(expanded = viewModel.isDropdownExpanded)
-                        },
-                        modifier = Modifier
-                            .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryEditable, true),
-                        colors = TextFieldDefaults.colors(
-                            disabledContainerColor = White,
-                            disabledLabelColor = ButtonBackground,
-                            disabledIndicatorColor = ButtonBackground,
-                            disabledTextColor = ButtonBackground
-                        )
-                    )
-
-                    ExposedDropdownMenu(
-                        expanded = viewModel.isDropdownExpanded,
-                        onDismissRequest = { viewModel.isDropdownExpanded = false }
-                    ) {
-                        categories.forEach { option ->
-                            DropdownMenuItem(
-                                text = { Text(option.categoryName) },
-                                onClick = {
-                                    viewModel.category = option.categoryName
-                                    viewModel.isDropdownExpanded = false
-                                }
-                            )
-                        }
-                    }
-                }
+                CategoryDropdown(viewModel)
 
                 Row(
                     modifier = Modifier.fillMaxWidth(),
@@ -175,4 +172,50 @@ fun OutlinedTextFieldDialog(
             keyboardType = keyboardType
         )
     )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun CategoryDropdown(viewModel: ListDialogViewModel) {
+    val categories by viewModel.allCategories.collectAsState()
+
+    ExposedDropdownMenuBox(
+        expanded = viewModel.isCategoryDropdownExpanded,
+        onExpandedChange = {
+            viewModel.isCategoryDropdownExpanded = !viewModel.isCategoryDropdownExpanded
+        }
+    ) {
+        OutlinedTextField(
+            value = viewModel.category,
+            onValueChange = {},
+            enabled = false,
+            label = { Text("Category") },
+            trailingIcon = {
+                ExposedDropdownMenuDefaults.TrailingIcon(expanded = viewModel.isCategoryDropdownExpanded)
+            },
+            modifier = Modifier
+                .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryEditable, true),
+            colors = TextFieldDefaults.colors(
+                disabledContainerColor = White,
+                disabledLabelColor = ButtonBackground,
+                disabledIndicatorColor = ButtonBackground,
+                disabledTextColor = ButtonBackground
+            )
+        )
+
+        ExposedDropdownMenu(
+            expanded = viewModel.isCategoryDropdownExpanded,
+            onDismissRequest = { viewModel.isCategoryDropdownExpanded = false }
+        ) {
+            categories.forEach { option ->
+                DropdownMenuItem(
+                    text = { Text(option.categoryName) },
+                    onClick = {
+                        viewModel.category = option.categoryName
+                        viewModel.isCategoryDropdownExpanded = false
+                    }
+                )
+            }
+        }
+    }
 }

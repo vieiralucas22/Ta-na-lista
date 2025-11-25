@@ -5,11 +5,15 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.example.tanalista.database.model.ProductEntity
 import com.example.tanalista.database.model.dto.ListItemDTO
 import com.example.tanalista.enums.ProductCategory
 import com.example.tanalista.repository.ProductCategoryRepository
 import com.example.tanalista.repository.ProductListRepository
+import com.example.tanalista.repository.ProductRepository
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -19,6 +23,7 @@ class ListDialogViewModel(application: Application) : AndroidViewModel(applicati
     private val productCategoryRepository =
         ProductCategoryRepository(application.applicationContext)
     private val productListRepository = ProductListRepository(application.applicationContext)
+    private val productRepository = ProductRepository(application.applicationContext)
 
     private var currentListItem: ListItemDTO? = null
 
@@ -27,12 +32,14 @@ class ListDialogViewModel(application: Application) : AndroidViewModel(applicati
         SharingStarted.WhileSubscribed(5000),
         emptyList()
     )
+    private var allProducts: List<ProductEntity> = emptyList()
 
     var isDialogOpen by mutableStateOf(false)
     var productName by mutableStateOf("")
     var quantity by mutableStateOf("")
     var price by mutableStateOf("")
-    var isDropdownExpanded by mutableStateOf(false)
+    var isCategoryDropdownExpanded by mutableStateOf(false)
+    var isProductNameDropdownExpanded by mutableStateOf(false)
     var category by mutableStateOf("Select a category")
     var canAddToCart by mutableStateOf(false)
     var isInvalidProductName by mutableStateOf(false)
@@ -40,6 +47,16 @@ class ListDialogViewModel(application: Application) : AndroidViewModel(applicati
     var isInvalidPrice by mutableStateOf(false)
     var textButtonDialog by mutableStateOf("Add")
 
+    private val _productsSuggestion = MutableLiveData<List<ProductEntity>>()
+    val productsSuggestion: LiveData<List<ProductEntity>> = _productsSuggestion
+
+    init {
+        viewModelScope.launch {
+            productRepository.getAllProducts().collect { newList ->
+                allProducts = newList
+            }
+        }
+    }
 
     fun openDialog() {
         isDialogOpen = true
@@ -137,5 +154,22 @@ class ListDialogViewModel(application: Application) : AndroidViewModel(applicati
             category = if (category == "Select a category") ProductCategory.Undefined.toString() else category,
             isInCart = canAddToCart
         )
+    }
+
+    fun suggestNewProducts(inputTextName: String) {
+        updateProductDropdownList(inputTextName)
+
+        productName = inputTextName
+    }
+
+    fun updateProductDropdownList(inputTextName: String) {
+        val newSuggestionProducts = allProducts
+            .filter { it.name.lowercase().startsWith(inputTextName.lowercase()) }
+            .take(5)
+            .sortedBy { it.name }
+
+        isProductNameDropdownExpanded = newSuggestionProducts.isNotEmpty()
+
+        _productsSuggestion.value = newSuggestionProducts
     }
 }
