@@ -14,15 +14,18 @@ import com.example.tanalista.enums.ProductCategory
 import com.example.tanalista.repository.ProductListRepository
 import kotlinx.coroutines.launch
 
-class HomeViewModel (application: Application) : AndroidViewModel(application) {
+class HomeViewModel(application: Application) : AndroidViewModel(application) {
 
     private val productListRepository = ProductListRepository(application.applicationContext)
 
-    var allProductsInCurrentPage by mutableStateOf(productListRepository.getAllProductsFromList(1).asLiveData())
+    var allProductsInCurrentPage by mutableStateOf(
+        productListRepository.getAllListProducts(1, false).asLiveData()
+    )
 
     var isListToggleButtonChecked by mutableStateOf(true)
     var isCartToggleButtonChecked by mutableStateOf(false)
     var totalValue by mutableDoubleStateOf(0.0)
+    var isSortDropdownExpanded by mutableStateOf(false)
 
     init {
         updateTotalCartValue()
@@ -38,32 +41,29 @@ class HomeViewModel (application: Application) : AndroidViewModel(application) {
         }
     }
 
-    fun showAllProductsInList()
-    {
+    fun showAllProductsInList() {
         viewModelScope.launch {
-            allProductsInCurrentPage = productListRepository.getAllProductsFromList(1).asLiveData()
+            allProductsInCurrentPage = productListRepository.getAllListProducts(1, false).asLiveData()
         }
         isCartToggleButtonChecked = false
         isListToggleButtonChecked = true
     }
 
-    fun showAllProductsInCart()
-    {
+    fun showAllProductsInCart() {
         viewModelScope.launch {
-            allProductsInCurrentPage = productListRepository.getAllProductsFromCart(1).asLiveData()
+            allProductsInCurrentPage = productListRepository.getAllListProducts(1, true).asLiveData()
         }
         isCartToggleButtonChecked = true
         isListToggleButtonChecked = false
     }
 
-    fun updateTotalCartValue()
-    {
+    fun updateTotalCartValue() {
         viewModelScope.launch {
-            productListRepository.getAllProductsFromCart(1)
+            productListRepository.getAllListProducts(1, true)
                 .collect { products ->
                     totalValue = 0.0
 
-                    products.forEach { product->
+                    products.forEach { product ->
                         totalValue += product.quantity * product.productPrice;
                     }
                 }
@@ -84,6 +84,16 @@ class HomeViewModel (application: Application) : AndroidViewModel(application) {
             ProductCategory.Toilet -> R.drawable.ic_toilet
             else -> {
                 R.drawable.ic_undefined
+            }
+        }
+    }
+
+    fun orderItemsBy(orderType: Int) {
+        viewModelScope.launch {
+            allProductsInCurrentPage = if (orderType == 0) {
+                productListRepository.getAllProductsFromListOrderByCategory(1, isCartToggleButtonChecked).asLiveData()
+            } else {
+                productListRepository.getAllProductsFromListOrderByAlphabetical(1, isCartToggleButtonChecked).asLiveData()
             }
         }
     }

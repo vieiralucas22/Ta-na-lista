@@ -19,8 +19,13 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuAnchorType
+import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconToggleButton
 import androidx.compose.material3.IconToggleButtonColors
 import androidx.compose.material3.Scaffold
@@ -86,12 +91,15 @@ fun CartView(
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HeaderHome(homeViewModel: HomeViewModel) {
     Column(modifier = Modifier.padding(24.dp, 32.dp)) {
         Row(
             modifier = Modifier
-                .fillMaxWidth(), horizontalArrangement = Arrangement.Start
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
         ) {
             Column {
                 Text(
@@ -103,6 +111,46 @@ fun HeaderHome(homeViewModel: HomeViewModel) {
                 Text(text = "Cart value", fontSize = 16.sp, color = BackgroundColor)
             }
 
+            ExposedDropdownMenuBox(
+                expanded = homeViewModel.isSortDropdownExpanded,
+                onExpandedChange = {
+                    homeViewModel.isSortDropdownExpanded =
+                        !homeViewModel.isSortDropdownExpanded
+                }
+            ) {
+                Row (modifier = Modifier.width(120.dp).menuAnchor(ExposedDropdownMenuAnchorType.PrimaryEditable, true), horizontalArrangement = Arrangement.End)
+                {
+                    IconButton(
+                        onClick = {}
+                    ) {
+                        Icon(
+                            painter = painterResource(R.drawable.ic_order_by),
+                            contentDescription = "Icon",
+                            tint = White,
+                        )
+                    }
+                }
+                ExposedDropdownMenu(
+                    expanded = homeViewModel.isSortDropdownExpanded,
+                    onDismissRequest = { homeViewModel.isSortDropdownExpanded = false }
+                ) {
+                    DropdownMenuItem(
+                        text = { Text("Category") },
+                        onClick = {
+                            homeViewModel.orderItemsBy(0)
+                            homeViewModel.isSortDropdownExpanded = false
+                        },
+                    )
+
+                    DropdownMenuItem(
+                        text = { Text("Alphabetical") },
+                        onClick = {
+                            homeViewModel.orderItemsBy(1)
+                            homeViewModel.isSortDropdownExpanded = false
+                        }
+                    )
+                }
+            }
         }
 
         Spacer(Modifier.height(16.dp))

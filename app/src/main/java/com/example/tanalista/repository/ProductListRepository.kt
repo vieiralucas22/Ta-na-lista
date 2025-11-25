@@ -45,12 +45,8 @@ class ProductListRepository(context: Context) {
         productListDao.insert(productListEntity)
     }
 
-    fun getAllProductsFromList(id: Long): Flow<List<ListItemDTO>> {
-        return productListDao.getProductsInList(id)
-    }
-
-    fun getAllProductsFromCart(id: Long): Flow<List<ListItemDTO>> {
-        return productListDao.getProductsInCart(id)
+    fun getAllListProducts(id: Long, isInCart: Boolean): Flow<List<ListItemDTO>> {
+        return productListDao.getProductsInList(id, isInCart)
     }
 
     suspend fun addProductInCart(listItem: ListItemDTO) {
@@ -88,4 +84,13 @@ class ProductListRepository(context: Context) {
 
     private fun isUpdate(listItemDTO: ListItemDTO): Boolean =
         listItemDTO.productId.toInt() != 0 && listItemDTO.listId.toInt() != 0
+
+    fun getAllProductsFromListOrderByAlphabetical(id: Long, isInCart: Boolean): Flow<List<ListItemDTO>> {
+        return productListDao.getProductsInListOrderByAlphabetical(id, isInCart)
+    }
+
+    fun getAllProductsFromListOrderByCategory(id: Long, isInCart: Boolean): Flow<List<ListItemDTO>> {
+        return productListDao.getProductsInListOrderByCategory(id, isInCart)
+    }
+
 }
