@@ -118,7 +118,12 @@ fun HeaderHome(homeViewModel: HomeViewModel) {
                         !homeViewModel.isSortDropdownExpanded
                 }
             ) {
-                Row (modifier = Modifier.width(120.dp).menuAnchor(ExposedDropdownMenuAnchorType.PrimaryEditable, true), horizontalArrangement = Arrangement.End)
+                Row(
+                    modifier = Modifier
+                        .width(150.dp)
+                        .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryEditable, true),
+                    horizontalArrangement = Arrangement.End
+                )
                 {
                     IconButton(
                         onClick = {}
@@ -140,6 +145,16 @@ fun HeaderHome(homeViewModel: HomeViewModel) {
                             homeViewModel.orderItemsBy(0)
                             homeViewModel.isSortDropdownExpanded = false
                         },
+                        trailingIcon = {
+                            if (homeViewModel.isCategoryOrderSelected) {
+                                Icon(
+                                    painter = painterResource(R.drawable.ic_check),
+                                    contentDescription = null,
+                                    tint = Purple,
+                                    modifier = Modifier.size(16.dp)
+                                )
+                            }
+                        }
                     )
 
                     DropdownMenuItem(
@@ -147,6 +162,16 @@ fun HeaderHome(homeViewModel: HomeViewModel) {
                         onClick = {
                             homeViewModel.orderItemsBy(1)
                             homeViewModel.isSortDropdownExpanded = false
+                        },
+                        trailingIcon = {
+                            if (homeViewModel.isAlphabeticalOrderSelected) {
+                                Icon(
+                                    painter = painterResource(R.drawable.ic_check),
+                                    contentDescription = null,
+                                    tint = Purple,
+                                    modifier = Modifier.size(16.dp)
+                                )
+                            }
                         }
                     )
                 }

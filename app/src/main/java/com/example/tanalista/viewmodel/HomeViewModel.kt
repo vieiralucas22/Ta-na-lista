@@ -24,8 +24,10 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
 
     var isListToggleButtonChecked by mutableStateOf(true)
     var isCartToggleButtonChecked by mutableStateOf(false)
-    var totalValue by mutableDoubleStateOf(0.0)
+    var isAlphabeticalOrderSelected by mutableStateOf(false)
+    var isCategoryOrderSelected by mutableStateOf(false)
     var isSortDropdownExpanded by mutableStateOf(false)
+    var totalValue by mutableDoubleStateOf(0.0)
 
     init {
         updateTotalCartValue()
@@ -90,10 +92,14 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
 
     fun orderItemsBy(orderType: Int) {
         viewModelScope.launch {
-            allProductsInCurrentPage = if (orderType == 0) {
-                productListRepository.getAllProductsFromListOrderByCategory(1, isCartToggleButtonChecked).asLiveData()
+             if (orderType == 0) {
+                 allProductsInCurrentPage = productListRepository.getAllProductsFromListOrderByCategory(1, isCartToggleButtonChecked).asLiveData()
+                 isCategoryOrderSelected = true
+                 isAlphabeticalOrderSelected = false
             } else {
-                productListRepository.getAllProductsFromListOrderByAlphabetical(1, isCartToggleButtonChecked).asLiveData()
+                 allProductsInCurrentPage = productListRepository.getAllProductsFromListOrderByAlphabetical(1, isCartToggleButtonChecked).asLiveData()
+                 isCategoryOrderSelected = false
+                 isAlphabeticalOrderSelected = true
             }
         }
     }
