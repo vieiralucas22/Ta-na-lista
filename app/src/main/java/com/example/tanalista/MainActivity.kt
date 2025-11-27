@@ -16,7 +16,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.lifecycle.ViewModelProvider
 import com.example.tanalista.ui.views.CartView
 import com.example.tanalista.ui.views.ProfileView
-import com.example.tanalista.viewmodel.HomeViewModel
+import com.example.tanalista.viewmodel.CartViewModel
 import com.example.tanalista.viewmodel.ProfileViewModel
 import com.example.tanalista.viewmodel.dialog.DeleteListItemDialogViewModel
 import com.example.tanalista.viewmodel.dialog.ListDialogViewModel
@@ -26,20 +26,20 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        val homeViewModel = ViewModelProvider.create(this)[HomeViewModel::class.java]
+        val cartViewModel = ViewModelProvider.create(this)[CartViewModel::class.java]
         val listDialogViewModel = ViewModelProvider.create(this)[ListDialogViewModel::class.java]
         val deleteDialogViewModel = ViewModelProvider.create(this)[DeleteListItemDialogViewModel::class.java]
         val profileViewModel = ViewModelProvider.create(this)[ProfileViewModel::class.java]
 
         setContent {
-            MyApplicationApp(homeViewModel, listDialogViewModel, deleteDialogViewModel, profileViewModel)
+            MyApplicationApp(cartViewModel, listDialogViewModel, deleteDialogViewModel, profileViewModel)
         }
     }
 }
 
 @Composable
 fun MyApplicationApp(
-    homeViewModel: HomeViewModel,
+    cartViewModel: CartViewModel,
     listDialogViewModel: ListDialogViewModel,
     deleteDialogViewModel: DeleteListItemDialogViewModel,
     profileViewModel: ProfileViewModel, ) {
@@ -64,7 +64,7 @@ fun MyApplicationApp(
         },
         ) {
         when (currentDestination) {
-            AppDestinations.HOME -> CartView(homeViewModel, listDialogViewModel, deleteDialogViewModel)
+            AppDestinations.HOME -> CartView(cartViewModel, listDialogViewModel, deleteDialogViewModel)
             AppDestinations.PROFILE -> ProfileView(profileViewModel)
         }
     }

@@ -14,7 +14,7 @@ import com.example.tanalista.enums.ProductCategory
 import com.example.tanalista.repository.ProductListRepository
 import kotlinx.coroutines.launch
 
-class HomeViewModel(application: Application) : AndroidViewModel(application) {
+class CartViewModel(application: Application) : AndroidViewModel(application) {
 
     private val productListRepository = ProductListRepository(application.applicationContext)
 

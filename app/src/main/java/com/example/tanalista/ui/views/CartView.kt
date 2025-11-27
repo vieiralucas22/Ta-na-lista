@@ -25,7 +25,6 @@ import androidx.compose.material3.ExposedDropdownMenuAnchorType
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconToggleButton
 import androidx.compose.material3.IconToggleButtonColors
 import androidx.compose.material3.Scaffold
@@ -56,14 +55,14 @@ import com.example.tanalista.ui.theme.ToggleButtonListChecked
 import com.example.tanalista.ui.theme.ToggleButtonListDisabled
 import com.example.tanalista.ui.theme.White
 import androidx.compose.ui.draw.shadow
-import com.example.tanalista.viewmodel.HomeViewModel
+import com.example.tanalista.viewmodel.CartViewModel
 import com.example.tanalista.viewmodel.dialog.DeleteListItemDialogViewModel
 import com.example.tanalista.viewmodel.dialog.ListDialogViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun CartView(
-    homeViewModel: HomeViewModel,
+    cartViewModel: CartViewModel,
     listDialogViewModel: ListDialogViewModel,
     deleteDialogViewModel: DeleteListItemDialogViewModel
 ) {
@@ -83,8 +82,8 @@ fun CartView(
                     .fillMaxSize()
                     .background(ButtonBackground)
             ) {
-                HeaderHome(homeViewModel)
-                ListHome(homeViewModel, listDialogViewModel, deleteDialogViewModel)
+                HeaderCart(cartViewModel)
+                ListCart(cartViewModel, listDialogViewModel, deleteDialogViewModel)
                 CartDialog(listDialogViewModel)
                 DeleteListItemDialog(deleteDialogViewModel)
             }
@@ -94,7 +93,7 @@ fun CartView(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HeaderHome(homeViewModel: HomeViewModel) {
+fun HeaderCart(cartViewModel: CartViewModel) {
     Column(modifier = Modifier.padding(24.dp, 32.dp)) {
         Row(
             modifier = Modifier
@@ -104,7 +103,7 @@ fun HeaderHome(homeViewModel: HomeViewModel) {
         ) {
             Column {
                 Text(
-                    text = "R$ %.2f".format(homeViewModel.totalValue),
+                    text = "R$ %.2f".format(cartViewModel.totalValue),
                     fontSize = 32.sp,
                     fontWeight = FontWeight.SemiBold,
                     color = BackgroundColor
@@ -113,10 +112,10 @@ fun HeaderHome(homeViewModel: HomeViewModel) {
             }
 
             ExposedDropdownMenuBox(
-                expanded = homeViewModel.isSortDropdownExpanded,
+                expanded = cartViewModel.isSortDropdownExpanded,
                 onExpandedChange = {
-                    homeViewModel.isSortDropdownExpanded =
-                        !homeViewModel.isSortDropdownExpanded
+                    cartViewModel.isSortDropdownExpanded =
+                        !cartViewModel.isSortDropdownExpanded
                 }
             ) {
                 Row(
@@ -133,17 +132,17 @@ fun HeaderHome(homeViewModel: HomeViewModel) {
                     )
                 }
                 ExposedDropdownMenu(
-                    expanded = homeViewModel.isSortDropdownExpanded,
-                    onDismissRequest = { homeViewModel.isSortDropdownExpanded = false }
+                    expanded = cartViewModel.isSortDropdownExpanded,
+                    onDismissRequest = { cartViewModel.isSortDropdownExpanded = false }
                 ) {
                     DropdownMenuItem(
                         text = { Text("Category") },
                         onClick = {
-                            homeViewModel.orderItemsBy(0)
-                            homeViewModel.isSortDropdownExpanded = false
+                            cartViewModel.orderItemsBy(0)
+                            cartViewModel.isSortDropdownExpanded = false
                         },
                         trailingIcon = {
-                            if (homeViewModel.isCategoryOrderSelected) {
+                            if (cartViewModel.isCategoryOrderSelected) {
                                 Icon(
                                     painter = painterResource(R.drawable.ic_check),
                                     contentDescription = null,
@@ -157,11 +156,11 @@ fun HeaderHome(homeViewModel: HomeViewModel) {
                     DropdownMenuItem(
                         text = { Text("Alphabetical") },
                         onClick = {
-                            homeViewModel.orderItemsBy(1)
-                            homeViewModel.isSortDropdownExpanded = false
+                            cartViewModel.orderItemsBy(1)
+                            cartViewModel.isSortDropdownExpanded = false
                         },
                         trailingIcon = {
-                            if (homeViewModel.isAlphabeticalOrderSelected) {
+                            if (cartViewModel.isAlphabeticalOrderSelected) {
                                 Icon(
                                     painter = painterResource(R.drawable.ic_check),
                                     contentDescription = null,
@@ -198,10 +197,10 @@ fun HeaderHome(homeViewModel: HomeViewModel) {
                 iconTint = ButtonBackground,
                 onCheckedChange = { isChecked ->
                     if (isChecked) {
-                        homeViewModel.showAllProductsInList()
+                        cartViewModel.showAllProductsInList()
                     }
                 },
-                isChecked = homeViewModel.isListToggleButtonChecked
+                isChecked = cartViewModel.isListToggleButtonChecked
             )
 
             HeaderToggleButton(
@@ -220,10 +219,10 @@ fun HeaderHome(homeViewModel: HomeViewModel) {
                 iconTint = White,
                 onCheckedChange = { isChecked ->
                     if (isChecked) {
-                        homeViewModel.showAllProductsInCart()
+                        cartViewModel.showAllProductsInCart()
                     }
                 },
-                isChecked = homeViewModel.isCartToggleButtonChecked
+                isChecked = cartViewModel.isCartToggleButtonChecked
             )
         }
 
@@ -231,12 +230,12 @@ fun HeaderHome(homeViewModel: HomeViewModel) {
 }
 
 @Composable
-fun ListHome(
-    homeViewModel: HomeViewModel,
+fun ListCart(
+    cartViewModel: CartViewModel,
     listDialogViewModel: ListDialogViewModel,
     deleteDialogViewModel: DeleteListItemDialogViewModel
 ) {
-    val productItems by homeViewModel.allProductsInCurrentPage.observeAsState()
+    val productItems by cartViewModel.allProductsInCurrentPage.observeAsState()
     val isEmpty = productItems.isNullOrEmpty()
 
     Column(
@@ -259,14 +258,14 @@ fun ListHome(
                         ProductItem(
                             item.name,
                             item.productPrice,
-                            homeViewModel.getCategoryIcon(item.category),
+                            cartViewModel.getCategoryIcon(item.category),
                             addItemToCartList =
                                 {
-                                    homeViewModel.moveProductBetweenLists(item, true)
+                                    cartViewModel.moveProductBetweenLists(item, true)
                                 },
                             removeItemToCartList =
                                 {
-                                    homeViewModel.moveProductBetweenLists(item, false)
+                                    cartViewModel.moveProductBetweenLists(item, false)
                                 },
                             item.quantity,
                             item.isInCart,
@@ -429,12 +428,3 @@ fun CartOutButton(addItemToCartList: () -> Unit, isInCart: Boolean) {
         }
     }
 }
-
-
-
-
-
-
-
-
-
