@@ -55,6 +55,7 @@ import com.example.tanalista.ui.theme.ToggleButtonCartDisable
 import com.example.tanalista.ui.theme.ToggleButtonListChecked
 import com.example.tanalista.ui.theme.ToggleButtonListDisabled
 import com.example.tanalista.ui.theme.White
+import androidx.compose.ui.draw.shadow
 import com.example.tanalista.viewmodel.HomeViewModel
 import com.example.tanalista.viewmodel.dialog.DeleteListItemDialogViewModel
 import com.example.tanalista.viewmodel.dialog.ListDialogViewModel
@@ -125,15 +126,11 @@ fun HeaderHome(homeViewModel: HomeViewModel) {
                     horizontalArrangement = Arrangement.End
                 )
                 {
-                    IconButton(
-                        onClick = {}
-                    ) {
-                        Icon(
-                            painter = painterResource(R.drawable.ic_order_by),
-                            contentDescription = "Icon",
-                            tint = White,
-                        )
-                    }
+                    Icon(
+                        painter = painterResource(R.drawable.ic_order_by),
+                        contentDescription = "Icon",
+                        tint = White,
+                    )
                 }
                 ExposedDropdownMenu(
                     expanded = homeViewModel.isSortDropdownExpanded,
@@ -299,7 +296,10 @@ fun HeaderToggleButton(
     isChecked: Boolean
 ) {
     IconToggleButton(
-        modifier = modifier,
+        modifier = modifier.shadow(
+            elevation = 1.dp,
+            shape = RoundedCornerShape(12.dp)
+        ),
         checked = isChecked,
         onCheckedChange = onCheckedChange,
         colors = colors,
@@ -335,6 +335,10 @@ fun ProductItem(
     Row(
         modifier = Modifier
             .fillMaxWidth()
+            .shadow(
+                elevation = 1.dp,
+                shape = RoundedCornerShape(20.dp)
+            )
             .padding(0.dp, 0.dp, 0.dp, 4.dp)
             .background(color = GrayBackground, shape = RoundedCornerShape(20.dp))
             .padding(12.dp)
@@ -371,6 +375,7 @@ fun ProductItem(
         CartInButton(addItemToCartList, isInCart)
         CartOutButton(removeItemToCartList, isInCart)
     }
+    Spacer(modifier = Modifier.height(4.dp))
 }
 
 @Composable
