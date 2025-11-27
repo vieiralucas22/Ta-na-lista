@@ -1,5 +1,7 @@
 package com.example.tanalista.ui.views
 
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -24,19 +26,28 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import coil.compose.rememberAsyncImagePainter
 import com.example.tanalista.R
 import com.example.tanalista.ui.theme.ButtonBackground
 import com.example.tanalista.ui.theme.GrayBackground
 import com.example.tanalista.ui.theme.White
+import com.example.tanalista.viewmodel.ProfileViewModel
 
 @Composable
-fun ProfileView() {
+fun ProfileView(viewModel: ProfileViewModel) {
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.GetContent()
+    ) { uri ->
+        viewModel.updateImage(uri)
+    }
+
     Scaffold(
         modifier = Modifier
             .background(White)
@@ -53,7 +64,29 @@ fun ProfileView() {
 
             Spacer(Modifier.height(16.dp))
 
-            PersonArea()
+            Button(
+                onClick = { launcher.launch("image/*") },
+                colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent)
+            ) {
+                viewModel.imageUri?.let { uri ->
+                    Image(
+                        painter = rememberAsyncImagePainter(uri),
+                        contentDescription = "profile picture",
+                        modifier = Modifier
+                            .size(120.dp)
+                            .clip(RoundedCornerShape(999.dp)),
+                        contentScale = ContentScale.Crop
+                    )
+                } ?: Image(
+                    painter = painterResource(R.drawable.avatar_default),
+                    contentDescription = "profile picture",
+                    modifier = Modifier.size(120.dp)
+                )
+            }
+
+            Spacer(Modifier.height(4.dp))
+
+            Text(text = "Lucas", fontSize = 18.sp)
 
             Column(
                 modifier = Modifier
@@ -77,27 +110,14 @@ fun ProfileView() {
 }
 
 @Composable
-fun PersonArea() {
+fun ProfileOption(text: String, resourceIconId: Int) {
     Button(
         onClick = {},
-        colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent)
+        colors = ButtonDefaults.buttonColors(
+            containerColor = Color.Transparent,
+            contentColor = ButtonBackground
+        ), modifier = Modifier.fillMaxWidth()
     ) {
-        Image(
-            painter = painterResource(R.drawable.avatar_default),
-            contentDescription = "profile picture",
-            modifier = Modifier.size(120.dp)
-        )
-    }
-
-    Spacer(Modifier.height(4.dp))
-
-    Text(text = "Lucas", fontSize = 18.sp)
-}
-
-@Composable
-fun ProfileOption(text: String, resourceIconId: Int) {
-    Button(onClick = {},
-        colors = ButtonDefaults.buttonColors(containerColor = Color.Transparent, contentColor = ButtonBackground), modifier = Modifier.fillMaxWidth() ) {
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
@@ -119,10 +139,4 @@ fun ProfileOption(text: String, resourceIconId: Int) {
             )
         }
     }
-}
-
-@Preview
-@Composable
-fun ProfileViewPreview() {
-    ProfileView()
 }

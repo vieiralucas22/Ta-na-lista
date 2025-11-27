@@ -17,6 +17,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.tanalista.ui.views.CartView
 import com.example.tanalista.ui.views.ProfileView
 import com.example.tanalista.viewmodel.HomeViewModel
+import com.example.tanalista.viewmodel.ProfileViewModel
 import com.example.tanalista.viewmodel.dialog.DeleteListItemDialogViewModel
 import com.example.tanalista.viewmodel.dialog.ListDialogViewModel
 
@@ -28,9 +29,10 @@ class MainActivity : ComponentActivity() {
         val homeViewModel = ViewModelProvider.create(this)[HomeViewModel::class.java]
         val listDialogViewModel = ViewModelProvider.create(this)[ListDialogViewModel::class.java]
         val deleteDialogViewModel = ViewModelProvider.create(this)[DeleteListItemDialogViewModel::class.java]
+        val profileViewModel = ViewModelProvider.create(this)[ProfileViewModel::class.java]
 
         setContent {
-            MyApplicationApp(homeViewModel, listDialogViewModel, deleteDialogViewModel)
+            MyApplicationApp(homeViewModel, listDialogViewModel, deleteDialogViewModel, profileViewModel)
         }
     }
 }
@@ -39,7 +41,8 @@ class MainActivity : ComponentActivity() {
 fun MyApplicationApp(
     homeViewModel: HomeViewModel,
     listDialogViewModel: ListDialogViewModel,
-    deleteDialogViewModel: DeleteListItemDialogViewModel, ) {
+    deleteDialogViewModel: DeleteListItemDialogViewModel,
+    profileViewModel: ProfileViewModel, ) {
 
     var currentDestination by rememberSaveable { mutableStateOf(AppDestinations.HOME) }
     NavigationSuiteScaffold(
@@ -62,7 +65,7 @@ fun MyApplicationApp(
         ) {
         when (currentDestination) {
             AppDestinations.HOME -> CartView(homeViewModel, listDialogViewModel, deleteDialogViewModel)
-            AppDestinations.PROFILE -> ProfileView()
+            AppDestinations.PROFILE -> ProfileView(profileViewModel)
         }
     }
 }

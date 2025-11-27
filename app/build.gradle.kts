@@ -56,7 +56,7 @@ dependencies {
     implementation(libs.androidx.compose.runtime.livedata)
     implementation(libs.gson)
     implementation(libs.accompanist.systemuicontroller)
-
+    implementation(libs.coil.compose)
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.compose.foundation)
     kapt(libs.androidx.room.compiler)
