@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Ta na Lista!</string>
+    <string name="cart_value">Cart value</string>
 </resources>

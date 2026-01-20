@@ -108,7 +108,7 @@ fun HeaderCart(cartViewModel: CartViewModel) {
                     fontWeight = FontWeight.SemiBold,
                     color = BackgroundColor
                 )
-                Text(text = "Cart value", fontSize = 16.sp, color = BackgroundColor)
+                Text(text = "Valor do carrinho!", fontSize = 16.sp, color = BackgroundColor)
             }
 
             ExposedDropdownMenuBox(
@@ -136,7 +136,7 @@ fun HeaderCart(cartViewModel: CartViewModel) {
                     onDismissRequest = { cartViewModel.isSortDropdownExpanded = false }
                 ) {
                     DropdownMenuItem(
-                        text = { Text("Category") },
+                        text = { Text("Categoria") },
                         onClick = {
                             cartViewModel.orderItemsBy(0)
                             cartViewModel.isSortDropdownExpanded = false
@@ -154,7 +154,7 @@ fun HeaderCart(cartViewModel: CartViewModel) {
                     )
 
                     DropdownMenuItem(
-                        text = { Text("Alphabetical") },
+                        text = { Text("Alfabética") },
                         onClick = {
                             cartViewModel.orderItemsBy(1)
                             cartViewModel.isSortDropdownExpanded = false
@@ -182,7 +182,7 @@ fun HeaderCart(cartViewModel: CartViewModel) {
         ) {
 
             HeaderToggleButton(
-                text = "List",
+                text = "Lista",
                 modifier = Modifier.weight(1f),
                 colors = IconToggleButtonColors(
                     containerColor = Green,
@@ -204,7 +204,7 @@ fun HeaderCart(cartViewModel: CartViewModel) {
             )
 
             HeaderToggleButton(
-                text = "Cart",
+                text = "Carrinho",
                 modifier = Modifier.weight(1f),
                 colors = IconToggleButtonColors(
                     containerColor = Purple,
@@ -384,7 +384,7 @@ fun EmptyCartSection() {
         Image(painter = painterResource(R.drawable.empty_cart), contentDescription = "Empty cart")
 
         Text(
-            text = "Please click on the below button to add items in your list!",
+            text = "Por favor clique no botão abaixo para adicionar um item!",
             textAlign = TextAlign.Center,
             fontSize = 16.sp
         )

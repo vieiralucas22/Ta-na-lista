@@ -40,12 +40,13 @@ class ListDialogViewModel(application: Application) : AndroidViewModel(applicati
     var price by mutableStateOf("")
     var isCategoryDropdownExpanded by mutableStateOf(false)
     var isProductNameDropdownExpanded by mutableStateOf(false)
-    var category by mutableStateOf("Select a category")
+    var category by mutableStateOf("Escolha uma categoria")
     var canAddToCart by mutableStateOf(false)
     var isInvalidProductName by mutableStateOf(false)
     var isInvalidQuantity by mutableStateOf(false)
     var isInvalidPrice by mutableStateOf(false)
-    var textButtonDialog by mutableStateOf("Add")
+    var textButtonDialog by mutableStateOf("Adicionar")
+    var headerDialog by mutableStateOf("Adicionar item")
 
     private val _productsSuggestion = MutableLiveData<List<ProductEntity>>()
     val productsSuggestion: LiveData<List<ProductEntity>> = _productsSuggestion
@@ -76,8 +77,8 @@ class ListDialogViewModel(application: Application) : AndroidViewModel(applicati
         quantity = currentListItem?.quantity.toString()
         canAddToCart = currentListItem?.isInCart == true
 
-        textButtonDialog = "Update"
-
+        textButtonDialog = "Atualizar"
+        headerDialog = "Atualizar item!"
         openDialog()
     }
 
@@ -127,10 +128,11 @@ class ListDialogViewModel(application: Application) : AndroidViewModel(applicati
         productName = ""
         quantity = ""
         price = ""
-        category = "Select a category"
+        category = "Escolha uma categoria"
         canAddToCart = false
         isInvalidProductName = false
-        textButtonDialog = "Add"
+        textButtonDialog = "Adicionar"
+        headerDialog = "Adicionar item"
         currentListItem = null
     }
 
@@ -139,7 +141,7 @@ class ListDialogViewModel(application: Application) : AndroidViewModel(applicati
             name = productName,
             quantity = quantity.ifEmpty { "0" }.toInt(),
             productPrice = price.ifEmpty { "0.0" }.toDouble(),
-            category = if (category == "Select a category") ProductCategory.Undefined.toString() else category,
+            category = if (category == "Escolha uma categoria") ProductCategory.Undefined.toString() else category,
             isInCart = canAddToCart
         )
     }
@@ -151,7 +153,7 @@ class ListDialogViewModel(application: Application) : AndroidViewModel(applicati
             name = productName,
             quantity = quantity.ifEmpty { "0" }.toInt(),
             productPrice = price.ifEmpty { "0.0" }.toDouble(),
-            category = if (category == "Select a category") ProductCategory.Undefined.toString() else category,
+            category = if (category == "Escolha uma categoria") ProductCategory.Undefined.toString() else category,
             isInCart = canAddToCart
         )
     }

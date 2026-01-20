@@ -49,7 +49,7 @@ fun CartDialog(viewModel: ListDialogViewModel) {
                     .padding(16.dp)
             ) {
 
-                Text(text = "Add a new item", fontSize = 12.sp, fontWeight = FontWeight.SemiBold)
+                Text(text = viewModel.headerDialog, fontSize = 12.sp, fontWeight = FontWeight.SemiBold)
 
                 ExposedDropdownMenuBox(
                     expanded = viewModel.isProductNameDropdownExpanded,
@@ -60,7 +60,7 @@ fun CartDialog(viewModel: ListDialogViewModel) {
                     OutlinedTextField(
                         value = viewModel.productName,
                         onValueChange = { viewModel.suggestNewProducts(it) },
-                        label = { Text("Product name") },
+                        label = { Text("Nome do produto") },
                         isError = viewModel.isInvalidProductName,
                         trailingIcon = {
                             ExposedDropdownMenuDefaults.TrailingIcon(expanded = viewModel.isProductNameDropdownExpanded)
@@ -97,7 +97,7 @@ fun CartDialog(viewModel: ListDialogViewModel) {
                     viewModel.isInvalidQuantity,
                     { viewModel.handleWithQuantityValueChange(it) },
                     KeyboardType.Decimal,
-                    "Quantity"
+                    "Quantidade"
                 )
 
                 OutlinedTextFieldDialog(
@@ -105,7 +105,7 @@ fun CartDialog(viewModel: ListDialogViewModel) {
                     viewModel.isInvalidPrice,
                     { viewModel.handleWithPriceValueChange(it) },
                     KeyboardType.Decimal,
-                    "Price"
+                    "Preço"
                 )
 
                 Spacer(Modifier.height(4.dp))
@@ -118,7 +118,7 @@ fun CartDialog(viewModel: ListDialogViewModel) {
                     horizontalArrangement = Arrangement.End
                 ) {
 
-                    Text(text = "Add to cart?", fontWeight = FontWeight.SemiBold)
+                    Text(text = "Adicionar no carrinho?", fontWeight = FontWeight.SemiBold)
 
                     Checkbox(
                         modifier = Modifier.background(
@@ -189,7 +189,7 @@ fun CategoryDropdown(viewModel: ListDialogViewModel) {
             value = viewModel.category,
             onValueChange = {},
             enabled = false,
-            label = { Text("Category") },
+            label = { Text("Categoria") },
             trailingIcon = {
                 ExposedDropdownMenuDefaults.TrailingIcon(expanded = viewModel.isCategoryDropdownExpanded)
             },

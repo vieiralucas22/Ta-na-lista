@@ -15,8 +15,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.painterResource
 import androidx.lifecycle.ViewModelProvider
 import com.example.tanalista.ui.views.CartView
+import com.example.tanalista.ui.views.HomeView
 import com.example.tanalista.ui.views.ProfileView
 import com.example.tanalista.viewmodel.CartViewModel
+import com.example.tanalista.viewmodel.HomeViewModel
 import com.example.tanalista.viewmodel.ProfileViewModel
 import com.example.tanalista.viewmodel.dialog.DeleteListItemDialogViewModel
 import com.example.tanalista.viewmodel.dialog.ListDialogViewModel
@@ -30,9 +32,10 @@ class MainActivity : ComponentActivity() {
         val listDialogViewModel = ViewModelProvider.create(this)[ListDialogViewModel::class.java]
         val deleteDialogViewModel = ViewModelProvider.create(this)[DeleteListItemDialogViewModel::class.java]
         val profileViewModel = ViewModelProvider.create(this)[ProfileViewModel::class.java]
+        val homeViewModel = ViewModelProvider.create(this)[HomeViewModel::class.java]
 
         setContent {
-            MyApplicationApp(cartViewModel, listDialogViewModel, deleteDialogViewModel, profileViewModel)
+            MyApplicationApp(cartViewModel, listDialogViewModel, deleteDialogViewModel, profileViewModel, homeViewModel)
         }
     }
 }
@@ -42,7 +45,8 @@ fun MyApplicationApp(
     cartViewModel: CartViewModel,
     listDialogViewModel: ListDialogViewModel,
     deleteDialogViewModel: DeleteListItemDialogViewModel,
-    profileViewModel: ProfileViewModel, ) {
+    profileViewModel: ProfileViewModel,
+    homeViewModel: HomeViewModel, ) {
 
     var currentDestination by rememberSaveable { mutableStateOf(AppDestinations.HOME) }
     NavigationSuiteScaffold(
@@ -64,8 +68,8 @@ fun MyApplicationApp(
         },
         ) {
         when (currentDestination) {
-            AppDestinations.HOME -> CartView(cartViewModel, listDialogViewModel, deleteDialogViewModel)
-            AppDestinations.PROFILE -> ProfileView(profileViewModel)
+            AppDestinations.HOME -> CartView(cartViewModel,listDialogViewModel,deleteDialogViewModel)
+            //AppDestinations.PROFILE -> ProfileView(profileViewModel)
         }
     }
 }
@@ -75,5 +79,5 @@ enum class AppDestinations(
     val resourceId: Int,
 ) {
     HOME("Home", R.drawable.ic_home),
-    PROFILE("Profile", R.drawable.ic_profile),
+    //PROFILE("Profile", R.drawable.ic_profile),
 }

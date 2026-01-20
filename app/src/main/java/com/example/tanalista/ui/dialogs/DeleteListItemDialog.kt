@@ -38,9 +38,9 @@ fun DeleteListItemDialog(deleteDialogViewModel: DeleteListItemDialogViewModel) {
                     .background(Color.White, shape = RoundedCornerShape(16.dp))
                     .padding(16.dp)
             ) {
-                Text(text = "Delete item", fontSize = 18.sp, fontWeight = FontWeight.SemiBold)
+                Text(text = "Remover item!", fontSize = 18.sp, fontWeight = FontWeight.SemiBold)
                 Text(
-                    text = "Are you sure you want to delete this item from the list?",
+                    text = "Tem certeza que deseja remover esse item da lista?",
                     fontSize = 16.sp,
                     modifier = Modifier.padding(0.dp, 8.dp)
                 )
@@ -64,7 +64,7 @@ fun DeleteListItemDialog(deleteDialogViewModel: DeleteListItemDialogViewModel) {
                         Spacer(modifier = Modifier.width(4.dp))
 
                         Text(
-                            "Delete",
+                            "Remover",
                             color = White,
                             fontSize = 16.sp,
                             fontWeight = FontWeight.SemiBold

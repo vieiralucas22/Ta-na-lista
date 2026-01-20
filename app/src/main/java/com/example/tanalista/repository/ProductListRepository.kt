@@ -25,16 +25,16 @@ class ProductListRepository(context: Context) {
 
         if (isUpdate(listItemDTO)) {
             existingProduct = allProducts.find {
-                it.id == listItemDTO.productId && listItemDTO.listId.toInt() == 1
+                it.id == listItemDTO.productId && listItemDTO.listId.toInt() == listItemDTO.listId.toInt()
             }
         }
 
-        val productId = getProductId(existingProduct, listItemDTO)
+        existingProduct = getProductId(existingProduct, listItemDTO)
 
         val productListEntity =
             ProductListEntity(
-                1,
-                productId,
+                1 ,
+                existingProduct.id,
                 listItemDTO.name,
                 listItemDTO.quantity,
                 listItemDTO.productPrice,
@@ -67,13 +67,16 @@ class ProductListRepository(context: Context) {
         productListDao.insert(listItem)
     }
 
-    private suspend fun getProductId(product: ProductEntity?, listItemDTO: ListItemDTO): Long {
+    private suspend fun getProductId(product: ProductEntity?, listItemDTO: ListItemDTO): ProductEntity {
 
         if (product != null) {
-            return product.id
+            return product
         }
 
-        return productDao.insertProduct(ProductEntity(listItemDTO.name, listItemDTO.category))
+        val newProduct = ProductEntity(listItemDTO.name, listItemDTO.category)
+
+        productDao.insertProduct(newProduct)
+        return newProduct
     }
 
     suspend fun deleteProductFromList(listItem: ListItemDTO) {
