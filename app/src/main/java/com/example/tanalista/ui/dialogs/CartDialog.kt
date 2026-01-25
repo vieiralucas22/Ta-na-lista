@@ -31,6 +31,8 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import androidx.lifecycle.application
+import com.example.tanalista.R
 import com.example.tanalista.ui.theme.ButtonBackground
 import com.example.tanalista.ui.theme.Error
 import com.example.tanalista.ui.theme.White
@@ -60,7 +62,7 @@ fun CartDialog(viewModel: ListDialogViewModel) {
                     OutlinedTextField(
                         value = viewModel.productName,
                         onValueChange = { viewModel.suggestNewProducts(it) },
-                        label = { Text("Nome do produto") },
+                        label = { Text(viewModel.application.getText(R.string.product_name).toString()) },
                         isError = viewModel.isInvalidProductName,
                         trailingIcon = {
                             ExposedDropdownMenuDefaults.TrailingIcon(expanded = viewModel.isProductNameDropdownExpanded)
@@ -97,7 +99,7 @@ fun CartDialog(viewModel: ListDialogViewModel) {
                     viewModel.isInvalidQuantity,
                     { viewModel.handleWithQuantityValueChange(it) },
                     KeyboardType.Decimal,
-                    "Quantidade"
+                    viewModel.application.getText(R.string.quantity).toString()
                 )
 
                 OutlinedTextFieldDialog(
@@ -105,7 +107,7 @@ fun CartDialog(viewModel: ListDialogViewModel) {
                     viewModel.isInvalidPrice,
                     { viewModel.handleWithPriceValueChange(it) },
                     KeyboardType.Decimal,
-                    "Preço"
+                    viewModel.application.getText(R.string.price).toString()
                 )
 
                 Spacer(Modifier.height(4.dp))
@@ -118,7 +120,7 @@ fun CartDialog(viewModel: ListDialogViewModel) {
                     horizontalArrangement = Arrangement.End
                 ) {
 
-                    Text(text = "Adicionar no carrinho?", fontWeight = FontWeight.SemiBold)
+                    Text(text = viewModel.application.getText(R.string.question_add_to_cart).toString(), fontWeight = FontWeight.SemiBold)
 
                     Checkbox(
                         modifier = Modifier.background(

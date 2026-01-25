@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Ta na Lista!</string>
+    <string name="cart_value">Valor do carrinho!</string>
+    <string name="category">Categoria</string>
+    <string name="alphabetic">Alfabética</string>
+    <string name="list">Lista</string>
+    <string name="cart">Carrinho</string>
+    <string name="product_name">Nome do produto</string>
+    <string name="quantity">Quantidade</string>
+    <string name="price">Preço</string>
+    <string name="question_add_to_cart">Adicionar no carrinho?</string>
+    <string name="question_are_you_sure_remove_item">Tem certeza que deseja remover esse item da lista?</string>
+    <string name="remove_item">Remover item!</string>
+    <string name="remove">Remover</string>
+    <string name="empty_cart_message">Por favor clique no botão abaixo para adicionar um item!</string>
+    <string name="select_category">Selecione uma categoria</string>
+    <string name="add">Adicionar</string>
+    <string name="add_item">Adicionar item!</string>
+    <string name="update">Atualizar</string>
+    <string name="update_item">Atualizar item</string>
+
+</resources>

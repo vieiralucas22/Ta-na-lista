@@ -7,7 +7,9 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.application
 import androidx.lifecycle.viewModelScope
+import com.example.tanalista.R
 import com.example.tanalista.database.model.ProductEntity
 import com.example.tanalista.database.model.dto.ListItemDTO
 import com.example.tanalista.enums.ProductCategory
@@ -40,13 +42,13 @@ class ListDialogViewModel(application: Application) : AndroidViewModel(applicati
     var price by mutableStateOf("")
     var isCategoryDropdownExpanded by mutableStateOf(false)
     var isProductNameDropdownExpanded by mutableStateOf(false)
-    var category by mutableStateOf("Escolha uma categoria")
+    var category by mutableStateOf(application.getText(R.string.select_category).toString())
     var canAddToCart by mutableStateOf(false)
     var isInvalidProductName by mutableStateOf(false)
     var isInvalidQuantity by mutableStateOf(false)
     var isInvalidPrice by mutableStateOf(false)
-    var textButtonDialog by mutableStateOf("Adicionar")
-    var headerDialog by mutableStateOf("Adicionar item")
+    var textButtonDialog by mutableStateOf(application.getText(R.string.add).toString())
+    var headerDialog by mutableStateOf(application.getText(R.string.add_item).toString())
 
     private val _productsSuggestion = MutableLiveData<List<ProductEntity>>()
     val productsSuggestion: LiveData<List<ProductEntity>> = _productsSuggestion
@@ -77,8 +79,8 @@ class ListDialogViewModel(application: Application) : AndroidViewModel(applicati
         quantity = currentListItem?.quantity.toString()
         canAddToCart = currentListItem?.isInCart == true
 
-        textButtonDialog = "Atualizar"
-        headerDialog = "Atualizar item!"
+        textButtonDialog = application.getText(R.string.update).toString()
+        headerDialog = application.getText(R.string.update_item).toString()
         openDialog()
     }
 
@@ -128,11 +130,11 @@ class ListDialogViewModel(application: Application) : AndroidViewModel(applicati
         productName = ""
         quantity = ""
         price = ""
-        category = "Escolha uma categoria"
+        category = application.getText(R.string.select_category).toString()
         canAddToCart = false
         isInvalidProductName = false
-        textButtonDialog = "Adicionar"
-        headerDialog = "Adicionar item"
+        textButtonDialog = application.getText(R.string.add).toString()
+        headerDialog = application.getText(R.string.add_item).toString()
         currentListItem = null
     }
 
@@ -141,7 +143,7 @@ class ListDialogViewModel(application: Application) : AndroidViewModel(applicati
             name = productName,
             quantity = quantity.ifEmpty { "0" }.toInt(),
             productPrice = price.ifEmpty { "0.0" }.toDouble(),
-            category = if (category == "Escolha uma categoria") ProductCategory.Undefined.toString() else category,
+            category = if (category == application.getText(R.string.select_category).toString()) ProductCategory.Undefined.toString() else category,
             isInCart = canAddToCart
         )
     }
@@ -153,7 +155,7 @@ class ListDialogViewModel(application: Application) : AndroidViewModel(applicati
             name = productName,
             quantity = quantity.ifEmpty { "0" }.toInt(),
             productPrice = price.ifEmpty { "0.0" }.toDouble(),
-            category = if (category == "Escolha uma categoria") ProductCategory.Undefined.toString() else category,
+            category = if (category == application.getText(R.string.select_category).toString()) ProductCategory.Undefined.toString() else category,
             isInCart = canAddToCart
         )
     }

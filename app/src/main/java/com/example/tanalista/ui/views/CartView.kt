@@ -55,6 +55,7 @@ import com.example.tanalista.ui.theme.ToggleButtonListChecked
 import com.example.tanalista.ui.theme.ToggleButtonListDisabled
 import com.example.tanalista.ui.theme.White
 import androidx.compose.ui.draw.shadow
+import androidx.lifecycle.application
 import com.example.tanalista.viewmodel.CartViewModel
 import com.example.tanalista.viewmodel.dialog.DeleteListItemDialogViewModel
 import com.example.tanalista.viewmodel.dialog.ListDialogViewModel
@@ -108,7 +109,7 @@ fun HeaderCart(cartViewModel: CartViewModel) {
                     fontWeight = FontWeight.SemiBold,
                     color = BackgroundColor
                 )
-                Text(text = "Valor do carrinho!", fontSize = 16.sp, color = BackgroundColor)
+                Text(text = cartViewModel.application.getText(R.string.cart_value).toString(),fontSize = 16.sp, color = BackgroundColor)
             }
 
             ExposedDropdownMenuBox(
@@ -136,7 +137,7 @@ fun HeaderCart(cartViewModel: CartViewModel) {
                     onDismissRequest = { cartViewModel.isSortDropdownExpanded = false }
                 ) {
                     DropdownMenuItem(
-                        text = { Text("Categoria") },
+                        text = { Text(cartViewModel.application.getText(R.string.category).toString()) },
                         onClick = {
                             cartViewModel.orderItemsBy(0)
                             cartViewModel.isSortDropdownExpanded = false
@@ -154,7 +155,7 @@ fun HeaderCart(cartViewModel: CartViewModel) {
                     )
 
                     DropdownMenuItem(
-                        text = { Text("Alfabética") },
+                        text = { Text(cartViewModel.application.getText(R.string.alphabetic).toString()) },
                         onClick = {
                             cartViewModel.orderItemsBy(1)
                             cartViewModel.isSortDropdownExpanded = false
@@ -182,7 +183,7 @@ fun HeaderCart(cartViewModel: CartViewModel) {
         ) {
 
             HeaderToggleButton(
-                text = "Lista",
+                text = cartViewModel.application.getText(R.string.list).toString(),
                 modifier = Modifier.weight(1f),
                 colors = IconToggleButtonColors(
                     containerColor = Green,
@@ -204,7 +205,7 @@ fun HeaderCart(cartViewModel: CartViewModel) {
             )
 
             HeaderToggleButton(
-                text = "Carrinho",
+                text = cartViewModel.application.getText(R.string.cart).toString(),
                 modifier = Modifier.weight(1f),
                 colors = IconToggleButtonColors(
                     containerColor = Purple,
@@ -251,7 +252,7 @@ fun ListCart(
     ) {
         productItems?.let { product ->
             if (isEmpty) {
-                EmptyCartSection()
+                EmptyCartSection(cartViewModel)
             } else {
                 LazyColumn(content = {
                     itemsIndexed(product) { index, item ->
@@ -279,7 +280,7 @@ fun ListCart(
                     }
                 })
             }
-        } ?: EmptyCartSection()
+        } ?: EmptyCartSection(cartViewModel)
     }
 }
 
@@ -378,13 +379,13 @@ fun ProductItem(
 }
 
 @Composable
-fun EmptyCartSection() {
+fun EmptyCartSection(cartViewModel: CartViewModel) {
     Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
 
         Image(painter = painterResource(R.drawable.empty_cart), contentDescription = "Empty cart")
 
         Text(
-            text = "Por favor clique no botão abaixo para adicionar um item!",
+            text = cartViewModel.application.getText(R.string.empty_cart_message).toString(),
             textAlign = TextAlign.Center,
             fontSize = 16.sp
         )

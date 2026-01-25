@@ -1,4 +1,21 @@
 <resources>
     <string name="app_name">Ta na Lista!</string>
-    <string name="cart_value">Cart value</string>
+    <string name="cart_value">Cart value!</string>
+    <string name="category">Category</string>
+    <string name="alphabetic">Alphabetical</string>
+    <string name="list">List</string>
+    <string name="cart">Cart</string>
+    <string name="product_name">Product name</string>
+    <string name="quantity">Quantity</string>
+    <string name="price">Price</string>
+    <string name="question_add_to_cart">Add to cart?</string>
+    <string name="question_are_you_sure_remove_item">Are you sure you want to remove this item from the list?</string>
+    <string name="remove_item">Remove item!</string>
+    <string name="remove">Remove</string>
+    <string name="empty_cart_message">Please click the button below to add an item!</string>
+    <string name="select_category">Select a category</string>
+    <string name="add">Add</string>
+    <string name="add_item">Add item!</string>
+    <string name="update">Update</string>
+    <string name="update_item">Update item</string>
 </resources>

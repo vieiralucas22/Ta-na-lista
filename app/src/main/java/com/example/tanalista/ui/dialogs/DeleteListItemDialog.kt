@@ -22,6 +22,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
+import androidx.lifecycle.application
 import com.example.tanalista.R
 import com.example.tanalista.ui.theme.Error
 import com.example.tanalista.ui.theme.White
@@ -38,9 +39,9 @@ fun DeleteListItemDialog(deleteDialogViewModel: DeleteListItemDialogViewModel) {
                     .background(Color.White, shape = RoundedCornerShape(16.dp))
                     .padding(16.dp)
             ) {
-                Text(text = "Remover item!", fontSize = 18.sp, fontWeight = FontWeight.SemiBold)
+                Text(text = deleteDialogViewModel.application.getText(R.string.remove_item).toString(), fontSize = 18.sp, fontWeight = FontWeight.SemiBold)
                 Text(
-                    text = "Tem certeza que deseja remover esse item da lista?",
+                    text = deleteDialogViewModel.application.getText(R.string.question_are_you_sure_remove_item).toString(),
                     fontSize = 16.sp,
                     modifier = Modifier.padding(0.dp, 8.dp)
                 )
@@ -64,7 +65,7 @@ fun DeleteListItemDialog(deleteDialogViewModel: DeleteListItemDialogViewModel) {
                         Spacer(modifier = Modifier.width(4.dp))
 
                         Text(
-                            "Remover",
+                            deleteDialogViewModel.application.getText(R.string.remove).toString(),
                             color = White,
                             fontSize = 16.sp,
                             fontWeight = FontWeight.SemiBold
