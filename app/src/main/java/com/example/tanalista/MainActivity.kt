@@ -31,11 +31,9 @@ class MainActivity : ComponentActivity() {
         val cartViewModel = ViewModelProvider.create(this)[CartViewModel::class.java]
         val listDialogViewModel = ViewModelProvider.create(this)[ListDialogViewModel::class.java]
         val deleteDialogViewModel = ViewModelProvider.create(this)[DeleteListItemDialogViewModel::class.java]
-        val profileViewModel = ViewModelProvider.create(this)[ProfileViewModel::class.java]
-        val homeViewModel = ViewModelProvider.create(this)[HomeViewModel::class.java]
 
         setContent {
-            MyApplicationApp(cartViewModel, listDialogViewModel, deleteDialogViewModel, profileViewModel, homeViewModel)
+            MyApplicationApp(cartViewModel, listDialogViewModel, deleteDialogViewModel)
         }
     }
 }
@@ -44,9 +42,7 @@ class MainActivity : ComponentActivity() {
 fun MyApplicationApp(
     cartViewModel: CartViewModel,
     listDialogViewModel: ListDialogViewModel,
-    deleteDialogViewModel: DeleteListItemDialogViewModel,
-    profileViewModel: ProfileViewModel,
-    homeViewModel: HomeViewModel, ) {
+    deleteDialogViewModel: DeleteListItemDialogViewModel) {
 
     var currentDestination by rememberSaveable { mutableStateOf(AppDestinations.HOME) }
     NavigationSuiteScaffold(
@@ -69,7 +65,6 @@ fun MyApplicationApp(
         ) {
         when (currentDestination) {
             AppDestinations.HOME -> CartView(cartViewModel,listDialogViewModel,deleteDialogViewModel)
-            //AppDestinations.PROFILE -> ProfileView(profileViewModel)
         }
     }
 }
@@ -79,5 +74,4 @@ enum class AppDestinations(
     val resourceId: Int,
 ) {
     HOME("Home", R.drawable.ic_home),
-    //PROFILE("Profile", R.drawable.ic_profile),
 }

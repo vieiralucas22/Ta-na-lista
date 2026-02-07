@@ -18,7 +18,7 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
         listRepository.getAllListsFromDatabase().asLiveData()
     )
 
-    fun createANewList() : Unit
+    fun createANewList()
     {
         viewModelScope.launch {
             listRepository.createAList("")
