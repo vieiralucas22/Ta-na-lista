@@ -18,6 +18,7 @@ val ToggleButtonListChecked = Color(0xFF8DC511)
 val ToggleButtonListDisabled = Color(0xFFA1CC5A)
 val Purple = Color(0xff6e64d5)
 val ToggleButtonCartChecked = Color(0xFF4428BB)
+val FloatingButton = Color(0xFF7258E1)
 val ToggleButtonCartDisable= Color(0xFF7258E1)
 val LightAppTitle= Color(0xff57dfc9)
 

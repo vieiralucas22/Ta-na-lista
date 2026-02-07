@@ -56,6 +56,7 @@ import com.example.tanalista.ui.theme.ToggleButtonListDisabled
 import com.example.tanalista.ui.theme.White
 import androidx.compose.ui.draw.shadow
 import androidx.lifecycle.application
+import com.example.tanalista.ui.theme.FloatingButton
 import com.example.tanalista.viewmodel.CartViewModel
 import com.example.tanalista.viewmodel.dialog.DeleteListItemDialogViewModel
 import com.example.tanalista.viewmodel.dialog.ListDialogViewModel
@@ -70,11 +71,13 @@ fun CartView(
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { listDialogViewModel.openDialog() }
+                onClick = { listDialogViewModel.openDialog() },
+                containerColor = FloatingButton
             ) {
                 Icon(
                     painter = painterResource(R.drawable.ic_plus),
-                    contentDescription = "Icon"
+                    contentDescription = "Icon",
+                    tint = White
                 )
             }
         }, content = {

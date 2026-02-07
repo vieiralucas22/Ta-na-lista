@@ -7,7 +7,7 @@ import com.example.tanalista.enums.ProductCategory
 
 @Entity(
     tableName = DatabaseConstants.ProducListTableName,
-    primaryKeys = [DatabaseConstants.ListPrimaryKeyName, DatabaseConstants.ProducListTableName],
+    primaryKeys = [DatabaseConstants.ListPrimaryKeyName, DatabaseConstants.ProductPrimaryKeyName],
     foreignKeys = [
         ForeignKey(
             entity = ListEntity::class,

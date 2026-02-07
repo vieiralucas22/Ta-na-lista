@@ -44,34 +44,5 @@ fun MyApplicationApp(
     listDialogViewModel: ListDialogViewModel,
     deleteDialogViewModel: DeleteListItemDialogViewModel) {
 
-    var currentDestination by rememberSaveable { mutableStateOf(AppDestinations.HOME) }
-    NavigationSuiteScaffold(
-        navigationSuiteItems = {
-            AppDestinations.entries.forEach {
-                item(
-                    icon = {
-                        Icon(
-                            painter = painterResource(it.resourceId),
-                            contentDescription = it.label
-                        )
-                    },
-                    label = { Text(it.label) },
-                    selected = it == currentDestination,
-                    onClick = { currentDestination = it }
-
-                )
-            }
-        },
-        ) {
-        when (currentDestination) {
-            AppDestinations.HOME -> CartView(cartViewModel,listDialogViewModel,deleteDialogViewModel)
-        }
-    }
-}
-
-enum class AppDestinations(
-    val label: String,
-    val resourceId: Int,
-) {
-    HOME("Home", R.drawable.ic_home),
+    CartView(cartViewModel,listDialogViewModel,deleteDialogViewModel)
 }
