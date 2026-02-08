@@ -6,6 +6,7 @@ class DatabaseConstants {
     {
         /// General
         const val Id = "id"
+        const val DatabaseName = "ApplicationDB2"
 
         /// Product List Entity
         const val ProducListTableName = "ProductList"

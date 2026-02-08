@@ -38,7 +38,7 @@ import com.example.tanalista.R
 import com.example.tanalista.ui.theme.ButtonBackground
 import com.example.tanalista.ui.theme.GrayBackground
 import com.example.tanalista.ui.theme.White
-import com.example.tanalista.viewmodel.ProfileViewModel
+import com.example.tanalista.ui.viewmodel.ProfileViewModel
 
 @Composable
 fun ProfileView(viewModel: ProfileViewModel) {

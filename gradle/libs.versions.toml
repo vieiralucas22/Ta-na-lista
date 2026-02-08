@@ -16,6 +16,8 @@ navigationCompose = "2.9.5"
 roomRuntime = "2.8.3"
 runtimeLivedata = "1.9.4"
 foundation = "1.9.5"
+dagger-hilt = "2.57.1"
+ksp = "2.0.21-1.0.28"
 
 [libraries]
 accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanistSystemuicontroller" }
@@ -41,9 +43,12 @@ androidx-compose-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-
 androidx-compose-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-compose-material3 = { group = "androidx.compose.material3", name = "material3" }
 androidx-compose-foundation = { group = "androidx.compose.foundation", name = "foundation", version.ref = "foundation" }
+dagger-hilt = {module = "com.google.dagger:hilt-android", version.ref ="dagger-hilt"}
+hilt-compiler = {module = "com.google.dagger:hilt-android-compiler", version.ref ="dagger-hilt"}
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
-
+dagger-hilt = {id = "com.google.dagger.hilt.android", version.ref ="dagger-hilt" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }

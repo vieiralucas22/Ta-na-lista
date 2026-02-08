@@ -41,8 +41,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.tanalista.R
-import com.example.tanalista.ui.dialogs.CartDialog
-import com.example.tanalista.ui.dialogs.DeleteListItemDialog
+import com.example.tanalista.ui.views.dialogs.CartDialog
+import com.example.tanalista.ui.views.dialogs.DeleteListItemDialog
 import com.example.tanalista.ui.theme.BackgroundColor
 import com.example.tanalista.ui.theme.ButtonBackground
 import com.example.tanalista.ui.theme.Error
@@ -57,9 +57,9 @@ import com.example.tanalista.ui.theme.White
 import androidx.compose.ui.draw.shadow
 import androidx.lifecycle.application
 import com.example.tanalista.ui.theme.FloatingButton
-import com.example.tanalista.viewmodel.CartViewModel
-import com.example.tanalista.viewmodel.dialog.DeleteListItemDialogViewModel
-import com.example.tanalista.viewmodel.dialog.ListDialogViewModel
+import com.example.tanalista.ui.viewmodel.CartViewModel
+import com.example.tanalista.ui.viewmodel.dialog.DeleteListItemDialogViewModel
+import com.example.tanalista.ui.viewmodel.dialog.ListDialogViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -142,7 +142,7 @@ fun HeaderCart(cartViewModel: CartViewModel) {
                     DropdownMenuItem(
                         text = { Text(cartViewModel.application.getText(R.string.category).toString()) },
                         onClick = {
-                            cartViewModel.orderItemsBy(0)
+                            //cartViewModel.orderItemsBy(0)
                             cartViewModel.isSortDropdownExpanded = false
                         },
                         trailingIcon = {
@@ -160,7 +160,7 @@ fun HeaderCart(cartViewModel: CartViewModel) {
                     DropdownMenuItem(
                         text = { Text(cartViewModel.application.getText(R.string.alphabetic).toString()) },
                         onClick = {
-                            cartViewModel.orderItemsBy(1)
+                            //cartViewModel.orderItemsBy(1)
                             cartViewModel.isSortDropdownExpanded = false
                         },
                         trailingIcon = {

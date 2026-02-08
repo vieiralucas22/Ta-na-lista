@@ -36,14 +36,13 @@ import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.tanalista.R
 import com.example.tanalista.ui.theme.LightAppTitle
 import com.example.tanalista.ui.theme.Purple
 import com.example.tanalista.ui.theme.White
-import com.example.tanalista.viewmodel.HomeViewModel
+import com.example.tanalista.ui.viewmodel.HomeViewModel
 
 @Composable
 fun HomeView(viewModel: HomeViewModel) {
