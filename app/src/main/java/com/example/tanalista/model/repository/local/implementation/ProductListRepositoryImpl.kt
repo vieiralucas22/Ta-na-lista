@@ -67,20 +67,6 @@ class ProductListRepositoryImpl @Inject constructor(
         return productListDAO.getProductsInList(id, isInCart)
     }
 
-    override fun getAllProductsFromListOrderByAlphabetical(
-        id: Long,
-        isInCart: Boolean
-    ): Flow<List<ListItemDTO>> {
-        return productListDAO.getProductsInListOrderByAlphabetical(id, isInCart)
-    }
-
-    override fun getAllProductsFromListOrderByCategory(
-        id: Long,
-        isInCart: Boolean
-    ): Flow<List<ListItemDTO>> {
-        return productListDAO.getProductsInListOrderByCategory(id, isInCart)
-    }
-
     override suspend fun deleteProductInCart(listItem: ListItemDTO) {
 
         val listItem = productListDAO.getProductInListByIds(listItem.listId, listItem.productId)

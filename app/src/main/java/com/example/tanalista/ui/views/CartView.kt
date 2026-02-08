@@ -114,68 +114,6 @@ fun HeaderCart(cartViewModel: CartViewModel) {
                 )
                 Text(text = cartViewModel.application.getText(R.string.cart_value).toString(),fontSize = 16.sp, color = BackgroundColor)
             }
-
-            ExposedDropdownMenuBox(
-                expanded = cartViewModel.isSortDropdownExpanded,
-                onExpandedChange = {
-                    cartViewModel.isSortDropdownExpanded =
-                        !cartViewModel.isSortDropdownExpanded
-                }
-            ) {
-                Row(
-                    modifier = Modifier
-                        .width(150.dp)
-                        .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryEditable, true),
-                    horizontalArrangement = Arrangement.End
-                )
-                {
-                    Icon(
-                        painter = painterResource(R.drawable.ic_order_by),
-                        contentDescription = "Icon",
-                        tint = White,
-                    )
-                }
-                ExposedDropdownMenu(
-                    expanded = cartViewModel.isSortDropdownExpanded,
-                    onDismissRequest = { cartViewModel.isSortDropdownExpanded = false }
-                ) {
-                    DropdownMenuItem(
-                        text = { Text(cartViewModel.application.getText(R.string.category).toString()) },
-                        onClick = {
-                            //cartViewModel.orderItemsBy(0)
-                            cartViewModel.isSortDropdownExpanded = false
-                        },
-                        trailingIcon = {
-                            if (cartViewModel.isCategoryOrderSelected) {
-                                Icon(
-                                    painter = painterResource(R.drawable.ic_check),
-                                    contentDescription = null,
-                                    tint = Purple,
-                                    modifier = Modifier.size(16.dp)
-                                )
-                            }
-                        }
-                    )
-
-                    DropdownMenuItem(
-                        text = { Text(cartViewModel.application.getText(R.string.alphabetic).toString()) },
-                        onClick = {
-                            //cartViewModel.orderItemsBy(1)
-                            cartViewModel.isSortDropdownExpanded = false
-                        },
-                        trailingIcon = {
-                            if (cartViewModel.isAlphabeticalOrderSelected) {
-                                Icon(
-                                    painter = painterResource(R.drawable.ic_check),
-                                    contentDescription = null,
-                                    tint = Purple,
-                                    modifier = Modifier.size(16.dp)
-                                )
-                            }
-                        }
-                    )
-                }
-            }
         }
 
         Spacer(Modifier.height(16.dp))

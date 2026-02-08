@@ -1,7 +1,6 @@
 package com.example.tanalista.ui.viewmodel
 
 import android.app.Application
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableDoubleStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -14,11 +13,9 @@ import com.example.tanalista.model.database.model.dto.ListItemDTO
 import com.example.tanalista.enums.ProductCategory
 import com.example.tanalista.repository.local.interfaces.IProductListRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -33,9 +30,7 @@ class CartViewModel @Inject constructor(
 
     var isListToggleButtonChecked by mutableStateOf(true)
     var isCartToggleButtonChecked by mutableStateOf(false)
-    var isAlphabeticalOrderSelected by mutableStateOf(false)
-    var isCategoryOrderSelected by mutableStateOf(false)
-    var isSortDropdownExpanded by mutableStateOf(false)
+
     var totalValue by mutableDoubleStateOf(0.0)
 
     var allProductsInCurrentPage = _isCartSelected
@@ -104,21 +99,4 @@ class CartViewModel @Inject constructor(
         }
     }
 
-//    fun orderItemsBy(orderType: Int) {
-//        viewModelScope.launch {
-//            if (orderType == 0) {
-//                _allProductsInCurrentPage.value = productListRepository
-//                    .getAllProductsFromListOrderByCategory(1, isCartToggleButtonChecked)
-//
-//                isCategoryOrderSelected = true
-//                isAlphabeticalOrderSelected = false
-//            } else {
-//                _allProductsInCurrentPage.value = productListRepository
-//                    .getAllProductsFromListOrderByAlphabetical(1, isCartToggleButtonChecked)
-//
-//                isCategoryOrderSelected = false
-//                isAlphabeticalOrderSelected = true
-//            }
-//        }
-//    }
 }

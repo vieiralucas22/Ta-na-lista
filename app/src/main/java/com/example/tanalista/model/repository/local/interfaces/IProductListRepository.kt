@@ -8,15 +8,7 @@ interface IProductListRepository {
     suspend fun addProductInCart(listItem: ListItemDTO)
 
     fun getAllListProducts(id: Long, isInCart: Boolean): Flow<List<ListItemDTO>>
-    fun getAllProductsFromListOrderByAlphabetical(
-        id: Long,
-        isInCart: Boolean
-    ): Flow<List<ListItemDTO>>
-
-    fun getAllProductsFromListOrderByCategory(id: Long, isInCart: Boolean): Flow<List<ListItemDTO>>
 
     suspend fun deleteProductInCart(listItem: ListItemDTO)
-
     suspend fun deleteProductFromList(listItem: ListItemDTO)
-
 }
