@@ -109,7 +109,9 @@ class ProductListRepositoryImpl @Inject constructor(
 
         val newProduct = ProductEntity(listItemDTO.name, listItemDTO.category)
 
-        productDAO.insertProduct(newProduct)
+        val id = productDAO.insertProduct(newProduct)
+        newProduct.id = id
+
         return newProduct
     }
 

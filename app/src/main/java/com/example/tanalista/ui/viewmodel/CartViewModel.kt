@@ -14,7 +14,12 @@ import com.example.tanalista.model.database.model.dto.ListItemDTO
 import com.example.tanalista.enums.ProductCategory
 import com.example.tanalista.repository.local.interfaces.IProductListRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -24,7 +29,7 @@ class CartViewModel @Inject constructor(
     val productListRepository: IProductListRepository
 ) : AndroidViewModel(application) {
 
-    var _isListSelected = MutableStateFlow(true)
+    var _isCartSelected = MutableStateFlow(false)
 
     var isListToggleButtonChecked by mutableStateOf(true)
     var isCartToggleButtonChecked by mutableStateOf(false)
@@ -33,9 +38,15 @@ class CartViewModel @Inject constructor(
     var isSortDropdownExpanded by mutableStateOf(false)
     var totalValue by mutableDoubleStateOf(0.0)
 
-    var allProductsInCurrentPage by mutableStateOf(
-        productListRepository.getAllListProducts(1, true).asLiveData()
-    )
+    var allProductsInCurrentPage = _isCartSelected
+        .flatMapLatest {
+                isCart ->
+            productListRepository.getAllListProducts(1, isCart)
+        }.stateIn(
+            viewModelScope,
+            SharingStarted.Eagerly,
+            emptyList()
+        ).asLiveData()
 
     init {
         updateTotalCartValue()
@@ -52,23 +63,22 @@ class CartViewModel @Inject constructor(
     }
 
     fun showAllProductsInList() {
-        _isListSelected.value = true
+        _isCartSelected.value = false
         isCartToggleButtonChecked = false
         isListToggleButtonChecked = true
     }
 
     fun showAllProductsInCart() {
-        _isListSelected.value = false
+        _isCartSelected.value = true
         isCartToggleButtonChecked = true
         isListToggleButtonChecked = false
     }
 
     fun updateTotalCartValue() {
         viewModelScope.launch {
-            productListRepository.getAllListProducts(1, false)
+            productListRepository.getAllListProducts(1, true)
                 .collect { products ->
                     totalValue = 0.0
-                    Log.d("FAKELOG", "Emit")
                     products.forEach { product ->
                         totalValue += product.quantity * product.productPrice;
                     }
