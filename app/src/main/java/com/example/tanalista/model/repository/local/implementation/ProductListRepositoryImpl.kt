@@ -63,7 +63,6 @@ class ProductListRepositoryImpl @Inject constructor(
         id: Long,
         isInCart: Boolean
     ): Flow<List<ListItemDTO>> {
-
         return productListDAO.getProductsInList(id, isInCart)
     }
 

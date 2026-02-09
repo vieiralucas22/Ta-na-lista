@@ -53,7 +53,13 @@ class ListDialogViewModel @Inject constructor(
     var textButtonDialog by mutableStateOf(application.getText(R.string.add).toString())
     var headerDialog by mutableStateOf(application.getText(R.string.add_item).toString())
 
-    private val _productsSuggestion = MutableLiveData<List<ProductEntity>>()
+    private val _productsSuggestion = MutableLiveData( listOf(
+        ProductEntity(name = "Arroz", category = "Food"),
+        ProductEntity(name = "Feijão", category = "Food"),
+        ProductEntity(name = "Coca-Cola", category = "Drink"),
+        ProductEntity(name = "Sabão", category = "Clean"),
+        ProductEntity(name = "Papel Higiênico", category = "Toilet")
+    ))
     val productsSuggestion: LiveData<List<ProductEntity>> = _productsSuggestion
 
     init {
