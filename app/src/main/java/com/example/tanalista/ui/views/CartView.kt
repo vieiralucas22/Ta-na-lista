@@ -1,6 +1,7 @@
 package com.example.tanalista.ui.views
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
@@ -15,6 +16,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
@@ -61,13 +63,14 @@ import com.example.tanalista.ui.viewmodel.CartViewModel
 import com.example.tanalista.ui.viewmodel.dialog.DeleteListItemDialogViewModel
 import com.example.tanalista.ui.viewmodel.dialog.ListDialogViewModel
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun CartView(
     cartViewModel: CartViewModel,
     listDialogViewModel: ListDialogViewModel,
     deleteDialogViewModel: DeleteListItemDialogViewModel
 ) {
+    Log.d("[TaNaLista]", "CartView")
+
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(
@@ -81,10 +84,12 @@ fun CartView(
                 )
             }
         }, content = {
+            paddingValues ->
             Column(
                 modifier = Modifier
                     .fillMaxSize()
                     .background(ButtonBackground)
+                    .padding(paddingValues)
             ) {
                 HeaderCart(cartViewModel)
                 ListCart(cartViewModel, listDialogViewModel, deleteDialogViewModel)
@@ -98,22 +103,17 @@ fun CartView(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HeaderCart(cartViewModel: CartViewModel) {
-    Column(modifier = Modifier.padding(24.dp, 32.dp)) {
+
+    Log.d("[TaNaLista]", "HeaderCart")
+
+    Column(modifier = Modifier.padding(24.dp, 12.dp)) {
         Row(
             modifier = Modifier
                 .fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Column {
-                Text(
-                    text = "R$ %.2f".format(cartViewModel.totalValue),
-                    fontSize = 32.sp,
-                    fontWeight = FontWeight.SemiBold,
-                    color = BackgroundColor
-                )
-                Text(text = cartViewModel.application.getText(R.string.cart_value).toString(),fontSize = 16.sp, color = BackgroundColor)
-            }
+            CartPriceArea(cartViewModel)
         }
 
         Spacer(Modifier.height(16.dp))
@@ -177,6 +177,8 @@ fun ListCart(
     listDialogViewModel: ListDialogViewModel,
     deleteDialogViewModel: DeleteListItemDialogViewModel
 ) {
+    Log.d("[TaNaLista]", "ListCart")
+
     val productItems by cartViewModel.allProductsInCurrentPage.observeAsState()
     val isEmpty = productItems.isNullOrEmpty()
 
@@ -196,7 +198,7 @@ fun ListCart(
                 EmptyCartSection(cartViewModel)
             } else {
                 LazyColumn(content = {
-                    itemsIndexed(product) { index, item ->
+                    items(product, key = {product -> product.productId}) { item ->
                         ProductItem(
                             item.name,
                             item.productPrice,
@@ -236,6 +238,8 @@ fun HeaderToggleButton(
     onCheckedChange: (Boolean) -> Unit,
     isChecked: Boolean
 ) {
+    Log.d("[TaNaLista]", "HeaderToggleButton")
+
     IconToggleButton(
         modifier = modifier.shadow(
             elevation = 1.dp,
@@ -273,6 +277,8 @@ fun ProductItem(
     onClick: () -> Unit,
     onLongClick: () -> Unit
 ) {
+    Log.d("[TaNaLista]", "ProductItem")
+
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -368,5 +374,21 @@ fun CartOutButton(addItemToCartList: () -> Unit, isInCart: Boolean) {
                 tint = Color.White
             )
         }
+    }
+}
+
+@Composable
+fun CartPriceArea(cartViewModel: CartViewModel)
+{
+    Log.d("[TaNaLista]", "CartPriceArea")
+
+    Column {
+        Text(
+            text = "R$ %.2f".format(cartViewModel.totalValue),
+            fontSize = 32.sp,
+            fontWeight = FontWeight.SemiBold,
+            color = BackgroundColor
+        )
+        Text(text = cartViewModel.application.getText(R.string.cart_value).toString(),fontSize = 16.sp, color = BackgroundColor)
     }
 }

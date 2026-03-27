@@ -59,12 +59,15 @@ dependencies {
     implementation(libs.gson)
     implementation(libs.accompanist.systemuicontroller)
     implementation(libs.coil.compose)
-    implementation(libs.androidx.room.runtime)
+
     implementation(libs.androidx.compose.foundation)
     implementation(libs.dagger.hilt)
     ksp(libs.hilt.compiler)
+    /*Room Dependencies*/
     kapt(libs.androidx.room.compiler)
     annotationProcessor(libs.androidx.room.compiler)
+    implementation(libs.androidx.room.runtime)
+    /*******************/
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
