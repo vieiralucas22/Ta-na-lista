@@ -1,4 +1,4 @@
-package com.example.tanalista.ui.viewmodel
+package com.example.tanalista.screens.home
 
 import android.app.Application
 import androidx.compose.runtime.getValue

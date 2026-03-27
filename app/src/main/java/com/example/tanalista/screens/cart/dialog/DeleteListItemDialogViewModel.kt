@@ -1,4 +1,4 @@
-package com.example.tanalista.ui.viewmodel.dialog
+package com.example.tanalista.screens.cart.dialog
 
 import android.app.Application
 import androidx.compose.runtime.getValue

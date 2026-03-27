@@ -6,10 +6,10 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
 import androidx.compose.runtime.Composable
-import com.example.tanalista.ui.views.CartView
-import com.example.tanalista.ui.viewmodel.CartViewModel
-import com.example.tanalista.ui.viewmodel.dialog.DeleteListItemDialogViewModel
-import com.example.tanalista.ui.viewmodel.dialog.ListDialogViewModel
+import com.example.tanalista.screens.cart.CartView
+import com.example.tanalista.screens.cart.CartViewModel
+import com.example.tanalista.screens.cart.dialog.DeleteListItemDialogViewModel
+import com.example.tanalista.screens.cart.dialog.CartDialogViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -19,11 +19,11 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
 
         val cartViewModel : CartViewModel by viewModels()
-        val listDialogViewModel : ListDialogViewModel by viewModels()
+        val cartDialogViewModel : CartDialogViewModel by viewModels()
         val deleteDialogViewModel : DeleteListItemDialogViewModel by viewModels()
 
         setContent {
-            MyApplicationApp(cartViewModel, listDialogViewModel, deleteDialogViewModel)
+            MyApplicationApp(cartViewModel, cartDialogViewModel, deleteDialogViewModel)
         }
     }
 }
@@ -31,8 +31,8 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun MyApplicationApp(
     cartViewModel: CartViewModel,
-    listDialogViewModel: ListDialogViewModel,
+    cartDialogViewModel: CartDialogViewModel,
     deleteDialogViewModel: DeleteListItemDialogViewModel) {
 
-    CartView(cartViewModel,listDialogViewModel,deleteDialogViewModel)
+    CartView(cartViewModel,cartDialogViewModel,deleteDialogViewModel)
 }

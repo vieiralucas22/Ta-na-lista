@@ -1,4 +1,4 @@
-package com.example.tanalista.ui.views
+package com.example.tanalista.screens.profile
 
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -36,7 +36,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
 import com.example.tanalista.R
-import com.example.tanalista.ui.viewmodel.ProfileViewModel
+import com.example.tanalista.screens.profile.ProfileViewModel
 
 @Composable
 fun ProfileView(viewModel: ProfileViewModel) {

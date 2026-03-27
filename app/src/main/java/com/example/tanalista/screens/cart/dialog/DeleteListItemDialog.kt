@@ -1,4 +1,4 @@
-package com.example.tanalista.ui.views.dialogs
+package com.example.tanalista.screens.cart.dialog
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -24,7 +24,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.example.tanalista.R
-import com.example.tanalista.ui.viewmodel.dialog.DeleteListItemDialogViewModel
 
 @Composable
 fun DeleteListItemDialog(deleteDialogViewModel: DeleteListItemDialogViewModel) {

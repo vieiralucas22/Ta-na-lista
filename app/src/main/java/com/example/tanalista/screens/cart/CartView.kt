@@ -1,4 +1,4 @@
-package com.example.tanalista.ui.views
+package com.example.tanalista.screens.cart
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -37,25 +37,24 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.tanalista.R
-import com.example.tanalista.ui.views.dialogs.CartDialog
-import com.example.tanalista.ui.views.dialogs.DeleteListItemDialog
+import com.example.tanalista.screens.cart.dialog.CartDialog
+import com.example.tanalista.screens.cart.dialog.DeleteListItemDialog
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
-import com.example.tanalista.ui.viewmodel.CartViewModel
-import com.example.tanalista.ui.viewmodel.dialog.DeleteListItemDialogViewModel
-import com.example.tanalista.ui.viewmodel.dialog.ListDialogViewModel
+import com.example.tanalista.screens.cart.dialog.DeleteListItemDialogViewModel
+import com.example.tanalista.screens.cart.dialog.CartDialogViewModel
 
 @Composable
 fun CartView(
     cartViewModel: CartViewModel,
-    listDialogViewModel: ListDialogViewModel,
+    cartDialogViewModel: CartDialogViewModel,
     deleteDialogViewModel: DeleteListItemDialogViewModel
 ) {
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(
-                onClick = { listDialogViewModel.openDialog() },
+                onClick = { cartDialogViewModel.openDialog() },
                 containerColor = colorResource(R.color.floatingButton)
             ) {
                 Icon(
@@ -72,8 +71,8 @@ fun CartView(
                     .padding(paddingValues)
             ) {
                 HeaderCart(cartViewModel)
-                ListCart(cartViewModel, listDialogViewModel, deleteDialogViewModel)
-                CartDialog(listDialogViewModel)
+                ListCart(cartViewModel, cartDialogViewModel, deleteDialogViewModel)
+                CartDialog(cartDialogViewModel)
                 DeleteListItemDialog(deleteDialogViewModel)
             }
         }
@@ -151,7 +150,7 @@ fun HeaderCart(cartViewModel: CartViewModel) {
 @Composable
 fun ListCart(
     cartViewModel: CartViewModel,
-    listDialogViewModel: ListDialogViewModel,
+    cartDialogViewModel: CartDialogViewModel,
     deleteDialogViewModel: DeleteListItemDialogViewModel
 ) {
     val productItems by cartViewModel.allProductsInCurrentPage.observeAsState()
@@ -189,7 +188,7 @@ fun ListCart(
                             item.quantity,
                             item.isInCart,
                             onClick = {
-                                listDialogViewModel.editDialog(item)
+                                cartDialogViewModel.editDialog(item)
                             },
                             onLongClick = {
                                 deleteDialogViewModel.openDialog(item)

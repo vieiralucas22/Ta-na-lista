@@ -1,4 +1,4 @@
-package com.example.tanalista.ui.views.dialogs
+package com.example.tanalista.screens.cart.dialog
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -34,11 +34,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.example.tanalista.R
-import com.example.tanalista.ui.viewmodel.dialog.ListDialogViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CartDialog(viewModel: ListDialogViewModel) {
+fun CartDialog(viewModel: CartDialogViewModel) {
 
     if (viewModel.isDialogOpen) {
         Dialog(onDismissRequest = { viewModel.closeDialog() }) {
@@ -184,7 +183,7 @@ fun OutlinedTextFieldDialog(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun CategoryDropdown(viewModel: ListDialogViewModel) {
+fun CategoryDropdown(viewModel: CartDialogViewModel) {
     val categories by viewModel.allCategories.collectAsState()
 
     ExposedDropdownMenuBox(

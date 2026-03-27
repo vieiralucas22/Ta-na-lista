@@ -1,4 +1,4 @@
-package com.example.tanalista.ui.viewmodel.dialog
+package com.example.tanalista.screens.cart.dialog
 
 import android.app.Application
 import androidx.compose.runtime.getValue
@@ -10,9 +10,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.application
 import androidx.lifecycle.viewModelScope
 import com.example.tanalista.R
+import com.example.tanalista.enums.ProductCategory
 import com.example.tanalista.model.database.model.ProductEntity
 import com.example.tanalista.model.database.model.dto.ListItemDTO
-import com.example.tanalista.enums.ProductCategory
 import com.example.tanalista.repository.local.interfaces.IProductCategoryRepository
 import com.example.tanalista.repository.local.interfaces.IProductListRepository
 import com.example.tanalista.repository.local.interfaces.IProductRepository
@@ -21,9 +21,12 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.text.ifEmpty
+import kotlin.text.toDouble
+import kotlin.text.toInt
 
 @HiltViewModel
-class ListDialogViewModel @Inject constructor(
+class CartDialogViewModel @Inject constructor(
     application: Application,
     val productCategoryRepository: IProductCategoryRepository,
     val productListRepository: IProductListRepository,
@@ -34,7 +37,7 @@ class ListDialogViewModel @Inject constructor(
 
     val allCategories = productCategoryRepository.getAllCategories().stateIn(
         viewModelScope,
-        SharingStarted.WhileSubscribed(5000),
+        SharingStarted.Companion.WhileSubscribed(5000),
         emptyList()
     )
     private var allProducts: List<ProductEntity> = emptyList()
@@ -53,13 +56,15 @@ class ListDialogViewModel @Inject constructor(
     var textButtonDialog by mutableStateOf(application.getText(R.string.add).toString())
     var headerDialog by mutableStateOf(application.getText(R.string.add_item).toString())
 
-    private val _productsSuggestion = MutableLiveData( listOf(
-        ProductEntity(name = "Arroz", category = "Food"),
-        ProductEntity(name = "Feijão", category = "Food"),
-        ProductEntity(name = "Coca-Cola", category = "Drink"),
-        ProductEntity(name = "Sabão", category = "Clean"),
-        ProductEntity(name = "Papel Higiênico", category = "Toilet")
-    ))
+    private val _productsSuggestion = MutableLiveData(
+        listOf(
+            ProductEntity(name = "Arroz", category = "Food"),
+            ProductEntity(name = "Feijão", category = "Food"),
+            ProductEntity(name = "Coca-Cola", category = "Drink"),
+            ProductEntity(name = "Sabão", category = "Clean"),
+            ProductEntity(name = "Papel Higiênico", category = "Toilet")
+        )
+    )
     val productsSuggestion: LiveData<List<ProductEntity>> = _productsSuggestion
 
     init {

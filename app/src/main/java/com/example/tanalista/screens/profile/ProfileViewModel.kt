@@ -1,10 +1,10 @@
-package com.example.tanalista.ui.viewmodel
+package com.example.tanalista.screens.profile
 
 import android.app.Application
 import android.net.Uri
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
 
 class ProfileViewModel(application: Application) : AndroidViewModel(application) {

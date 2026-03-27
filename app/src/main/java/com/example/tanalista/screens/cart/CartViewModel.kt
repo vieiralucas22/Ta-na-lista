@@ -1,4 +1,4 @@
-package com.example.tanalista.ui.viewmodel
+package com.example.tanalista.screens.cart
 
 import android.app.Application
 import androidx.compose.runtime.getValue
@@ -9,8 +9,8 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.tanalista.R
-import com.example.tanalista.model.database.model.dto.ListItemDTO
 import com.example.tanalista.enums.ProductCategory
+import com.example.tanalista.model.database.model.dto.ListItemDTO
 import com.example.tanalista.repository.local.interfaces.IProductListRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -39,7 +39,7 @@ class CartViewModel @Inject constructor(
             productListRepository.getAllListProducts(1, isCart)
         }.stateIn(
             viewModelScope,
-            SharingStarted.Eagerly,
+            SharingStarted.Companion.Eagerly,
             emptyList()
         ).asLiveData()
 
