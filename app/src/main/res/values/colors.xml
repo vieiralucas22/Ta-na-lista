@@ -7,4 +7,19 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <color name="backgroundColor">#FFefefef</color>
+    <color name="buttonBackground">#ff0a0a1a</color>
+    <color name="green">#ffaff41e</color>
+    <color name="toggleButtonListChecked">#FF8DC511</color>
+    <color name="toggleButtonListDisabled">#FFA1CC5A</color>
+    <color name="purple">#ff6e64d5</color>
+    <color name="toggleButtonCartChecked">#FF4428BB</color>
+
+    <color name="floatingButton">#FF7258E1</color>
+    <color name="toggleButtonCartDisable">#FF785BEE</color>
+    <color name="lightAppTitle">#ff57dfc9</color>
+    <color name="grayBackground">#ffeeeeec</color>
+    <color name="error">#FFEF0221</color>
+
 </resources>

@@ -33,15 +33,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.tanalista.R
-import com.example.tanalista.ui.theme.LightAppTitle
-import com.example.tanalista.ui.theme.Purple
-import com.example.tanalista.ui.theme.White
 import com.example.tanalista.ui.viewmodel.HomeViewModel
 
 @Composable
@@ -51,7 +49,7 @@ fun HomeView(viewModel: HomeViewModel) {
 
     Scaffold(
         modifier = Modifier
-            .background(White)
+            .background(colorResource(R.color.white))
             .windowInsetsPadding(WindowInsets.statusBars),
         floatingActionButton = {
             FloatingActionButton(
@@ -68,7 +66,7 @@ fun HomeView(viewModel: HomeViewModel) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(White)
+                .background(colorResource(R.color.white))
                 .padding(paddingValues)
         ) {
             Column(modifier = Modifier.padding(16.dp, 0.dp)) {
@@ -79,7 +77,7 @@ fun HomeView(viewModel: HomeViewModel) {
                     text = "Your lists!",
                     fontSize = 16.sp,
                     fontWeight = FontWeight.SemiBold,
-                    color = Purple
+                    color = colorResource(R.color.purple)
                 )
 
                 Spacer(modifier = Modifier.height(24.dp))
@@ -98,7 +96,10 @@ fun HomeView(viewModel: HomeViewModel) {
             Box(
                 modifier = Modifier
                     .size(100.dp, 90.dp)
-                    .background(Purple, shape = RoundedCornerShape(0.dp, 0.dp, 0.dp, 300.dp))
+                    .background(
+                        colorResource(R.color.purple),
+                        shape = RoundedCornerShape(0.dp, 0.dp, 0.dp, 300.dp)
+                    )
             )
         }
     }
@@ -111,19 +112,19 @@ fun TitleSection() {
             text = "Welcome,",
             fontSize = 24.sp,
             fontWeight = FontWeight.SemiBold,
-            color = Purple
+            color = colorResource(R.color.purple)
         )
         Text(
             text = " to Ta na Lista",
             fontSize = 24.sp,
             fontWeight = FontWeight.SemiBold,
-            color = LightAppTitle
+            color = colorResource(R.color.lightAppTitle)
         )
         Text(
             text = "!",
             fontSize = 24.sp,
             fontWeight = FontWeight.SemiBold,
-            color = Purple
+            color = colorResource(R.color.purple)
         )
     }
 }
@@ -139,7 +140,7 @@ fun ListItem(text: String, createdAt: String, resourceId: Int) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Purple, shape = RoundedCornerShape(24.dp))
+                .background(colorResource(R.color.purple), shape = RoundedCornerShape(24.dp))
                 .padding(12.dp, 16.dp),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
@@ -149,7 +150,7 @@ fun ListItem(text: String, createdAt: String, resourceId: Int) {
                 Icon(
                     painter = painterResource(resourceId),
                     contentDescription = "Food",
-                    tint = White,
+                    tint = colorResource(R.color.white),
                     modifier = Modifier.size(28.dp)
                 )
 
@@ -159,18 +160,18 @@ fun ListItem(text: String, createdAt: String, resourceId: Int) {
                 {
                     Text(
                         text = text,
-                        color = White,
+                        color = colorResource(R.color.white),
                         fontWeight = FontWeight.SemiBold,
                         fontSize = 18.sp
                     )
-                    Text(text = createdAt, color = White)
+                    Text(text = createdAt, color = colorResource(R.color.white))
                 }
             }
 
             Icon(
                 painter = painterResource(R.drawable.ic_arrow_right),
                 contentDescription = "Arrow",
-                tint = White,
+                tint = colorResource(R.color.white),
                 modifier = Modifier.size(28.dp)
             )
         }

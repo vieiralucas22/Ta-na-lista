@@ -1,7 +1,5 @@
 package com.example.tanalista.ui.views
 
-import android.annotation.SuppressLint
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
@@ -17,14 +15,10 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.ExposedDropdownMenuAnchorType
-import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconToggleButton
@@ -45,20 +39,9 @@ import androidx.compose.ui.unit.sp
 import com.example.tanalista.R
 import com.example.tanalista.ui.views.dialogs.CartDialog
 import com.example.tanalista.ui.views.dialogs.DeleteListItemDialog
-import com.example.tanalista.ui.theme.BackgroundColor
-import com.example.tanalista.ui.theme.ButtonBackground
-import com.example.tanalista.ui.theme.Error
-import com.example.tanalista.ui.theme.GrayBackground
-import com.example.tanalista.ui.theme.Green
-import com.example.tanalista.ui.theme.Purple
-import com.example.tanalista.ui.theme.ToggleButtonCartChecked
-import com.example.tanalista.ui.theme.ToggleButtonCartDisable
-import com.example.tanalista.ui.theme.ToggleButtonListChecked
-import com.example.tanalista.ui.theme.ToggleButtonListDisabled
-import com.example.tanalista.ui.theme.White
 import androidx.compose.ui.draw.shadow
-import androidx.lifecycle.application
-import com.example.tanalista.ui.theme.FloatingButton
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.stringResource
 import com.example.tanalista.ui.viewmodel.CartViewModel
 import com.example.tanalista.ui.viewmodel.dialog.DeleteListItemDialogViewModel
 import com.example.tanalista.ui.viewmodel.dialog.ListDialogViewModel
@@ -69,26 +52,23 @@ fun CartView(
     listDialogViewModel: ListDialogViewModel,
     deleteDialogViewModel: DeleteListItemDialogViewModel
 ) {
-    Log.d("[TaNaLista]", "CartView")
-
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(
                 onClick = { listDialogViewModel.openDialog() },
-                containerColor = FloatingButton
+                containerColor = colorResource(R.color.floatingButton)
             ) {
                 Icon(
                     painter = painterResource(R.drawable.ic_plus),
                     contentDescription = "Icon",
-                    tint = White
+                    tint = colorResource(R.color.white)
                 )
             }
-        }, content = {
-            paddingValues ->
+        }, content = { paddingValues ->
             Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(ButtonBackground)
+                    .background(colorResource(R.color.buttonBackground))
                     .padding(paddingValues)
             ) {
                 HeaderCart(cartViewModel)
@@ -103,9 +83,6 @@ fun CartView(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HeaderCart(cartViewModel: CartViewModel) {
-
-    Log.d("[TaNaLista]", "HeaderCart")
-
     Column(modifier = Modifier.padding(24.dp, 12.dp)) {
         Row(
             modifier = Modifier
@@ -124,19 +101,19 @@ fun HeaderCart(cartViewModel: CartViewModel) {
         ) {
 
             HeaderToggleButton(
-                text = cartViewModel.application.getText(R.string.list).toString(),
+                text = stringResource(R.string.list),
                 modifier = Modifier.weight(1f),
                 colors = IconToggleButtonColors(
-                    containerColor = Green,
-                    checkedContentColor = ToggleButtonListChecked,
-                    contentColor = Green,
-                    disabledContainerColor = GrayBackground,
-                    disabledContentColor = ToggleButtonListDisabled,
-                    checkedContainerColor = ToggleButtonListChecked
+                    containerColor = colorResource(R.color.green),
+                    checkedContentColor = colorResource(R.color.toggleButtonListChecked),
+                    contentColor = colorResource(R.color.green),
+                    disabledContainerColor = colorResource(R.color.grayBackground),
+                    disabledContentColor = colorResource(R.color.toggleButtonListDisabled),
+                    checkedContainerColor = colorResource(R.color.toggleButtonListChecked)
                 ),
-                textColor = ButtonBackground,
+                textColor = colorResource(R.color.buttonBackground),
                 iconResourceId = R.drawable.ic_list,
-                iconTint = ButtonBackground,
+                iconTint = colorResource(R.color.buttonBackground),
                 onCheckedChange = { isChecked ->
                     if (isChecked) {
                         cartViewModel.showAllProductsInList()
@@ -146,19 +123,19 @@ fun HeaderCart(cartViewModel: CartViewModel) {
             )
 
             HeaderToggleButton(
-                text = cartViewModel.application.getText(R.string.cart).toString(),
+                text = stringResource(R.string.cart),
                 modifier = Modifier.weight(1f),
                 colors = IconToggleButtonColors(
-                    containerColor = Purple,
-                    checkedContentColor = ToggleButtonCartChecked,
-                    contentColor = Purple,
-                    disabledContainerColor = ToggleButtonCartDisable,
-                    disabledContentColor = White,
-                    checkedContainerColor = ToggleButtonCartChecked
+                    containerColor = colorResource(R.color.purple),
+                    checkedContentColor = colorResource(R.color.toggleButtonCartChecked),
+                    contentColor = colorResource(R.color.purple),
+                    disabledContainerColor = colorResource(R.color.toggleButtonCartDisable),
+                    disabledContentColor = colorResource(R.color.white),
+                    checkedContainerColor = colorResource(R.color.toggleButtonCartChecked)
                 ),
-                textColor = White,
+                textColor = colorResource(R.color.white),
                 iconResourceId = R.drawable.ic_cart,
-                iconTint = White,
+                iconTint = colorResource(R.color.white),
                 onCheckedChange = { isChecked ->
                     if (isChecked) {
                         cartViewModel.showAllProductsInCart()
@@ -177,8 +154,6 @@ fun ListCart(
     listDialogViewModel: ListDialogViewModel,
     deleteDialogViewModel: DeleteListItemDialogViewModel
 ) {
-    Log.d("[TaNaLista]", "ListCart")
-
     val productItems by cartViewModel.allProductsInCurrentPage.observeAsState()
     val isEmpty = productItems.isNullOrEmpty()
 
@@ -186,7 +161,7 @@ fun ListCart(
         modifier = Modifier
             .fillMaxSize()
             .background(
-                color = White,
+                color = colorResource(R.color.white),
                 shape = RoundedCornerShape(24.dp, 24.dp, 0.dp, 0.dp)
             )
             .padding(24.dp),
@@ -198,7 +173,7 @@ fun ListCart(
                 EmptyCartSection(cartViewModel)
             } else {
                 LazyColumn(content = {
-                    items(product, key = {product -> product.productId}) { item ->
+                    items(product, key = { product -> product.productId }) { item ->
                         ProductItem(
                             item.name,
                             item.productPrice,
@@ -232,14 +207,12 @@ fun HeaderToggleButton(
     text: String,
     modifier: Modifier,
     colors: IconToggleButtonColors,
-    textColor: Color = White,
+    textColor: Color = colorResource(R.color.white),
     iconResourceId: Int,
-    iconTint: Color = White,
+    iconTint: Color = colorResource(R.color.white),
     onCheckedChange: (Boolean) -> Unit,
     isChecked: Boolean
 ) {
-    Log.d("[TaNaLista]", "HeaderToggleButton")
-
     IconToggleButton(
         modifier = modifier.shadow(
             elevation = 1.dp,
@@ -277,8 +250,6 @@ fun ProductItem(
     onClick: () -> Unit,
     onLongClick: () -> Unit
 ) {
-    Log.d("[TaNaLista]", "ProductItem")
-
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -287,7 +258,10 @@ fun ProductItem(
                 shape = RoundedCornerShape(20.dp)
             )
             .padding(0.dp, 0.dp, 0.dp, 4.dp)
-            .background(color = GrayBackground, shape = RoundedCornerShape(20.dp))
+            .background(
+                color = colorResource(R.color.grayBackground),
+                shape = RoundedCornerShape(20.dp)
+            )
             .padding(12.dp)
             .combinedClickable(
                 onClick = onClick,
@@ -302,7 +276,7 @@ fun ProductItem(
             Icon(
                 painter = painterResource(iconResourceId),
                 contentDescription = "Icon",
-                tint = Purple
+                tint = colorResource(R.color.purple)
             )
 
             Spacer(Modifier.width(8.dp))
@@ -312,7 +286,7 @@ fun ProductItem(
                     text = "$title ($quantity un)",
                     fontSize = 14.sp,
                     fontWeight = FontWeight.SemiBold,
-                    color = ButtonBackground
+                    color = colorResource(R.color.buttonBackground)
                 )
                 Spacer(Modifier.height(4.dp))
                 Text(text = "R$ %.2f".format(price), fontSize = 12.sp)
@@ -332,7 +306,7 @@ fun EmptyCartSection(cartViewModel: CartViewModel) {
         Image(painter = painterResource(R.drawable.empty_cart), contentDescription = "Empty cart")
 
         Text(
-            text = cartViewModel.application.getText(R.string.empty_cart_message).toString(),
+            text = stringResource(R.string.empty_cart_message),
             textAlign = TextAlign.Center,
             fontSize = 16.sp
         )
@@ -344,7 +318,7 @@ fun CartInButton(addItemToCartList: () -> Unit, isInCart: Boolean) {
     if (!isInCart) {
         Button(
             colors = ButtonDefaults.buttonColors(
-                containerColor = Purple
+                containerColor = colorResource(R.color.purple)
             ), onClick = addItemToCartList
         )
         {
@@ -352,7 +326,7 @@ fun CartInButton(addItemToCartList: () -> Unit, isInCart: Boolean) {
                 modifier = Modifier.size(18.dp),
                 painter = painterResource(R.drawable.ic_cart_in),
                 contentDescription = "App Icon",
-                tint = Color.White
+                tint = colorResource(R.color.white)
             )
         }
     }
@@ -363,7 +337,7 @@ fun CartOutButton(addItemToCartList: () -> Unit, isInCart: Boolean) {
     if (isInCart) {
         Button(
             colors = ButtonDefaults.buttonColors(
-                containerColor = Error
+                containerColor = colorResource(R.color.error)
             ), onClick = addItemToCartList
         )
         {
@@ -371,24 +345,25 @@ fun CartOutButton(addItemToCartList: () -> Unit, isInCart: Boolean) {
                 modifier = Modifier.size(18.dp),
                 painter = painterResource(R.drawable.ic_cart_out),
                 contentDescription = "App Icon",
-                tint = Color.White
+                tint = colorResource(R.color.white)
             )
         }
     }
 }
 
 @Composable
-fun CartPriceArea(cartViewModel: CartViewModel)
-{
-    Log.d("[TaNaLista]", "CartPriceArea")
-
+fun CartPriceArea(cartViewModel: CartViewModel) {
     Column {
         Text(
             text = "R$ %.2f".format(cartViewModel.totalValue),
             fontSize = 32.sp,
             fontWeight = FontWeight.SemiBold,
-            color = BackgroundColor
+            color = colorResource(R.color.backgroundColor)
         )
-        Text(text = cartViewModel.application.getText(R.string.cart_value).toString(),fontSize = 16.sp, color = BackgroundColor)
+        Text(
+            text = stringResource(R.string.cart_value),
+            fontSize = 16.sp,
+            color = colorResource(R.color.backgroundColor)
+        )
     }
 }

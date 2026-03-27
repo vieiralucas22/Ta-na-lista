@@ -30,14 +30,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
 import com.example.tanalista.R
-import com.example.tanalista.ui.theme.ButtonBackground
-import com.example.tanalista.ui.theme.GrayBackground
-import com.example.tanalista.ui.theme.White
 import com.example.tanalista.ui.viewmodel.ProfileViewModel
 
 @Composable
@@ -50,14 +48,14 @@ fun ProfileView(viewModel: ProfileViewModel) {
 
     Scaffold(
         modifier = Modifier
-            .background(White)
+            .background(colorResource(R.color.white))
             .windowInsetsPadding(WindowInsets.statusBars)
     ) { paddingValues ->
         Column(
             Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
-                .background(White),
+                .background(colorResource(R.color.white)),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(text = "Profile", fontSize = 32.sp)
@@ -96,7 +94,10 @@ fun ProfileView(viewModel: ProfileViewModel) {
                         elevation = 4.dp,
                         shape = RoundedCornerShape(20.dp)
                     )
-                    .background(color = GrayBackground, shape = RoundedCornerShape(20.dp))
+                    .background(
+                        color = colorResource(R.color.grayBackground),
+                        shape = RoundedCornerShape(20.dp)
+                    )
                     .padding(4.dp)
             ) {
 
@@ -115,7 +116,7 @@ fun ProfileOption(text: String, resourceIconId: Int) {
         onClick = {},
         colors = ButtonDefaults.buttonColors(
             containerColor = Color.Transparent,
-            contentColor = ButtonBackground
+            contentColor = colorResource(R.color.buttonBackground)
         ), modifier = Modifier.fillMaxWidth()
     ) {
         Row(

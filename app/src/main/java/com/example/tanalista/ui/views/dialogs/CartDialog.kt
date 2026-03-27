@@ -26,16 +26,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
-import androidx.lifecycle.application
 import com.example.tanalista.R
-import com.example.tanalista.ui.theme.ButtonBackground
-import com.example.tanalista.ui.theme.Error
-import com.example.tanalista.ui.theme.White
 import com.example.tanalista.ui.viewmodel.dialog.ListDialogViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -47,22 +45,27 @@ fun CartDialog(viewModel: ListDialogViewModel) {
             Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .background(Color.White, shape = RoundedCornerShape(16.dp))
+                    .background(colorResource(R.color.white), shape = RoundedCornerShape(16.dp))
                     .padding(16.dp)
             ) {
 
-                Text(text = viewModel.headerDialog, fontSize = 12.sp, fontWeight = FontWeight.SemiBold)
+                Text(
+                    text = viewModel.headerDialog,
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.SemiBold
+                )
 
                 ExposedDropdownMenuBox(
                     expanded = viewModel.isProductNameDropdownExpanded,
                     onExpandedChange = {
-                        viewModel.isProductNameDropdownExpanded = !viewModel.isProductNameDropdownExpanded
+                        viewModel.isProductNameDropdownExpanded =
+                            !viewModel.isProductNameDropdownExpanded
                     }
                 ) {
                     OutlinedTextField(
                         value = viewModel.productName,
                         onValueChange = { viewModel.suggestNewProducts(it) },
-                        label = { Text(viewModel.application.getText(R.string.product_name).toString()) },
+                        label = { Text(stringResource(R.string.product_name)) },
                         isError = viewModel.isInvalidProductName,
                         trailingIcon = {
                             ExposedDropdownMenuDefaults.TrailingIcon(expanded = viewModel.isProductNameDropdownExpanded)
@@ -99,7 +102,7 @@ fun CartDialog(viewModel: ListDialogViewModel) {
                     viewModel.isInvalidQuantity,
                     { viewModel.handleWithQuantityValueChange(it) },
                     KeyboardType.Decimal,
-                    viewModel.application.getText(R.string.quantity).toString()
+                    stringResource(R.string.quantity)
                 )
 
                 OutlinedTextFieldDialog(
@@ -107,7 +110,7 @@ fun CartDialog(viewModel: ListDialogViewModel) {
                     viewModel.isInvalidPrice,
                     { viewModel.handleWithPriceValueChange(it) },
                     KeyboardType.Decimal,
-                    viewModel.application.getText(R.string.price).toString()
+                    stringResource(R.string.price)
                 )
 
                 Spacer(Modifier.height(4.dp))
@@ -120,7 +123,10 @@ fun CartDialog(viewModel: ListDialogViewModel) {
                     horizontalArrangement = Arrangement.End
                 ) {
 
-                    Text(text = viewModel.application.getText(R.string.question_add_to_cart).toString(), fontWeight = FontWeight.SemiBold)
+                    Text(
+                        text = stringResource(R.string.question_add_to_cart),
+                        fontWeight = FontWeight.SemiBold
+                    )
 
                     Checkbox(
                         modifier = Modifier.background(
@@ -165,10 +171,10 @@ fun OutlinedTextFieldDialog(
         label = { Text(text = label) },
         isError = isInvalid,
         colors = TextFieldDefaults.colors(
-            errorIndicatorColor = Error,
-            errorContainerColor = White,
-            unfocusedContainerColor = White,
-            focusedContainerColor = White,
+            errorIndicatorColor = colorResource(R.color.error),
+            errorContainerColor = colorResource(R.color.white),
+            unfocusedContainerColor = colorResource(R.color.white),
+            focusedContainerColor = colorResource(R.color.white),
         ),
         keyboardOptions = KeyboardOptions(
             keyboardType = keyboardType
@@ -198,10 +204,10 @@ fun CategoryDropdown(viewModel: ListDialogViewModel) {
             modifier = Modifier
                 .menuAnchor(ExposedDropdownMenuAnchorType.PrimaryEditable, true),
             colors = TextFieldDefaults.colors(
-                disabledContainerColor = White,
-                disabledLabelColor = ButtonBackground,
-                disabledIndicatorColor = ButtonBackground,
-                disabledTextColor = ButtonBackground
+                disabledContainerColor = colorResource(R.color.white),
+                disabledLabelColor = colorResource(R.color.buttonBackground),
+                disabledIndicatorColor = colorResource(R.color.buttonBackground),
+                disabledTextColor = colorResource(R.color.buttonBackground)
             )
         )
 

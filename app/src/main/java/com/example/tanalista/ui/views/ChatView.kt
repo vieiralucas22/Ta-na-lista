@@ -9,16 +9,17 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.tanalista.ui.theme.BackgroundColor
+import com.example.tanalista.R
 
 @Composable
 fun ChatView() {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(BackgroundColor)
+            .background(colorResource(R.color.backgroundColor))
             .padding(20.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
