@@ -8,6 +8,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.tanalista.model.database.model.dto.ListItemDTO
 import com.example.tanalista.repository.local.interfaces.IProductListRepository
+import com.example.tanalista.screens.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -16,7 +17,7 @@ import javax.inject.Inject
 class DeleteListItemDialogViewModel @Inject constructor(
     application: Application,
     val productListRepository: IProductListRepository
-) : AndroidViewModel(application) {
+) : BaseViewModel(application) {
 
     private lateinit var currentProduct: ListItemDTO
 

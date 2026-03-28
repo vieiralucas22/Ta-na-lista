@@ -13,6 +13,7 @@ import com.example.tanalista.R
 import com.example.tanalista.enums.ProductCategory
 import com.example.tanalista.model.database.model.dto.ListItemDTO
 import com.example.tanalista.repository.local.interfaces.IProductListRepository
+import com.example.tanalista.screens.BaseViewModel
 import com.example.tanalista.screens.cart.model.ButtonState
 import com.example.tanalista.screens.cart.model.CartScreenState
 import com.example.tanalista.screens.cart.model.HeaderToggleButtonState
@@ -28,7 +29,7 @@ import javax.inject.Inject
 class CartScreenViewModel @Inject constructor(
     application: Application,
     val productListRepository: IProductListRepository
-) : AndroidViewModel(application) {
+) : BaseViewModel(application) {
 
     var state by mutableStateOf(CartScreenState())
 

@@ -16,6 +16,7 @@ import com.example.tanalista.model.database.model.dto.ListItemDTO
 import com.example.tanalista.repository.local.interfaces.IProductCategoryRepository
 import com.example.tanalista.repository.local.interfaces.IProductListRepository
 import com.example.tanalista.repository.local.interfaces.IProductRepository
+import com.example.tanalista.screens.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.stateIn
@@ -31,7 +32,7 @@ class CartDialogViewModel @Inject constructor(
     val productCategoryRepository: IProductCategoryRepository,
     val productListRepository: IProductListRepository,
     val productRepository: IProductRepository
-) : AndroidViewModel(application) {
+) : BaseViewModel(application) {
 
     private var currentListItem: ListItemDTO? = null
 
@@ -48,12 +49,12 @@ class CartDialogViewModel @Inject constructor(
     var price by mutableStateOf("")
     var isCategoryDropdownExpanded by mutableStateOf(false)
     var isProductNameDropdownExpanded by mutableStateOf(false)
-    var category by mutableStateOf(application.getText(R.string.select_category).toString())
+    var category by mutableStateOf(getText(R.string.select_category))
     var canAddToCart by mutableStateOf(false)
     var isInvalidProductName by mutableStateOf(false)
     var isInvalidQuantity by mutableStateOf(false)
     var isInvalidPrice by mutableStateOf(false)
-    var textButtonDialog by mutableStateOf(application.getText(R.string.add).toString())
+    var textButtonDialog by mutableStateOf(getText(R.string.add))
 
     private val _productsSuggestion = MutableLiveData(
         listOf(
@@ -92,7 +93,7 @@ class CartDialogViewModel @Inject constructor(
         quantity = currentListItem?.quantity.toString()
         canAddToCart = currentListItem?.isInCart == true
 
-        textButtonDialog = application.getText(R.string.update).toString()
+        textButtonDialog = getText(R.string.update)
         openDialog()
     }
 
@@ -142,10 +143,10 @@ class CartDialogViewModel @Inject constructor(
         productName = ""
         quantity = ""
         price = ""
-        category = application.getText(R.string.select_category).toString()
+        category = getText(R.string.select_category)
         canAddToCart = false
         isInvalidProductName = false
-        textButtonDialog = application.getText(R.string.add).toString()
+        textButtonDialog = getText(R.string.add)
         currentListItem = null
     }
 
@@ -154,9 +155,8 @@ class CartDialogViewModel @Inject constructor(
             name = productName,
             quantity = quantity.ifEmpty { "0" }.toInt(),
             productPrice = price.ifEmpty { "0.0" }.toDouble(),
-            category = if (category == application.getText(R.string.select_category)
-                    .toString()
-            ) ProductCategory.Undefined.toString() else category,
+            category = if (category == getText(R.string.select_category))
+                ProductCategory.Undefined.toString() else category,
             isInCart = canAddToCart
         )
     }
@@ -168,9 +168,8 @@ class CartDialogViewModel @Inject constructor(
             name = productName,
             quantity = quantity.ifEmpty { "0" }.toInt(),
             productPrice = price.ifEmpty { "0.0" }.toDouble(),
-            category = if (category == application.getText(R.string.select_category)
-                    .toString()
-            ) ProductCategory.Undefined.toString() else category,
+            category = if (category == getText(R.string.select_category))
+                ProductCategory.Undefined.toString() else category,
             isInCart = canAddToCart
         )
     }
