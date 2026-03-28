@@ -50,7 +50,7 @@ class ProductListRepositoryImpl @Inject constructor(
         productListDAO.insert(productListEntity)
     }
 
-    override suspend fun addProductInCart(listItem: ListItemDTO) {
+    override suspend fun addProductToCart(listItem: ListItemDTO) {
 
         val listItem = productListDAO.getProductInListByIds(listItem.listId, listItem.productId)
 
@@ -66,7 +66,7 @@ class ProductListRepositoryImpl @Inject constructor(
         return productListDAO.getProductsInList(id, isInCart)
     }
 
-    override suspend fun deleteProductInCart(listItem: ListItemDTO) {
+    override suspend fun removeProductFromCart(listItem: ListItemDTO) {
 
         val listItem = productListDAO.getProductInListByIds(listItem.listId, listItem.productId)
 

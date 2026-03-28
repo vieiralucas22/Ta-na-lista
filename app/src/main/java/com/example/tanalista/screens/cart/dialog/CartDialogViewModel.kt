@@ -54,7 +54,6 @@ class CartDialogViewModel @Inject constructor(
     var isInvalidQuantity by mutableStateOf(false)
     var isInvalidPrice by mutableStateOf(false)
     var textButtonDialog by mutableStateOf(application.getText(R.string.add).toString())
-    var headerDialog by mutableStateOf(application.getText(R.string.add_item).toString())
 
     private val _productsSuggestion = MutableLiveData(
         listOf(
@@ -94,7 +93,6 @@ class CartDialogViewModel @Inject constructor(
         canAddToCart = currentListItem?.isInCart == true
 
         textButtonDialog = application.getText(R.string.update).toString()
-        headerDialog = application.getText(R.string.update_item).toString()
         openDialog()
     }
 
@@ -148,7 +146,6 @@ class CartDialogViewModel @Inject constructor(
         canAddToCart = false
         isInvalidProductName = false
         textButtonDialog = application.getText(R.string.add).toString()
-        headerDialog = application.getText(R.string.add_item).toString()
         currentListItem = null
     }
 
@@ -187,7 +184,7 @@ class CartDialogViewModel @Inject constructor(
     fun updateProductDropdownList(inputTextName: String) {
         val newSuggestionProducts = allProducts
             .filter { it.name.lowercase().startsWith(inputTextName.lowercase()) }
-            .take(5)
+            .take(3)
             .sortedBy { it.name }
 
         isProductNameDropdownExpanded = newSuggestionProducts.isNotEmpty()

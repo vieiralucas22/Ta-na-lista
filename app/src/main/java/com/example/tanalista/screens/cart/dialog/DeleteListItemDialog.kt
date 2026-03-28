@@ -36,16 +36,13 @@ fun DeleteListItemDialog(deleteDialogViewModel: DeleteListItemDialogViewModel) {
                     .background(colorResource(R.color.white), shape = RoundedCornerShape(16.dp))
                     .padding(16.dp)
             ) {
-                Text(
-                    text = stringResource(R.string.remove_item),
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.SemiBold
-                )
+
                 Text(
                     text = stringResource(R.string.question_are_you_sure_remove_item),
                     fontSize = 16.sp,
                     modifier = Modifier.padding(0.dp, 8.dp)
                 )
+                
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.End

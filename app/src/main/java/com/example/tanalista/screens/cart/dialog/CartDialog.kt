@@ -48,12 +48,6 @@ fun CartDialog(viewModel: CartDialogViewModel) {
                     .padding(16.dp)
             ) {
 
-                Text(
-                    text = viewModel.headerDialog,
-                    fontSize = 12.sp,
-                    fontWeight = FontWeight.SemiBold
-                )
-
                 ExposedDropdownMenuBox(
                     expanded = viewModel.isProductNameDropdownExpanded,
                     onExpandedChange = {
