@@ -8,7 +8,6 @@ import com.example.tanalista.model.database.model.ProductListEntity
 import com.example.tanalista.repository.local.interfaces.IProductListRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class ProductListRepositoryImpl @Inject constructor(

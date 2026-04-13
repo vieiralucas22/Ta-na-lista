@@ -64,9 +64,8 @@ fun CartView(
                     .background(colorResource(R.color.buttonBackground))
                     .padding(paddingValues)
             ) {
-
                 HeaderCart(cartScreenViewModel.state) { isChecked ->
-                    cartScreenViewModel.showAllProductsInSection(!isChecked)
+                    cartScreenViewModel.showAllProductsInSection(isChecked)
                 }
 
                 ListCart(
