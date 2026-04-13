@@ -28,7 +28,7 @@ fun EmptyCartSection() {
     }
 }
 
-@Preview
+@Preview (showBackground = true)
 @Composable
 fun EmptyCartSectionPreview()
 {

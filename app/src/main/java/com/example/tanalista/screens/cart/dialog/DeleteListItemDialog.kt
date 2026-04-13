@@ -26,9 +26,9 @@ import androidx.compose.ui.window.Dialog
 import com.example.tanalista.R
 
 @Composable
-fun DeleteListItemDialog(deleteDialogViewModel: DeleteListItemDialogViewModel) {
-    if (deleteDialogViewModel.isDialogOpen) {
-        Dialog(onDismissRequest = { deleteDialogViewModel.closeDialog() })
+fun DeleteListItemDialog(isDialogOpen: Boolean, closeDialog: () -> Unit, deleteItem: () -> Unit) {
+    if (isDialogOpen) {
+        Dialog(onDismissRequest = { closeDialog() })
         {
             Column(
                 modifier = Modifier
@@ -42,13 +42,13 @@ fun DeleteListItemDialog(deleteDialogViewModel: DeleteListItemDialogViewModel) {
                     fontSize = 16.sp,
                     modifier = Modifier.padding(0.dp, 8.dp)
                 )
-                
+
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.End
                 ) {
                     Button(
-                        onClick = { deleteDialogViewModel.deleteListItem() },
+                        onClick = { deleteItem() },
                         colors = ButtonDefaults.buttonColors(
                             containerColor = colorResource(R.color.error)
                         )

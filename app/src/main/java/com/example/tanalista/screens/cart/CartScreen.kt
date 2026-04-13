@@ -15,12 +15,12 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.IconToggleButtonColors
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
@@ -29,18 +29,21 @@ import com.example.tanalista.R
 import com.example.tanalista.screens.cart.dialog.CartDialog
 import com.example.tanalista.screens.cart.dialog.DeleteListItemDialog
 import androidx.compose.ui.res.colorResource
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.tanalista.model.database.model.dto.ListItemDTO
 import com.example.tanalista.screens.cart.composable.CartPriceArea
 import com.example.tanalista.screens.cart.composable.EmptyCartSection
 import com.example.tanalista.screens.cart.composable.HeaderToggleButton
 import com.example.tanalista.screens.cart.composable.ProductItem
 import com.example.tanalista.screens.cart.dialog.DeleteListItemDialogViewModel
 import com.example.tanalista.screens.cart.dialog.CartDialogViewModel
+import com.example.tanalista.screens.cart.model.CartScreenState
 
 @Composable
 fun CartView(
-    cartScreenViewModel: CartScreenViewModel,
-    cartDialogViewModel: CartDialogViewModel,
-    deleteDialogViewModel: DeleteListItemDialogViewModel
+    cartScreenViewModel: CartScreenViewModel = viewModel(),
+    cartDialogViewModel: CartDialogViewModel = viewModel(),
+    deleteDialogViewModel: DeleteListItemDialogViewModel = viewModel()
 ) {
     Scaffold(
         floatingActionButton = {
@@ -61,10 +64,31 @@ fun CartView(
                     .background(colorResource(R.color.buttonBackground))
                     .padding(paddingValues)
             ) {
-                HeaderCart(cartScreenViewModel)
-                ListCart(cartScreenViewModel, cartDialogViewModel, deleteDialogViewModel)
+
+                HeaderCart(cartScreenViewModel.state) { isChecked ->
+                    cartScreenViewModel.showAllProductsInSection(!isChecked)
+                }
+
+                ListCart(
+                    cartScreenViewModel.state,
+                    onOpenDeleteDialog = { item -> deleteDialogViewModel.openDialog(item) },
+                    onOpenEditDialog = { item -> cartDialogViewModel.editDialog(item) },
+                    onMoveItem = { item, moveToCart ->
+                        cartScreenViewModel.moveProductBetweenLists(item, moveToCart)
+                    },
+                    onGetIcon = { category -> cartScreenViewModel.getCategoryIcon(category) }
+                )
+
                 CartDialog(cartDialogViewModel)
-                DeleteListItemDialog(deleteDialogViewModel)
+
+                DeleteListItemDialog(
+                    deleteDialogViewModel.isDialogOpen,
+                    {
+                        deleteDialogViewModel.closeDialog()
+                    },
+                    { deleteDialogViewModel.deleteListItem() }
+                )
+
             }
         }
     )
@@ -72,7 +96,7 @@ fun CartView(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HeaderCart(cartScreenViewModel: CartScreenViewModel) {
+fun HeaderCart(state: CartScreenState, onCheckedChange: (Boolean) -> Unit) {
     Column(modifier = Modifier.padding(24.dp, 12.dp)) {
         Row(
             modifier = Modifier
@@ -80,7 +104,7 @@ fun HeaderCart(cartScreenViewModel: CartScreenViewModel) {
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
-            CartPriceArea(cartScreenViewModel)
+            CartPriceArea(state.totalCartValue)
         }
 
         Spacer(Modifier.height(16.dp))
@@ -91,9 +115,9 @@ fun HeaderCart(cartScreenViewModel: CartScreenViewModel) {
         ) {
 
             HeaderToggleButton(
-                state = cartScreenViewModel.state.listToggle,
+                state = state.listToggle,
                 modifier = Modifier.weight(1f),
-                colors = IconToggleButtonColors(
+                colors = IconButtonDefaults.iconToggleButtonColors(
                     containerColor = colorResource(R.color.green),
                     checkedContentColor = colorResource(R.color.toggleButtonListChecked),
                     contentColor = colorResource(R.color.green),
@@ -104,12 +128,12 @@ fun HeaderCart(cartScreenViewModel: CartScreenViewModel) {
                 textColor = colorResource(R.color.buttonBackground),
                 iconTint = colorResource(R.color.buttonBackground),
                 onCheckedChange = { isChecked ->
-                        cartScreenViewModel.showAllProductsInSection(!isChecked)
+                    onCheckedChange(!isChecked)
                 },
             )
 
             HeaderToggleButton(
-                state = cartScreenViewModel.state.cartToggle,
+                state = state.cartToggle,
                 modifier = Modifier.weight(1f),
                 colors = IconToggleButtonColors(
                     containerColor = colorResource(R.color.purple),
@@ -122,7 +146,7 @@ fun HeaderCart(cartScreenViewModel: CartScreenViewModel) {
                 textColor = colorResource(R.color.white),
                 iconTint = colorResource(R.color.white),
                 onCheckedChange = { isChecked ->
-                        cartScreenViewModel.showAllProductsInSection(isChecked)
+                    onCheckedChange(isChecked)
                 }
             )
         }
@@ -132,12 +156,13 @@ fun HeaderCart(cartScreenViewModel: CartScreenViewModel) {
 
 @Composable
 fun ListCart(
-    cartScreenViewModel: CartScreenViewModel,
-    cartDialogViewModel: CartDialogViewModel,
-    deleteDialogViewModel: DeleteListItemDialogViewModel
+    state: CartScreenState,
+    onOpenDeleteDialog: (ListItemDTO) -> Unit,
+    onOpenEditDialog: (ListItemDTO) -> Unit,
+    onMoveItem: (ListItemDTO, Boolean) -> Unit,
+    onGetIcon: (String) -> Int
 ) {
-    val productItems by cartScreenViewModel.state.allProductsInList.collectAsState(emptyList())
-    val isEmpty = productItems.isNullOrEmpty()
+    val productItems by state.allProductsInList.collectAsState(emptyList())
 
     Column(
         modifier = Modifier
@@ -148,10 +173,10 @@ fun ListCart(
             )
             .padding(24.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = if (isEmpty) Arrangement.Center else Arrangement.Top,
+        verticalArrangement = if (productItems.isEmpty()) Arrangement.Center else Arrangement.Top,
     ) {
         productItems.let { product ->
-            if (isEmpty) {
+            if (productItems.isEmpty()) {
                 EmptyCartSection()
             } else {
                 LazyColumn(content = {
@@ -159,22 +184,22 @@ fun ListCart(
                         ProductItem(
                             item.name,
                             item.productPrice,
-                            cartScreenViewModel.getCategoryIcon(item.category),
+                            onGetIcon(item.category),
                             addItemToCartList =
                                 {
-                                    cartScreenViewModel.moveProductBetweenLists(item, true)
+                                    onMoveItem(item, true)
                                 },
                             removeItemToCartList =
                                 {
-                                    cartScreenViewModel.moveProductBetweenLists(item, false)
+                                    onMoveItem(item, false)
                                 },
                             item.quantity,
                             item.isInCart,
                             onClick = {
-                                cartDialogViewModel.editDialog(item)
+                                onOpenEditDialog(item)
                             },
                             onLongClick = {
-                                deleteDialogViewModel.openDialog(item)
+                                onOpenDeleteDialog(item)
                             }
                         )
                     }

@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.IconToggleButton
 import androidx.compose.material3.IconToggleButtonColors
 import androidx.compose.material3.Text
@@ -31,7 +32,7 @@ fun HeaderToggleButton(
     colors: IconToggleButtonColors,
     textColor: Color = colorResource(R.color.white),
     iconTint: Color = colorResource(R.color.white),
-    onCheckedChange: (Boolean) -> Unit,
+    onCheckedChange: (Boolean) -> Unit = {},
 ) {
     IconToggleButton(
         modifier = modifier.shadow(
@@ -64,9 +65,15 @@ fun HeaderToggleButton(
     }
 }
 
-@Preview
+@Preview(widthDp = 200, heightDp = 50)
 @Composable
-fun HeaderToggleButtonPreview()
-{
-    /// Todo
+fun HeaderToggleButtonPreview() {
+
+    HeaderToggleButton(
+        state = HeaderToggleButtonState(),
+        modifier = Modifier,
+        colors = IconButtonDefaults.iconToggleButtonColors(
+            containerColor = colorResource(R.color.purple),
+        )
+    )
 }

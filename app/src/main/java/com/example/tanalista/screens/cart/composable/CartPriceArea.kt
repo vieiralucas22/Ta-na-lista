@@ -9,13 +9,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import com.example.tanalista.R
-import com.example.tanalista.screens.cart.CartScreenViewModel
 
 @Composable
-fun CartPriceArea(cartScreenViewModel: CartScreenViewModel) {
+fun CartPriceArea(totalCartValue : Double) {
     Column {
         Text(
-            text = "R$ %.2f".format(cartScreenViewModel.state.totalCartValue),
+            text = "R$ %.2f".format(totalCartValue),
             fontSize = 32.sp,
             fontWeight = FontWeight.SemiBold,
             color = colorResource(R.color.backgroundColor)
@@ -27,10 +26,9 @@ fun CartPriceArea(cartScreenViewModel: CartScreenViewModel) {
         )
     }
 }
-
-@Preview
+@Preview(showBackground = true, backgroundColor = 0xFF0A0A1A)
 @Composable
 fun CartPriceAreaPreview()
 {
-    /// Todo
+    CartPriceArea(450.0)
 }
