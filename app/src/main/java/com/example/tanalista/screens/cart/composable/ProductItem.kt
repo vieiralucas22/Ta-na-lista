@@ -1,5 +1,6 @@
 package com.example.tanalista.screens.cart.composable
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -15,8 +16,12 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.SwipeToDismissBox
+import androidx.compose.material3.SwipeToDismissBoxValue
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
@@ -37,56 +42,66 @@ fun ProductItem(
     quantity: Int = 0,
     isInCart: Boolean = false,
     onClick: () -> Unit = {},
-    onLongClick: () -> Unit = {}
+    onDismissItem: () -> Unit = {}
 ) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .combinedClickable(
-                onClick = onClick,
-                onLongClick = onLongClick
-            ),
-        elevation = CardDefaults.elevatedCardElevation(4.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = colorResource(R.color.grayBackground)
-        )
-    ) {
+    val swipeToDismissBoxState = rememberSwipeToDismissBoxState()
 
-        Row(
-            modifier = Modifier.padding(12.dp).fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
+    LaunchedEffect(swipeToDismissBoxState.currentValue) {
+        if (swipeToDismissBoxState.currentValue == SwipeToDismissBoxValue.StartToEnd
+            || swipeToDismissBoxState.currentValue == SwipeToDismissBoxValue.EndToStart) {
+            onDismissItem()
+        }
+    }
+
+    SwipeToDismissBox(state = swipeToDismissBoxState, backgroundContent = {}) {
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable(onClick = { onClick() }),
+            elevation = CardDefaults.elevatedCardElevation(4.dp),
+            colors = CardDefaults.cardColors(
+                containerColor = colorResource(R.color.grayBackground)
+            )
         ) {
-            Row (verticalAlignment = Alignment.CenterVertically) {
 
-                Icon(
-                    painter = painterResource(iconResourceId),
-                    contentDescription = "Icon",
-                    tint = colorResource(R.color.purple)
-                )
+            Row(
+                modifier = Modifier
+                    .padding(12.dp)
+                    .fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Row(verticalAlignment = Alignment.CenterVertically) {
 
-                Spacer(Modifier.width(8.dp))
-
-                Column {
-                    Text(
-                        text = "$title ($quantity un)",
-                        fontSize = 14.sp,
-                        fontWeight = FontWeight.SemiBold,
-                        color = colorResource(R.color.buttonBackground)
+                    Icon(
+                        painter = painterResource(iconResourceId),
+                        contentDescription = "Icon",
+                        tint = colorResource(R.color.purple)
                     )
 
-                    Spacer(Modifier.height(4.dp))
+                    Spacer(Modifier.width(8.dp))
 
-                    Text(text = "R$ %.2f".format(price), fontSize = 12.sp)
+                    Column {
+                        Text(
+                            text = "$title ($quantity un)",
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.SemiBold,
+                            color = colorResource(R.color.buttonBackground)
+                        )
+
+                        Spacer(Modifier.height(4.dp))
+
+                        Text(text = "R$ %.2f".format(price), fontSize = 12.sp)
+                    }
                 }
+
+                if (isInCart)
+                    CartOutButton(removeItemToCartList)
+                else
+                    CartInButton(addItemToCartList)
             }
 
-            if (isInCart)
-                CartOutButton(removeItemToCartList)
-            else
-                CartInButton(addItemToCartList)
         }
-
     }
 
     Spacer(modifier = Modifier.height(8.dp))

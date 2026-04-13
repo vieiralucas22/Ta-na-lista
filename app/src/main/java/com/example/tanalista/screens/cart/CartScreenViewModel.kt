@@ -111,4 +111,10 @@ class CartScreenViewModel @Inject constructor(
         }
     }
 
+    fun deleteListItem(item: ListItemDTO) {
+        viewModelScope.launch {
+            productListRepository.deleteProductFromList(item)
+        }
+    }
+
 }

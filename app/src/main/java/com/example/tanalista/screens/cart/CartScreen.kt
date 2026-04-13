@@ -27,7 +27,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.example.tanalista.R
 import com.example.tanalista.screens.cart.dialog.CartDialog
-import com.example.tanalista.screens.cart.dialog.DeleteListItemDialog
 import androidx.compose.ui.res.colorResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.tanalista.model.database.model.dto.ListItemDTO
@@ -35,15 +34,13 @@ import com.example.tanalista.screens.cart.composable.CartPriceArea
 import com.example.tanalista.screens.cart.composable.EmptyCartSection
 import com.example.tanalista.screens.cart.composable.HeaderToggleButton
 import com.example.tanalista.screens.cart.composable.ProductItem
-import com.example.tanalista.screens.cart.dialog.DeleteListItemDialogViewModel
 import com.example.tanalista.screens.cart.dialog.CartDialogViewModel
 import com.example.tanalista.screens.cart.model.CartScreenState
 
 @Composable
 fun CartView(
     cartScreenViewModel: CartScreenViewModel = viewModel(),
-    cartDialogViewModel: CartDialogViewModel = viewModel(),
-    deleteDialogViewModel: DeleteListItemDialogViewModel = viewModel()
+    cartDialogViewModel: CartDialogViewModel = viewModel()
 ) {
     Scaffold(
         floatingActionButton = {
@@ -70,23 +67,17 @@ fun CartView(
 
                 ListCart(
                     cartScreenViewModel.state,
-                    onOpenDeleteDialog = { item -> deleteDialogViewModel.openDialog(item) },
                     onOpenEditDialog = { item -> cartDialogViewModel.editDialog(item) },
                     onMoveItem = { item, moveToCart ->
                         cartScreenViewModel.moveProductBetweenLists(item, moveToCart)
                     },
-                    onGetIcon = { category -> cartScreenViewModel.getCategoryIcon(category) }
+                    onGetIcon = { category -> cartScreenViewModel.getCategoryIcon(category) },
+                    onDismissItem = { item ->
+                        cartScreenViewModel.deleteListItem(item)
+                    }
                 )
 
                 CartDialog(cartDialogViewModel)
-
-                DeleteListItemDialog(
-                    deleteDialogViewModel.isDialogOpen,
-                    {
-                        deleteDialogViewModel.closeDialog()
-                    },
-                    { deleteDialogViewModel.deleteListItem() }
-                )
 
             }
         }
@@ -156,10 +147,10 @@ fun HeaderCart(state: CartScreenState, onCheckedChange: (Boolean) -> Unit) {
 @Composable
 fun ListCart(
     state: CartScreenState,
-    onOpenDeleteDialog: (ListItemDTO) -> Unit,
     onOpenEditDialog: (ListItemDTO) -> Unit,
     onMoveItem: (ListItemDTO, Boolean) -> Unit,
-    onGetIcon: (String) -> Int
+    onGetIcon: (String) -> Int,
+    onDismissItem: (ListItemDTO) -> Unit
 ) {
     val productItems by state.allProductsInList.collectAsState(emptyList())
 
@@ -197,8 +188,8 @@ fun ListCart(
                             onClick = {
                                 onOpenEditDialog(item)
                             },
-                            onLongClick = {
-                                onOpenDeleteDialog(item)
+                            onDismissItem = {
+                                onDismissItem(item)
                             }
                         )
                     }
