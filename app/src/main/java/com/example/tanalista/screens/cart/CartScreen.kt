@@ -61,9 +61,16 @@ fun CartView(
                     .background(colorResource(R.color.buttonBackground))
                     .padding(paddingValues)
             ) {
-                HeaderCart(cartScreenViewModel.state) { isChecked ->
-                    cartScreenViewModel.showAllProductsInSection(isChecked)
-                }
+                HeaderCart(
+                    cartScreenViewModel.state,
+                    onListCheckedChange = { isListChecked ->
+                        if (isListChecked)
+                            cartScreenViewModel.showAllProductsInList()
+                    },
+                    onCartCheckedChange = { isCartChecked ->
+                        if (isCartChecked)
+                            cartScreenViewModel.showAllProductsInCart()
+                    })
 
                 ListCart(
                     cartScreenViewModel.state,
@@ -86,7 +93,11 @@ fun CartView(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HeaderCart(state: CartScreenState, onCheckedChange: (Boolean) -> Unit) {
+fun HeaderCart(
+    state: CartScreenState,
+    onListCheckedChange: (Boolean) -> Unit,
+    onCartCheckedChange: (Boolean) -> Unit
+) {
     Column(modifier = Modifier.padding(24.dp, 12.dp)) {
         Row(
             modifier = Modifier
@@ -118,7 +129,7 @@ fun HeaderCart(state: CartScreenState, onCheckedChange: (Boolean) -> Unit) {
                 textColor = colorResource(R.color.buttonBackground),
                 iconTint = colorResource(R.color.buttonBackground),
                 onCheckedChange = { isChecked ->
-                    onCheckedChange(!isChecked)
+                    onListCheckedChange(isChecked)
                 },
             )
 
@@ -136,7 +147,7 @@ fun HeaderCart(state: CartScreenState, onCheckedChange: (Boolean) -> Unit) {
                 textColor = colorResource(R.color.white),
                 iconTint = colorResource(R.color.white),
                 onCheckedChange = { isChecked ->
-                    onCheckedChange(isChecked)
+                    onCartCheckedChange(isChecked)
                 }
             )
         }

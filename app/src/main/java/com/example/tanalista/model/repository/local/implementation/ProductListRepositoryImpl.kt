@@ -19,12 +19,12 @@ class ProductListRepositoryImpl @Inject constructor(
 
     /* Override Methods */
 
-    override suspend fun addOrUpdateProductInList(listItemDTO: ListItemDTO?) {
+    override suspend fun addOrUpdateProductInList(listItemDTO: ListItemDTO?) =
+        withContext(Dispatchers.IO) {
 
-        if (listItemDTO == null) return
+            if (listItemDTO == null)
+                return@withContext
 
-        withContext(Dispatchers.IO)
-        {
             val allProducts = productDAO.getAllProducts().first()
 
             var existingProduct = allProducts.find {
@@ -33,7 +33,8 @@ class ProductListRepositoryImpl @Inject constructor(
 
             if (isUpdate(listItemDTO)) {
                 existingProduct = allProducts.find {
-                    it.id == listItemDTO.productId && listItemDTO.listId.toInt() == listItemDTO.listId.toInt()
+                    it.id == listItemDTO.productId
+                            && listItemDTO.listId.toInt() == listItemDTO.listId.toInt()
                 }
             }
 
@@ -52,7 +53,6 @@ class ProductListRepositoryImpl @Inject constructor(
 
             productListDAO.insert(productListEntity)
         }
-    }
 
     override suspend fun addProductToCart(item: ListItemDTO) = withContext(Dispatchers.IO) {
         val listItem = productListDAO.getProductInListByIds(item.listId, item.productId)
@@ -70,7 +70,6 @@ class ProductListRepositoryImpl @Inject constructor(
     }
 
     override suspend fun removeProductFromCart(item: ListItemDTO) = withContext(Dispatchers.IO) {
-
         val listItem = productListDAO.getProductInListByIds(item.listId, item.productId)
 
         listItem.isInCart = false
@@ -79,7 +78,6 @@ class ProductListRepositoryImpl @Inject constructor(
     }
 
     override suspend fun deleteProductFromList(item: ListItemDTO) = withContext(Dispatchers.IO) {
-
         val listItem = productListDAO.getProductInListByIds(item.listId, item.productId)
 
         productListDAO.deleteProductList(listItem)

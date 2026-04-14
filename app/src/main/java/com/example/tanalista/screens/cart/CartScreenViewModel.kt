@@ -70,13 +70,25 @@ class CartScreenViewModel @Inject constructor(
         }
     }
 
-    fun showAllProductsInSection(isCartSection: Boolean) {
+    fun showAllProductsInList() {
         viewModelScope.launch {
-            val allProducts = productListRepository.getAllListProducts(1, isCartSection)
+            val allProducts = productListRepository.getAllListProducts(1, false)
 
             state = state.copy(
-                cartToggle = state.cartToggle.copy(isChecked = isCartSection),
-                listToggle = state.listToggle.copy(isChecked = !isCartSection),
+                cartToggle = state.cartToggle.copy(isChecked = false),
+                listToggle = state.listToggle.copy(isChecked = true),
+                allProductsInList = allProducts
+            )
+        }
+    }
+
+    fun showAllProductsInCart() {
+        viewModelScope.launch {
+            val allProducts = productListRepository.getAllListProducts(1, true)
+
+            state = state.copy(
+                cartToggle = state.cartToggle.copy(isChecked = true),
+                listToggle = state.listToggle.copy(isChecked = false),
                 allProductsInList = allProducts
             )
         }
