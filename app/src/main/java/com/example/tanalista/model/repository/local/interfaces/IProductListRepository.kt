@@ -5,10 +5,10 @@ import kotlinx.coroutines.flow.Flow
 
 interface IProductListRepository {
     suspend fun addOrUpdateProductInList(listItemDTO: ListItemDTO?)
-    suspend fun addProductToCart(listItem: ListItemDTO)
+    suspend fun addProductToCart(item: ListItemDTO)
 
     fun getAllListProducts(id: Long, isInCart: Boolean = false): Flow<List<ListItemDTO>>
 
-    suspend fun removeProductFromCart(listItem: ListItemDTO)
-    suspend fun deleteProductFromList(listItem: ListItemDTO)
+    suspend fun removeProductFromCart(item: ListItemDTO)
+    suspend fun deleteProductFromList(item: ListItemDTO)
 }

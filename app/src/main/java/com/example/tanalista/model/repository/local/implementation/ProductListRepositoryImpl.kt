@@ -6,8 +6,10 @@ import com.example.tanalista.model.database.model.dto.ListItemDTO
 import com.example.tanalista.model.database.model.ProductEntity
 import com.example.tanalista.model.database.model.ProductListEntity
 import com.example.tanalista.repository.local.interfaces.IProductListRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class ProductListRepositoryImpl @Inject constructor(
@@ -21,37 +23,39 @@ class ProductListRepositoryImpl @Inject constructor(
 
         if (listItemDTO == null) return
 
-        val allProducts = productDAO.getAllProducts().first()
+        withContext(Dispatchers.IO)
+        {
+            val allProducts = productDAO.getAllProducts().first()
 
-        var existingProduct = allProducts.find {
-            it.name.equals(listItemDTO.name.trim(), ignoreCase = true)
-        }
-
-        if (isUpdate(listItemDTO)) {
-            existingProduct = allProducts.find {
-                it.id == listItemDTO.productId && listItemDTO.listId.toInt() == listItemDTO.listId.toInt()
+            var existingProduct = allProducts.find {
+                it.name.equals(listItemDTO.name.trim(), ignoreCase = true)
             }
+
+            if (isUpdate(listItemDTO)) {
+                existingProduct = allProducts.find {
+                    it.id == listItemDTO.productId && listItemDTO.listId.toInt() == listItemDTO.listId.toInt()
+                }
+            }
+
+            existingProduct = getProductId(existingProduct, listItemDTO)
+
+            val productListEntity =
+                ProductListEntity(
+                    1,
+                    existingProduct.id,
+                    listItemDTO.name,
+                    listItemDTO.quantity,
+                    listItemDTO.productPrice,
+                    listItemDTO.isInCart,
+                    listItemDTO.category
+                )
+
+            productListDAO.insert(productListEntity)
         }
-
-        existingProduct = getProductId(existingProduct, listItemDTO)
-
-        val productListEntity =
-            ProductListEntity(
-                1,
-                existingProduct.id,
-                listItemDTO.name,
-                listItemDTO.quantity,
-                listItemDTO.productPrice,
-                listItemDTO.isInCart,
-                listItemDTO.category
-            )
-
-        productListDAO.insert(productListEntity)
     }
 
-    override suspend fun addProductToCart(listItem: ListItemDTO) {
-
-        val listItem = productListDAO.getProductInListByIds(listItem.listId, listItem.productId)
+    override suspend fun addProductToCart(item: ListItemDTO) = withContext(Dispatchers.IO) {
+        val listItem = productListDAO.getProductInListByIds(item.listId, item.productId)
 
         listItem.isInCart = true
 
@@ -65,24 +69,25 @@ class ProductListRepositoryImpl @Inject constructor(
         return productListDAO.getProductsInList(id, isInCart)
     }
 
-    override suspend fun removeProductFromCart(listItem: ListItemDTO) {
+    override suspend fun removeProductFromCart(item: ListItemDTO) = withContext(Dispatchers.IO) {
 
-        val listItem = productListDAO.getProductInListByIds(listItem.listId, listItem.productId)
+        val listItem = productListDAO.getProductInListByIds(item.listId, item.productId)
 
         listItem.isInCart = false
 
         productListDAO.insert(listItem)
     }
 
-    override suspend fun deleteProductFromList(listItem: ListItemDTO) {
-        val listItem = productListDAO.getProductInListByIds(listItem.listId, listItem.productId)
+    override suspend fun deleteProductFromList(item: ListItemDTO) = withContext(Dispatchers.IO) {
+
+        val listItem = productListDAO.getProductInListByIds(item.listId, item.productId)
 
         productListDAO.deleteProductList(listItem)
     }
 
     /* Private Methods */
 
-    private suspend fun getProductId(
+    private fun getProductId(
         product: ProductEntity?,
         listItemDTO: ListItemDTO
     ): ProductEntity {

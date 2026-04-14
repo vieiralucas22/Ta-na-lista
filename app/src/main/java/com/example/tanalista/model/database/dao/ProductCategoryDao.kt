@@ -10,13 +10,13 @@ import kotlinx.coroutines.flow.Flow
 @Dao
 interface ProductCategoryDao {
 
-    @Insert (onConflict = REPLACE)
-    suspend fun insertProductCategory(category : ProductCategoryEntity)
+    @Insert(onConflict = REPLACE)
+    fun insertProductCategory(category: ProductCategoryEntity)
 
     @Insert(onConflict = REPLACE)
-    suspend fun insertAll(categories: List<ProductCategoryEntity>)
+    fun insertAll(categories: List<ProductCategoryEntity>)
 
     @Query("select * from ProductCategory")
-    fun getAllProductCategories() : Flow<List<ProductCategoryEntity>>
+    fun getAllProductCategories(): Flow<List<ProductCategoryEntity>>
 
 }

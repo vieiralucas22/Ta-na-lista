@@ -4,13 +4,12 @@ import android.app.Application
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.application
 import androidx.lifecycle.viewModelScope
 import com.example.tanalista.R
 import com.example.tanalista.enums.ProductCategory
+import com.example.tanalista.logger.Logger
 import com.example.tanalista.model.database.model.ProductEntity
 import com.example.tanalista.model.database.model.dto.ListItemDTO
 import com.example.tanalista.repository.local.interfaces.IProductCategoryRepository
@@ -33,6 +32,8 @@ class CartDialogViewModel @Inject constructor(
     val productListRepository: IProductListRepository,
     val productRepository: IProductRepository
 ) : BaseViewModel(application) {
+
+    private val TAG : String = "CartDialogViewModel"
 
     private var currentListItem: ListItemDTO? = null
 
@@ -106,7 +107,11 @@ class CartDialogViewModel @Inject constructor(
         currentListItem = if (currentListItem == null) createNewItem() else getItemUpdated()
 
         viewModelScope.launch {
-            productListRepository.addOrUpdateProductInList(currentListItem)
+            try {
+                productListRepository.addOrUpdateProductInList(currentListItem)
+            } catch (e: Exception) {
+                Logger.e(e, TAG, "Error to add or update item!")
+            }
         }
 
         closeDialog()

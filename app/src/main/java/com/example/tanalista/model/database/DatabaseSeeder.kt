@@ -11,6 +11,8 @@ import com.example.tanalista.model.database.model.ProductEntity
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class DatabaseSeeder @Inject constructor(
@@ -20,17 +22,18 @@ class DatabaseSeeder @Inject constructor(
     @ApplicationContext private val context: Context
 ) {
 
-    suspend fun seedDatabase() {
-
-        if (productDao.getTotalProducts() > 0) return
+    suspend fun seedDatabase() = withContext(Dispatchers.IO)
+    {
+        if (productDao.getTotalProducts() > 0)
+            return@withContext
 
         populateProducts()
         populateCategories()
         populateLists()
     }
 
-    private suspend fun populateProducts() {
 
+    private fun populateProducts() {
         val jsonString = context.assets.open("market_list.json")
             .bufferedReader()
             .use { it.readText() }
@@ -43,8 +46,7 @@ class DatabaseSeeder @Inject constructor(
         productDao.insertAll(products)
     }
 
-    private suspend fun populateCategories() {
-
+    private fun populateCategories() {
         val entities = ProductCategory.entries.map {
             ProductCategoryEntity(categoryName = it.name)
         }
@@ -52,7 +54,7 @@ class DatabaseSeeder @Inject constructor(
         categoryDao.insertAll(entities)
     }
 
-    private suspend fun populateLists() {
+    private fun populateLists() {
         listDao.insertList(ListEntity("Mercado"))
     }
 }

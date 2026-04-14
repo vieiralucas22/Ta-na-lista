@@ -13,14 +13,14 @@ import kotlinx.coroutines.flow.Flow
 interface ProductListDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(productListEntity: ProductListEntity)
+    fun insert(productListEntity: ProductListEntity)
 
     @Query("SELECT * FROM ProductList WHERE listId = :id AND isInCart = :isInCart")
     fun getProductsInList(id: Long, isInCart: Boolean): Flow<List<ListItemDTO>>
 
     @Query("SELECT * FROM ProductList WHERE listId=:listId AND productId=:productId")
-    suspend fun getProductInListByIds(listId: Long, productId: Long): ProductListEntity
+    fun getProductInListByIds(listId: Long, productId: Long): ProductListEntity
 
     @Delete
-    suspend fun deleteProductList(productListEntity: ProductListEntity)
+    fun deleteProductList(productListEntity: ProductListEntity)
 }
