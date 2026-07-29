@@ -4,7 +4,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import com.example.tanalista.constants.database.DatabaseConstants
 
-@Entity(tableName = DatabaseConstants.ProductCategoryTableName)
+@Entity(tableName = DatabaseConstants.PRODUCT_CATEGORY_TABLE_NAME)
 data class ProductCategoryEntity (
 
     @ColumnInfo

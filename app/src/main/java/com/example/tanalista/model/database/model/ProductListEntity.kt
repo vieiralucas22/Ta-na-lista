@@ -6,19 +6,19 @@ import com.example.tanalista.constants.database.DatabaseConstants
 import com.example.tanalista.enums.ProductCategory
 
 @Entity(
-    tableName = DatabaseConstants.ProducListTableName,
-    primaryKeys = [DatabaseConstants.ListPrimaryKeyName, DatabaseConstants.ProductPrimaryKeyName],
+    tableName = DatabaseConstants.PRODUCT_LIST_TABLE_NAME,
+    primaryKeys = [DatabaseConstants.LIST_PRIMARY_KEY_NAME, DatabaseConstants.PRODUCT_PRIMARY_KEY_NAME],
     foreignKeys = [
         ForeignKey(
             entity = ListEntity::class,
-            parentColumns = [DatabaseConstants.Id],
-            childColumns = [DatabaseConstants.ListPrimaryKeyName],
+            parentColumns = [DatabaseConstants.ID],
+            childColumns = [DatabaseConstants.LIST_PRIMARY_KEY_NAME],
             onDelete = ForeignKey.CASCADE
         ),
         ForeignKey(
             entity = ProductEntity::class,
-            parentColumns = [DatabaseConstants.Id],
-            childColumns = [DatabaseConstants.ProductPrimaryKeyName],
+            parentColumns = [DatabaseConstants.ID],
+            childColumns = [DatabaseConstants.PRODUCT_PRIMARY_KEY_NAME],
             onDelete = ForeignKey.CASCADE
         ),
     ]

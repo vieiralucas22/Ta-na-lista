@@ -25,7 +25,7 @@ class RoomModule {
         return Room.databaseBuilder(
             context,
             ApplicationDatabase::class.java,
-            DatabaseConstants.DatabaseName
+            DatabaseConstants.DATABASE_NAME
         ).build()
     }
 
