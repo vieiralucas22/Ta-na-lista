@@ -21,32 +21,29 @@ class RoomModule {
 
     @Provides
     @Singleton
-    fun providesRoomDatabase(@ApplicationContext context: Context): ApplicationDatabase {
-        return Room.databaseBuilder(
+    fun provideDatabase(
+        @ApplicationContext context: Context
+    ): ApplicationDatabase =
+        Room.databaseBuilder(
             context,
             ApplicationDatabase::class.java,
             DatabaseConstants.DATABASE_NAME
         ).build()
-    }
 
     @Provides
-    fun providesProductDao(db: ApplicationDatabase) : ProductDao {
-        return db.getProductDao()
-    }
+    fun provideProductDao(db: ApplicationDatabase): ProductDao =
+        db.productDao()
 
     @Provides
-    fun providesProductCategoryDao(db: ApplicationDatabase) : ProductCategoryDao {
-        return db.getProductCategoryDao()
-    }
+    fun provideProductCategoryDao(db: ApplicationDatabase): ProductCategoryDao =
+        db.productCategoryDao()
 
     @Provides
-    fun providesListDao(db: ApplicationDatabase) : ListDao {
-        return db.getListDao()
-    }
+    fun provideListDao(db: ApplicationDatabase): ListDao =
+        db.listDao()
 
     @Provides
-    fun providesProductListDao(db: ApplicationDatabase) : ProductListDao {
-        return db.getProductListDao()
-    }
+    fun provideProductListDao(db: ApplicationDatabase): ProductListDao =
+        db.productListDao()
 
 }

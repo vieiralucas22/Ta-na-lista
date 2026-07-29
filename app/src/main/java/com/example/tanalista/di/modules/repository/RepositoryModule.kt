@@ -4,10 +4,10 @@ import com.example.tanalista.repository.local.implementation.ListRepositoryImpl
 import com.example.tanalista.repository.local.implementation.ProductCategoryRepositoryImpl
 import com.example.tanalista.repository.local.implementation.ProductListRepositoryImpl
 import com.example.tanalista.repository.local.implementation.ProductRepositoryImpl
-import com.example.tanalista.repository.local.interfaces.IListRepository
-import com.example.tanalista.repository.local.interfaces.IProductCategoryRepository
-import com.example.tanalista.repository.local.interfaces.IProductListRepository
-import com.example.tanalista.repository.local.interfaces.IProductRepository
+import com.example.tanalista.model.repository.local.interfaces.ListRepository
+import com.example.tanalista.model.repository.local.interfaces.ProductCategoryRepository
+import com.example.tanalista.model.repository.local.interfaces.ProductListRepository
+import com.example.tanalista.repository.local.interfaces.ProductRepository
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -18,14 +18,14 @@ import dagger.hilt.components.SingletonComponent
 interface RepositoryModule {
 
     @Binds
-    fun bindsListRepository(impl : ListRepositoryImpl) : IListRepository
+    fun bindListRepository(impl : ListRepositoryImpl) : ListRepository
 
     @Binds
-    fun bindsProductCategoryRepository(impl : ProductCategoryRepositoryImpl) : IProductCategoryRepository
+    fun bindProductCategoryRepository(impl : ProductCategoryRepositoryImpl) : ProductCategoryRepository
 
     @Binds
-    fun bindsProductListRepository(impl : ProductListRepositoryImpl) : IProductListRepository
+    fun bindProductListRepository(impl : ProductListRepositoryImpl) : ProductListRepository
 
     @Binds
-    fun bindsProductRepository(impl : ProductRepositoryImpl) : IProductRepository
+    fun bindProductRepository(impl : ProductRepositoryImpl) : ProductRepository
 }

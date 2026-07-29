@@ -12,9 +12,9 @@ import com.example.tanalista.enums.ProductCategory
 import com.example.tanalista.logger.Logger
 import com.example.tanalista.model.database.model.ProductEntity
 import com.example.tanalista.model.database.model.dto.ListItemDTO
-import com.example.tanalista.repository.local.interfaces.IProductCategoryRepository
-import com.example.tanalista.repository.local.interfaces.IProductListRepository
-import com.example.tanalista.repository.local.interfaces.IProductRepository
+import com.example.tanalista.model.repository.local.interfaces.ProductCategoryRepository
+import com.example.tanalista.model.repository.local.interfaces.ProductListRepository
+import com.example.tanalista.repository.local.interfaces.ProductRepository
 import com.example.tanalista.screens.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
@@ -28,9 +28,9 @@ import kotlin.text.toInt
 @HiltViewModel
 class CartDialogViewModel @Inject constructor(
     application: Application,
-    val productCategoryRepository: IProductCategoryRepository,
-    val productListRepository: IProductListRepository,
-    val productRepository: IProductRepository
+    val productCategoryRepository: ProductCategoryRepository,
+    val productListRepository: ProductListRepository,
+    val productRepository: ProductRepository
 ) : BaseViewModel(application) {
 
     private val TAG : String = "CartDialogViewModel"

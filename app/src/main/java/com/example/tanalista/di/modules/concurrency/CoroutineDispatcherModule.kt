@@ -11,8 +11,6 @@ import dagger.hilt.components.SingletonComponent
 class CoroutineDispatcherModule {
 
     @Provides
-    fun providesCoroutineDispatcherProvider() : CoroutineDispatcherProvider {
-        return CoroutineDispatcherProvider()
-    }
+    fun provideCoroutineDispatcherProvider() = CoroutineDispatcherProvider()
 
 }

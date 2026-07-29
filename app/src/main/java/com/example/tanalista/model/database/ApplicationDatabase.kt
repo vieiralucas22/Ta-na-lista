@@ -20,9 +20,9 @@ import com.example.tanalista.model.database.model.ProductListEntity
     version = 1
 )
 abstract class ApplicationDatabase : RoomDatabase() {
-    abstract fun getProductDao(): ProductDao
-    abstract fun getProductCategoryDao(): ProductCategoryDao
-    abstract fun getListDao(): ListDao
-    abstract fun getProductListDao(): ProductListDao
+    abstract fun productDao(): ProductDao
+    abstract fun productCategoryDao(): ProductCategoryDao
+    abstract fun listDao(): ListDao
+    abstract fun productListDao(): ProductListDao
 
 }

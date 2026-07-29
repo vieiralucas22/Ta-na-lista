@@ -1,9 +1,9 @@
-package com.example.tanalista.repository.local.interfaces
+package com.example.tanalista.model.repository.local.interfaces
 
 import com.example.tanalista.model.database.model.ListEntity
 import kotlinx.coroutines.flow.Flow
 
-interface IListRepository {
+interface ListRepository {
 
     suspend fun insertList(name: String)
 

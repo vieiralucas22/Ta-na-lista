@@ -2,33 +2,25 @@ package com.example.tanalista.screens.cart
 
 import android.app.Application
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableDoubleStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.res.stringResource
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.asLiveData
 import androidx.lifecycle.viewModelScope
 import com.example.tanalista.R
 import com.example.tanalista.enums.ProductCategory
 import com.example.tanalista.model.database.model.dto.ListItemDTO
-import com.example.tanalista.repository.local.interfaces.IProductListRepository
+import com.example.tanalista.model.repository.local.interfaces.ProductListRepository
 import com.example.tanalista.screens.BaseViewModel
 import com.example.tanalista.screens.cart.model.ButtonState
 import com.example.tanalista.screens.cart.model.CartScreenState
 import com.example.tanalista.screens.cart.model.HeaderToggleButtonState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.flatMapLatest
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class CartScreenViewModel @Inject constructor(
     application: Application,
-    val productListRepository: IProductListRepository
+    val productListRepository: ProductListRepository
 ) : BaseViewModel(application) {
 
     var state by mutableStateOf(CartScreenState())

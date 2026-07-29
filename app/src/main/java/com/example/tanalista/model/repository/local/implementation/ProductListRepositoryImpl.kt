@@ -6,7 +6,7 @@ import com.example.tanalista.model.database.dao.ProductListDao
 import com.example.tanalista.model.database.model.dto.ListItemDTO
 import com.example.tanalista.model.database.model.ProductEntity
 import com.example.tanalista.model.database.model.ProductListEntity
-import com.example.tanalista.repository.local.interfaces.IProductListRepository
+import com.example.tanalista.model.repository.local.interfaces.ProductListRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
@@ -16,7 +16,7 @@ class ProductListRepositoryImpl @Inject constructor(
     val productListDAO: ProductListDao,
     val productDAO: ProductDao,
     val coroutineDispatcherProvider : CoroutineDispatcherProvider
-) : IProductListRepository {
+) : ProductListRepository {
 
     /* Override Methods */
 
