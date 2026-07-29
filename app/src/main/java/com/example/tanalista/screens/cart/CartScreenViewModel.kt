@@ -103,12 +103,12 @@ class CartScreenViewModel @Inject constructor(
             .firstOrNull { it.name.equals(category, ignoreCase = true) }
 
         return when (enumCategory) {
-            ProductCategory.Food -> R.drawable.ic_food
-            ProductCategory.Drink -> R.drawable.ic_drink
-            ProductCategory.Clean -> R.drawable.ic_clean
-            ProductCategory.Barbecue -> R.drawable.ic_barbecue
-            ProductCategory.Utilities -> R.drawable.ic_utilities
-            ProductCategory.Toilet -> R.drawable.ic_toilet
+            ProductCategory.FOOD -> R.drawable.ic_food
+            ProductCategory.DRINK -> R.drawable.ic_drink
+            ProductCategory.CLEAN -> R.drawable.ic_clean
+            ProductCategory.BARBECUE -> R.drawable.ic_barbecue
+            ProductCategory.UTILITIES -> R.drawable.ic_utilities
+            ProductCategory.TOILET -> R.drawable.ic_toilet
             else -> {
                 R.drawable.ic_undefined
             }

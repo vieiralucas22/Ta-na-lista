@@ -6,6 +6,6 @@ data class ProductState(
     val name : String = "",
     val value: Double = 0.0,
     val quantity: Int = 0,
-    val category : ProductCategory = ProductCategory.Undefined,
+    val category : ProductCategory = ProductCategory.UNDEFINED,
     val isInCart: Boolean = false
 )

@@ -161,7 +161,7 @@ class CartDialogViewModel @Inject constructor(
             quantity = quantity.ifEmpty { "0" }.toInt(),
             productPrice = price.ifEmpty { "0.0" }.toDouble(),
             category = if (category == getText(R.string.select_category))
-                ProductCategory.Undefined.toString() else category,
+                ProductCategory.UNDEFINED.toString() else category,
             isInCart = canAddToCart
         )
     }
@@ -174,7 +174,7 @@ class CartDialogViewModel @Inject constructor(
             quantity = quantity.ifEmpty { "0" }.toInt(),
             productPrice = price.ifEmpty { "0.0" }.toDouble(),
             category = if (category == getText(R.string.select_category))
-                ProductCategory.Undefined.toString() else category,
+                ProductCategory.UNDEFINED.toString() else category,
             isInCart = canAddToCart
         )
     }

@@ -30,5 +30,5 @@ data class ProductListEntity(
     var quantity: Int = 0,
     var productPrice: Double = 0.0,
     var isInCart: Boolean = false,
-    var category: String = ProductCategory.Undefined.toString()
+    var category: String = ProductCategory.UNDEFINED.toString()
 )
