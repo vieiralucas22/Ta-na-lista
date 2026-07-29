@@ -1,6 +1,6 @@
 package com.example.tanalista.di.modules.concurrency
 
-import com.example.tanalista.concurrency.DispatcherProvider
+import com.example.tanalista.concurrency.CoroutineDispatcherProvider
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -8,11 +8,11 @@ import dagger.hilt.components.SingletonComponent
 
 @Module
 @InstallIn(SingletonComponent::class)
-class DispatcherModule {
+class CoroutineDispatcherModule {
 
     @Provides
-    fun providesDispatcherProvider() : DispatcherProvider {
-        return DispatcherProvider()
+    fun providesCoroutineDispatcherProvider() : CoroutineDispatcherProvider {
+        return CoroutineDispatcherProvider()
     }
 
 }

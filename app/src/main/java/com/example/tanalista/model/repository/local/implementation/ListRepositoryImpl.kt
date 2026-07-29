@@ -1,6 +1,6 @@
 package com.example.tanalista.repository.local.implementation
 
-import com.example.tanalista.concurrency.DispatcherProvider
+import com.example.tanalista.concurrency.CoroutineDispatcherProvider
 import com.example.tanalista.model.database.dao.ListDao
 import com.example.tanalista.model.database.model.ListEntity
 import com.example.tanalista.repository.local.interfaces.IListRepository
@@ -10,10 +10,10 @@ import javax.inject.Inject
 
 class ListRepositoryImpl @Inject constructor(
     val listDAO: ListDao,
-    val dispatcherProvider: DispatcherProvider
+    val coroutineDispatcherProvider: CoroutineDispatcherProvider
 ) : IListRepository {
 
-    override suspend fun insertList(name: String) = withContext(dispatcherProvider.io)
+    override suspend fun insertList(name: String) = withContext(coroutineDispatcherProvider.io)
     {
         val newList = ListEntity("Mercado")
 

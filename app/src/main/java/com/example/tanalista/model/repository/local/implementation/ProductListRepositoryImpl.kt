@@ -1,6 +1,6 @@
 package com.example.tanalista.repository.local.implementation
 
-import com.example.tanalista.concurrency.DispatcherProvider
+import com.example.tanalista.concurrency.CoroutineDispatcherProvider
 import com.example.tanalista.model.database.dao.ProductDao
 import com.example.tanalista.model.database.dao.ProductListDao
 import com.example.tanalista.model.database.model.dto.ListItemDTO
@@ -15,13 +15,13 @@ import javax.inject.Inject
 class ProductListRepositoryImpl @Inject constructor(
     val productListDAO: ProductListDao,
     val productDAO: ProductDao,
-    val dispatcherProvider : DispatcherProvider
+    val coroutineDispatcherProvider : CoroutineDispatcherProvider
 ) : IProductListRepository {
 
     /* Override Methods */
 
     override suspend fun addOrUpdateProductInList(listItemDTO: ListItemDTO?) =
-        withContext(dispatcherProvider.io) {
+        withContext(coroutineDispatcherProvider.io) {
 
             if (listItemDTO == null)
                 return@withContext
@@ -55,7 +55,7 @@ class ProductListRepositoryImpl @Inject constructor(
             productListDAO.insert(productListEntity)
         }
 
-    override suspend fun addProductToCart(item: ListItemDTO) = withContext(dispatcherProvider.io) {
+    override suspend fun addProductToCart(item: ListItemDTO) = withContext(coroutineDispatcherProvider.io) {
         val listItem = productListDAO.getProductInListByIds(item.listId, item.productId)
 
         listItem.isInCart = true
@@ -70,7 +70,7 @@ class ProductListRepositoryImpl @Inject constructor(
         return productListDAO.getProductsInList(id, isInCart)
     }
 
-    override suspend fun removeProductFromCart(item: ListItemDTO) = withContext(dispatcherProvider.io) {
+    override suspend fun removeProductFromCart(item: ListItemDTO) = withContext(coroutineDispatcherProvider.io) {
         val listItem = productListDAO.getProductInListByIds(item.listId, item.productId)
 
         listItem.isInCart = false
@@ -78,7 +78,7 @@ class ProductListRepositoryImpl @Inject constructor(
         productListDAO.insert(listItem)
     }
 
-    override suspend fun deleteProductFromList(item: ListItemDTO) = withContext(dispatcherProvider.io) {
+    override suspend fun deleteProductFromList(item: ListItemDTO) = withContext(coroutineDispatcherProvider.io) {
         val listItem = productListDAO.getProductInListByIds(item.listId, item.productId)
 
         productListDAO.deleteProductList(listItem)
