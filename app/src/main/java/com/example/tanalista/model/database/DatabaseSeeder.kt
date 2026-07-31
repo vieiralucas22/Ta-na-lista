@@ -22,8 +22,7 @@ class DatabaseSeeder @Inject constructor(
     @ApplicationContext private val context: Context
 ) {
 
-    suspend fun seedDatabase() = withContext(Dispatchers.IO)
-    {
+    suspend fun seedDatabase() = withContext(Dispatchers.IO) {
         if (productDao.getTotalProducts() > 0)
             return@withContext
 

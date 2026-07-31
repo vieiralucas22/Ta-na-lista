@@ -120,5 +120,4 @@ class CartScreenViewModel @Inject constructor(
             productListRepository.deleteProductFromList(item)
         }
     }
-
 }

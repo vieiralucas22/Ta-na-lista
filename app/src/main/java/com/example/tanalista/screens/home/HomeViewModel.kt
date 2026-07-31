@@ -13,7 +13,10 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class HomeViewModel @Inject constructor (application: Application, val listRepository : ListRepository) : AndroidViewModel(application) {
+class HomeViewModel @Inject constructor (
+    application: Application,
+    private val listRepository : ListRepository
+) : AndroidViewModel(application) {
 
     var allLists by mutableStateOf(
         listRepository.getAllListsFromDatabase().asLiveData()

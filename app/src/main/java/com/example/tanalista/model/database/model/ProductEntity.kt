@@ -12,4 +12,4 @@ data class ProductEntity(
     @ColumnInfo
     var category: String = ""
 
-)  : BaseEntity()
+) : BaseEntity()

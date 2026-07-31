@@ -11,7 +11,7 @@ import androidx.compose.ui.unit.sp
 import com.example.tanalista.R
 
 @Composable
-fun CartPriceArea(totalCartValue : Double) {
+fun CartPriceArea(totalCartValue: Double) {
     Column {
         Text(
             text = "R$ %.2f".format(totalCartValue),
@@ -28,7 +28,6 @@ fun CartPriceArea(totalCartValue : Double) {
 }
 @Preview(showBackground = true, backgroundColor = 0xFF0A0A1A)
 @Composable
-fun CartPriceAreaPreview()
-{
+fun CartPriceAreaPreview() {
     CartPriceArea(450.0)
 }

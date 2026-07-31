@@ -6,6 +6,8 @@ import com.example.tanalista.constants.database.DatabaseConstants
 
 @Entity(tableName = DatabaseConstants.LIST_TABLE_NAME)
 data class ListEntity(
+
     @ColumnInfo
     val name : String
+
 ) : BaseEntity()

@@ -13,9 +13,9 @@ interface ListDao {
     fun insertList(listEntity: ListEntity)
 
     @Query("select * from List where id=:id")
-    fun getListById(id: Int) : ListEntity
+    fun getListById(id: Int): ListEntity
 
     @Query("select * from List")
-    fun getAllLists() : Flow<List<ListEntity>>
+    fun getAllLists(): Flow<List<ListEntity>>
 
 }

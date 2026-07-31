@@ -2,31 +2,29 @@ package com.example.tanalista.logger
 
 import android.util.Log
 
-class Logger {
+object Logger {
 
-    companion object {
+    private const val APP_TAG = "[TaNaLista]"
+    private fun buildTag(tag: String) = "$APP_TAG $tag"
 
-        private const val APP_TAG: String = "[TaNaLista] "
+    fun d(tag: String, message: String) {
+        
+        Log.d(buildTag(tag), message)
+    }
 
-        fun d(classTag: String, message: String) {
-            val tag = APP_TAG + classTag
-            Log.d(tag, message)
-        }
+    fun e(exception: Exception, tag: String, message: String) {
+        
+        val finalMessage = "\n\nMessage Exception: " + exception.message + "\n\n" + message
+        Log.e(buildTag(tag), finalMessage)
+    }
 
-        fun e(exception: Exception, classTag: String, message: String) {
-            val tag = APP_TAG + classTag
-            val finalMessage = "\n\nMessage Exception: " + exception.message + "\n\n" + message
-            Log.e(tag, finalMessage)
-        }
+    fun w(tag: String, message: String) {
+        
+        Log.w(buildTag(tag), message)
+    }
 
-        fun w(classTag: String, message: String) {
-            val tag = APP_TAG + classTag
-            Log.w(tag, message)
-        }
-
-        fun i(classTag: String, message: String) {
-            val tag = APP_TAG + classTag
-            Log.i(tag, message)
-        }
+    fun i(tag: String, message: String) {
+        
+        Log.i(buildTag(tag), message)
     }
 }

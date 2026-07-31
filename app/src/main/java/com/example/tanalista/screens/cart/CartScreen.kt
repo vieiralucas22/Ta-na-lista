@@ -54,7 +54,8 @@ fun CartView(
                     tint = colorResource(R.color.white)
                 )
             }
-        }, content = { paddingValues ->
+        },
+        content = { paddingValues ->
             Column(
                 modifier = Modifier
                     .fillMaxSize()
@@ -100,8 +101,7 @@ fun HeaderCart(
 ) {
     Column(modifier = Modifier.padding(24.dp, 12.dp)) {
         Row(
-            modifier = Modifier
-                .fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
@@ -111,8 +111,8 @@ fun HeaderCart(
         Spacer(Modifier.height(16.dp))
 
         Row(
-            modifier = Modifier
-                .fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(5.dp)
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(5.dp)
         ) {
 
             HeaderToggleButton(
@@ -151,7 +151,6 @@ fun HeaderCart(
                 }
             )
         }
-
     }
 }
 
@@ -186,14 +185,12 @@ fun ListCart(
                             item.name,
                             item.productPrice,
                             onGetIcon(item.category),
-                            addItemToCartList =
-                                {
-                                    onMoveItem(item, true)
-                                },
-                            removeItemToCartList =
-                                {
-                                    onMoveItem(item, false)
-                                },
+                            addItemToCartList = {
+                                onMoveItem(item, true)
+                            },
+                            removeItemToCartList = {
+                                onMoveItem(item, false)
+                            },
                             item.quantity,
                             item.isInCart,
                             onClick = {

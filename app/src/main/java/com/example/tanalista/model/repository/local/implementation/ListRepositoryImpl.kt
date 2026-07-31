@@ -1,4 +1,4 @@
-package com.example.tanalista.repository.local.implementation
+package com.example.tanalista.model.repository.local.implementation
 
 import com.example.tanalista.concurrency.CoroutineDispatcherProvider
 import com.example.tanalista.model.database.dao.ListDao
@@ -9,19 +9,15 @@ import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 class ListRepositoryImpl @Inject constructor(
-    val listDAO: ListDao,
-    val coroutineDispatcherProvider: CoroutineDispatcherProvider
+    private val listDAO: ListDao,
+    private val coroutineDispatcherProvider: CoroutineDispatcherProvider
 ) : ListRepository {
 
-    override suspend fun insertList(name: String) = withContext(coroutineDispatcherProvider.io)
-    {
+    override suspend fun insertList(name: String) = withContext(coroutineDispatcherProvider.io) {
         val newList = ListEntity("Mercado")
 
         listDAO.insertList(newList)
     }
 
-    override fun getAllListsFromDatabase(): Flow<List<ListEntity>> {
-        return listDAO.getAllLists()
-    }
-
+    override fun getAllListsFromDatabase(): Flow<List<ListEntity>> = listDAO.getAllLists()
 }

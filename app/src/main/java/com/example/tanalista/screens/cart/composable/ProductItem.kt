@@ -135,7 +135,6 @@ fun CartOutButton(removeItemToCartList: () -> Unit) {
         ), onClick = removeItemToCartList
     )
     {
-
         Icon(
             modifier = Modifier.size(18.dp),
             painter = painterResource(R.drawable.ic_cart_out),

@@ -16,9 +16,14 @@ import com.example.tanalista.R
 
 @Composable
 fun EmptyCartSection() {
-    Column(modifier = Modifier.fillMaxWidth(), horizontalAlignment = Alignment.CenterHorizontally) {
-
-        Image(painter = painterResource(R.drawable.empty_cart), contentDescription = "Empty cart")
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Image(
+            painter = painterResource(R.drawable.empty_cart),
+            contentDescription = "Empty cart"
+        )
 
         Text(
             text = stringResource(R.string.empty_cart_message),
@@ -28,9 +33,8 @@ fun EmptyCartSection() {
     }
 }
 
-@Preview (showBackground = true)
+@Preview(showBackground = true)
 @Composable
-fun EmptyCartSectionPreview()
-{
+fun EmptyCartSectionPreview() {
     EmptyCartSection()
 }
