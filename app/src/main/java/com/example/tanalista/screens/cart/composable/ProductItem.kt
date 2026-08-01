@@ -1,5 +1,6 @@
 package com.example.tanalista.screens.cart.composable
 
+import android.media.MediaPlayer
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -20,9 +21,11 @@ import androidx.compose.material3.SwipeToDismissBoxValue
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberSwipeToDismissBoxState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -45,12 +48,21 @@ fun ProductItem(
 ) {
     val swipeToDismissBoxState = rememberSwipeToDismissBoxState()
 
+    val context = LocalContext.current
+
+    val mp = MediaPlayer.create(context, R.raw.swipe_song)
+
     LaunchedEffect(swipeToDismissBoxState.currentValue) {
         if (swipeToDismissBoxState.currentValue == SwipeToDismissBoxValue.StartToEnd
             || swipeToDismissBoxState.currentValue == SwipeToDismissBoxValue.EndToStart
         ) {
+            mp.start()
             onDismissItem()
         }
+    }
+
+    DisposableEffect(Unit) {
+        onDispose { mp.release() }
     }
 
     SwipeToDismissBox(state = swipeToDismissBoxState, backgroundContent = {}) {
