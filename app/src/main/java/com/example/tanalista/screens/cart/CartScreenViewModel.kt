@@ -102,24 +102,6 @@ class CartScreenViewModel @Inject constructor(
             }
     }
 
-    fun getCategoryIcon(category: String): Int {
-
-        val enumCategory = ProductCategory.entries
-            .firstOrNull { it.name.equals(category, ignoreCase = true) }
-
-        return when (enumCategory) {
-            ProductCategory.FOOD -> R.drawable.ic_food
-            ProductCategory.DRINK -> R.drawable.ic_drink
-            ProductCategory.CLEAN -> R.drawable.ic_clean
-            ProductCategory.BARBECUE -> R.drawable.ic_barbecue
-            ProductCategory.UTILITIES -> R.drawable.ic_utilities
-            ProductCategory.TOILET -> R.drawable.ic_toilet
-            else -> {
-                R.drawable.ic_undefined
-            }
-        }
-    }
-
     fun deleteListItem(item: ListItemDTO) {
         viewModelScope.launch {
             productListRepository.deleteProductFromList(item)

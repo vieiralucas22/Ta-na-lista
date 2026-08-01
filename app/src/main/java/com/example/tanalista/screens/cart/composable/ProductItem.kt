@@ -31,12 +31,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.tanalista.R
+import com.example.tanalista.enums.ProductCategory
 
 @Composable
 fun ProductItem(
     title: String = "",
     price: Double = 0.0,
-    iconResourceId: Int = 0,
+    category: String = "",
     addItemToCartList: () -> Unit = {},
     removeItemToCartList: () -> Unit = {},
     quantity: Int = 0,
@@ -74,7 +75,7 @@ fun ProductItem(
                 Row(verticalAlignment = Alignment.CenterVertically) {
 
                     Icon(
-                        painter = painterResource(iconResourceId),
+                        painter = painterResource(getCategoryIcon(category = category)),
                         contentDescription = "Icon",
                         tint = colorResource(R.color.purple)
                     )
@@ -150,7 +151,7 @@ fun ProductListPreview() {
     ProductItem(
         title = "Coffee",
         price = 27.0,
-        iconResourceId = R.drawable.ic_drink,
+        category = "Drink",
         quantity = 1,
         isInCart = false
     )
@@ -160,10 +161,28 @@ fun ProductListPreview() {
 @Composable
 fun ProductCartPreview() {
     ProductItem(
-        title = "Coffee",
+        title = "Apple",
         price = 27.0,
-        iconResourceId = R.drawable.ic_drink,
+        category = "Food",
         quantity = 1,
         isInCart = true
     )
+}
+
+fun getCategoryIcon(category: String): Int {
+
+    val enumCategory = ProductCategory.entries
+        .firstOrNull { it.name.equals(category, ignoreCase = true) }
+
+    return when (enumCategory) {
+        ProductCategory.FOOD -> R.drawable.ic_food
+        ProductCategory.DRINK -> R.drawable.ic_drink
+        ProductCategory.CLEAN -> R.drawable.ic_clean
+        ProductCategory.BARBECUE -> R.drawable.ic_barbecue
+        ProductCategory.UTILITIES -> R.drawable.ic_utilities
+        ProductCategory.TOILET -> R.drawable.ic_toilet
+        else -> {
+            R.drawable.ic_undefined
+        }
+    }
 }

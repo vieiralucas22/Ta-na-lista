@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -59,6 +60,9 @@ fun CartView(
         },
         topBar = {
             HeaderScreen(
+                Modifier
+                    .statusBarsPadding()
+                    .padding(horizontal = 24.dp, vertical = 12.dp),
                 uiState,
                 onListCheckedChange = { isListChecked ->
                     if (isListChecked)
@@ -83,7 +87,6 @@ fun CartView(
                     onMoveItem = { item, moveToCart ->
                         cartScreenViewModel.moveProductBetweenLists(item, moveToCart)
                     },
-                    onGetIcon = { category -> cartScreenViewModel.getCategoryIcon(category) },
                     onDismissItem = { item ->
                         cartScreenViewModel.deleteListItem(item)
                     }
@@ -99,11 +102,12 @@ fun CartView(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HeaderScreen(
+    modifier: Modifier,
     state: CartScreenState,
     onListCheckedChange: (Boolean) -> Unit,
     onCartCheckedChange: (Boolean) -> Unit
 ) {
-    Column(modifier = Modifier.padding(24.dp, 12.dp)) {
+    Column(modifier = modifier) {
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -163,7 +167,6 @@ fun ContentScreen(
     state: CartScreenState,
     onOpenEditDialog: (ListItemDTO) -> Unit,
     onMoveItem: (ListItemDTO, Boolean) -> Unit,
-    onGetIcon: (String) -> Int,
     onDismissItem: (ListItemDTO) -> Unit
 ) {
     val productItems by state.allProductsInList.collectAsState(emptyList())
@@ -188,7 +191,7 @@ fun ContentScreen(
                         ProductItem(
                             item.name,
                             item.productPrice,
-                            onGetIcon(item.category),
+                            item.category,
                             addItemToCartList = {
                                 onMoveItem(item, true)
                             },
