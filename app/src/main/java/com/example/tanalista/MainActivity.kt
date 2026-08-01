@@ -16,11 +16,8 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        val cartScreenViewModel : CartScreenViewModel by viewModels()
-        val cartDialogViewModel : CartDialogViewModel by viewModels()
-
         setContent {
-            CartView(cartScreenViewModel,cartDialogViewModel)
+            CartView()
         }
     }
 }

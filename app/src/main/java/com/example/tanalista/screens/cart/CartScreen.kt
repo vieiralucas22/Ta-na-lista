@@ -42,6 +42,8 @@ fun CartView(
     cartScreenViewModel: CartScreenViewModel = viewModel(),
     cartDialogViewModel: CartDialogViewModel = viewModel()
 ) {
+    val uiState = cartScreenViewModel.uiState.collectAsState().value
+
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(
@@ -55,6 +57,18 @@ fun CartView(
                 )
             }
         },
+        topBar = {
+            HeaderScreen(
+                uiState,
+                onListCheckedChange = { isListChecked ->
+                    if (isListChecked)
+                        cartScreenViewModel.showAllProductsInList()
+                },
+                onCartCheckedChange = { isCartChecked ->
+                    if (isCartChecked)
+                        cartScreenViewModel.showAllProductsInCart()
+                })
+        },
         content = { paddingValues ->
             Column(
                 modifier = Modifier
@@ -62,19 +76,9 @@ fun CartView(
                     .background(colorResource(R.color.buttonBackground))
                     .padding(paddingValues)
             ) {
-                HeaderCart(
-                    cartScreenViewModel.state,
-                    onListCheckedChange = { isListChecked ->
-                        if (isListChecked)
-                            cartScreenViewModel.showAllProductsInList()
-                    },
-                    onCartCheckedChange = { isCartChecked ->
-                        if (isCartChecked)
-                            cartScreenViewModel.showAllProductsInCart()
-                    })
 
-                ListCart(
-                    cartScreenViewModel.state,
+                ContentScreen(
+                    uiState,
                     onOpenEditDialog = { item -> cartDialogViewModel.editDialog(item) },
                     onMoveItem = { item, moveToCart ->
                         cartScreenViewModel.moveProductBetweenLists(item, moveToCart)
@@ -94,7 +98,7 @@ fun CartView(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HeaderCart(
+fun HeaderScreen(
     state: CartScreenState,
     onListCheckedChange: (Boolean) -> Unit,
     onCartCheckedChange: (Boolean) -> Unit
@@ -155,7 +159,7 @@ fun HeaderCart(
 }
 
 @Composable
-fun ListCart(
+fun ContentScreen(
     state: CartScreenState,
     onOpenEditDialog: (ListItemDTO) -> Unit,
     onMoveItem: (ListItemDTO, Boolean) -> Unit,

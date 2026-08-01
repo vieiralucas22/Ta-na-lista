@@ -1,6 +1,7 @@
 package com.example.tanalista.screens.cart
 
 import android.app.Application
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -10,10 +11,17 @@ import com.example.tanalista.enums.ProductCategory
 import com.example.tanalista.model.database.model.dto.ListItemDTO
 import com.example.tanalista.model.repository.local.interfaces.ProductListRepository
 import com.example.tanalista.screens.BaseViewModel
+import com.example.tanalista.screens.cart.composable.CartPriceArea
 import com.example.tanalista.screens.cart.model.ButtonState
 import com.example.tanalista.screens.cart.model.CartScreenState
 import com.example.tanalista.screens.cart.model.HeaderToggleButtonState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -23,32 +31,23 @@ class CartScreenViewModel @Inject constructor(
     val productListRepository: ProductListRepository
 ) : BaseViewModel(application) {
 
-    var state by mutableStateOf(CartScreenState())
+    private val _uiState = MutableStateFlow(CartScreenState.DEFAULT_STATE)
 
-    init {
-        initializeState()
-    }
+    val uiState: StateFlow<CartScreenState> =
+        _uiState.onStart { 
+            initializeScreenData()
+        }.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = _uiState.value
+        )
 
-    private fun initializeState() {
+    private fun initializeScreenData() {
         viewModelScope.launch {
-
             val allProducts = productListRepository.getAllListProducts(1)
 
-            state = CartScreenState(
-                totalCartValue = 0.0,
-                cartToggle = HeaderToggleButtonState(
-                    R.drawable.ic_cart,
-                    false,
-                    ButtonState(R.string.cart)
-                ),
-                listToggle = HeaderToggleButtonState(
-                    R.drawable.ic_list,
-                    true,
-                    ButtonState(R.string.list)
-                ),
-                allProductsInList = allProducts
-            )
-
+            _uiState.update { it.copy(allProductsInList = allProducts) }
+            
             updateTotalCartValue()
         }
     }
@@ -66,11 +65,13 @@ class CartScreenViewModel @Inject constructor(
         viewModelScope.launch {
             val allProducts = productListRepository.getAllListProducts(1, false)
 
-            state = state.copy(
-                cartToggle = state.cartToggle.copy(isChecked = false),
-                listToggle = state.listToggle.copy(isChecked = true),
-                allProductsInList = allProducts
-            )
+            _uiState.update {
+                it.copy(
+                    cartToggle = it.cartToggle.copy(isChecked = false),
+                    listToggle = it.listToggle.copy(isChecked = true),
+                    allProductsInList = allProducts
+                )
+            }
         }
     }
 
@@ -78,11 +79,13 @@ class CartScreenViewModel @Inject constructor(
         viewModelScope.launch {
             val allProducts = productListRepository.getAllListProducts(1, true)
 
-            state = state.copy(
-                cartToggle = state.cartToggle.copy(isChecked = true),
-                listToggle = state.listToggle.copy(isChecked = false),
-                allProductsInList = allProducts
-            )
+            _uiState.update {
+                it.copy(
+                    cartToggle = it.cartToggle.copy(isChecked = true),
+                    listToggle = it.listToggle.copy(isChecked = false),
+                    allProductsInList = allProducts
+                )
+            }
         }
     }
 
@@ -93,7 +96,9 @@ class CartScreenViewModel @Inject constructor(
                 products.forEach { product ->
                     total += product.quantity * product.productPrice
                 }
-                state = state.copy(totalCartValue = total)
+                _uiState.update {
+                    it.copy(totalCartValue = total)
+                }
             }
     }
 

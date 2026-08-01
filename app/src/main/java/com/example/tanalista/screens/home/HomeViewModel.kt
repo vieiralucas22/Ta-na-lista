@@ -22,8 +22,7 @@ class HomeViewModel @Inject constructor (
         listRepository.getAllListsFromDatabase().asLiveData()
     )
 
-    fun createANewList()
-    {
+    fun createANewList() {
         viewModelScope.launch {
             listRepository.insertList("")
         }

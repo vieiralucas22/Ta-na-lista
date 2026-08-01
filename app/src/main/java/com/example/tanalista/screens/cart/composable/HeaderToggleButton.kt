@@ -23,6 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.tanalista.R
+import com.example.tanalista.screens.cart.model.ButtonState
 import com.example.tanalista.screens.cart.model.HeaderToggleButtonState
 
 @Composable
@@ -67,13 +68,34 @@ fun HeaderToggleButton(
 
 @Preview(widthDp = 200, heightDp = 50)
 @Composable
-fun HeaderToggleButtonPreview() {
+fun HeaderToggleButtonCartPreview() {
 
     HeaderToggleButton(
-        state = HeaderToggleButtonState(),
+        state = HeaderToggleButtonState(
+            R.drawable.ic_cart,
+            false,
+            ButtonState(R.string.cart)
+        ),
         modifier = Modifier,
         colors = IconButtonDefaults.iconToggleButtonColors(
             containerColor = colorResource(R.color.purple),
+        )
+    )
+}
+
+@Preview(widthDp = 200, heightDp = 50)
+@Composable
+fun HeaderToggleButtonListPreview() {
+
+    HeaderToggleButton(
+        state = HeaderToggleButtonState(
+            R.drawable.ic_list,
+            false,
+            ButtonState(R.string.list)
+        ),
+        modifier = Modifier,
+        colors = IconButtonDefaults.iconToggleButtonColors(
+            containerColor = colorResource(R.color.green),
         )
     )
 }

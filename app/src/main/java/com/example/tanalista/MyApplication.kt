@@ -9,8 +9,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltAndroidApp
-class MyApplication : Application()
-{
+class MyApplication : Application() {
     @Inject
     lateinit var seeder: DatabaseSeeder
 
