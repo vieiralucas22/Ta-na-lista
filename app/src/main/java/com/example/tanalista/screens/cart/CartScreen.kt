@@ -29,19 +29,18 @@ import androidx.compose.ui.unit.dp
 import com.example.tanalista.R
 import com.example.tanalista.screens.cart.dialog.CartDialog
 import androidx.compose.ui.res.colorResource
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.tanalista.model.database.model.dto.ListItemDTO
 import com.example.tanalista.screens.cart.composable.CartPriceArea
 import com.example.tanalista.screens.cart.composable.EmptyCartSection
 import com.example.tanalista.screens.cart.composable.HeaderToggleButton
-import com.example.tanalista.screens.cart.composable.ProductItem
+import com.example.tanalista.screens.cart.composable.ProductComponentItem
 import com.example.tanalista.screens.cart.dialog.CartDialogViewModel
 import com.example.tanalista.screens.cart.model.CartScreenState
 
 @Composable
 fun CartView(
-    cartScreenViewModel: CartScreenViewModel = viewModel(),
-    cartDialogViewModel: CartDialogViewModel = viewModel()
+    cartScreenViewModel: CartScreenViewModel,
+    cartDialogViewModel: CartDialogViewModel
 ) {
     val uiState = cartScreenViewModel.uiState.collectAsState().value
 
@@ -62,7 +61,7 @@ fun CartView(
             HeaderScreen(
                 Modifier
                     .statusBarsPadding()
-                    .padding(horizontal = 24.dp, vertical = 12.dp),
+                    .padding(horizontal = 12.dp, vertical = 12.dp),
                 uiState,
                 onListCheckedChange = { isListChecked ->
                     if (isListChecked)
@@ -188,7 +187,7 @@ fun ContentScreen(
             } else {
                 LazyColumn(content = {
                     items(product, key = { product -> product.productId }) { item ->
-                        ProductItem(
+                        ProductComponentItem(
                             item.name,
                             item.productPrice,
                             item.category,
@@ -210,3 +209,4 @@ fun ContentScreen(
         }
     }
 }
+

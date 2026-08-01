@@ -2,7 +2,7 @@ package com.example.tanalista.screens.cart.model
 
 import com.example.tanalista.enums.ProductCategory
 
-data class ProductState(
+data class ProductComponentState(
     val name : String = "",
     val value: Double = 0.0,
     val quantity: Int = 0,

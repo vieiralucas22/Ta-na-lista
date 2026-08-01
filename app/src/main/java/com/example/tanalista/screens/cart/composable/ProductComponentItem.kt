@@ -36,7 +36,7 @@ import com.example.tanalista.R
 import com.example.tanalista.enums.ProductCategory
 
 @Composable
-fun ProductItem(
+fun ProductComponentItem(
     title: String = "",
     price: Double = 0.0,
     category: String = "",
@@ -47,9 +47,7 @@ fun ProductItem(
     onDismissItem: () -> Unit = {}
 ) {
     val swipeToDismissBoxState = rememberSwipeToDismissBoxState()
-
     val context = LocalContext.current
-
     val mp = MediaPlayer.create(context, R.raw.swipe_song)
 
     LaunchedEffect(swipeToDismissBoxState.currentValue) {
@@ -140,7 +138,7 @@ fun CartButton(isInCart: Boolean, onClick: () -> Unit) {
 @Preview
 @Composable
 fun ProductListPreview() {
-    ProductItem(
+    ProductComponentItem(
         title = "Coffee",
         price = 27.0,
         category = "Drink",
@@ -152,7 +150,7 @@ fun ProductListPreview() {
 @Preview
 @Composable
 fun ProductCartPreview() {
-    ProductItem(
+    ProductComponentItem(
         title = "Apple",
         price = 27.0,
         category = "Food",
