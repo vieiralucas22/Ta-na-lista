@@ -164,12 +164,12 @@ fun HeaderScreen(
 
 @Composable
 fun ContentScreen(
-    state: CartScreenState,
+    uiState: CartScreenState,
     onOpenEditDialog: (ListItemDTO) -> Unit,
     onMoveItem: (ListItemDTO, Boolean) -> Unit,
     onDismissItem: (ListItemDTO) -> Unit
 ) {
-    val productItems by state.allProductsInList.collectAsState(emptyList())
+    val productItems by uiState.allProductsInList.collectAsState(emptyList())
 
     Column(
         modifier = Modifier
@@ -192,11 +192,8 @@ fun ContentScreen(
                             item.name,
                             item.productPrice,
                             item.category,
-                            addItemToCartList = {
-                                onMoveItem(item, true)
-                            },
-                            removeItemToCartList = {
-                                onMoveItem(item, false)
+                            onCartButtonClick = {
+                                onMoveItem(item, !item.isInCart)
                             },
                             item.quantity,
                             item.isInCart,
