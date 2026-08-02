@@ -1,6 +1,7 @@
 package com.example.tanalista.screens
 
 object Routes {
-    val HOME_SCREEN = "HOME_SCREEN"
-    val CART_SCREEN = "CART_SCREEN"
+    const val HOME_SCREEN = "HOME_SCREEN"
+    const val CART_SCREEN = "CART_SCREEN"
+    const val LIST_CREATION_SCREEN = "LIST_CREATION_SCREEN"
 }

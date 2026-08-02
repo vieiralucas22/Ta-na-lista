@@ -22,4 +22,6 @@
     <color name="grayBackground">#ffeeeeec</color>
     <color name="error">#FFEF0221</color>
 
+    <color name="backgroundSection">#FFFFFFFF</color>
+
 </resources>
