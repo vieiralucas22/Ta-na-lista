@@ -24,4 +24,14 @@
 
     <color name="backgroundSection">#FFFFFFFF</color>
 
+    <!--Color picker colors-->
+
+    <color name="light_blue">#FFE3F2FD</color>
+    <color name="light_green">#FFE8F5E9</color>
+    <color name="light_yellow">#FFFFF3E0</color>
+    <color name="light_red">#FFFCE4EC</color>
+    <color name="light_pink">#FFF3E5F5</color>
+    <color name="light_aqua_green">#FFE0F7FA</color>
+
+
 </resources>

@@ -1,5 +1,6 @@
 package com.example.tanalista.screens.listcreation
 
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 
@@ -19,13 +20,24 @@ import androidx.compose.ui.*
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.tanalista.R
+import com.example.tanalista.screens.listcreation.model.ListCreationScreenState
+import com.example.tanalista.screens.util.model.colorpicker.ColorState
+import com.example.tanalista.screens.util.model.iconpicker.IconState
 
 @Composable
 fun ListCreationView(viewModel: ListCreationViewModel) {
+
+    val uiState = viewModel.uiState.value
+
+    LaunchedEffect(viewModel) {
+        Log.d("Lucas", "LaunchedEffect")
+        viewModel.initializeScreenData()
+    }
 
     Scaffold(
         topBar = {
@@ -40,13 +52,18 @@ fun ListCreationView(viewModel: ListCreationViewModel) {
         },
         content = { paddingValues ->
             ContentListCreationView(
+                state = uiState,
                 modifier = Modifier
                     .background(colorResource(R.color.white))
                     .padding(
                         horizontal = 24.dp,
                         vertical = paddingValues.calculateTopPadding()
                     )
-                    .fillMaxSize()
+                    .fillMaxSize(),
+                onListNameChanged = viewModel::updateListName,
+                onListDescriptionChanged = viewModel::updateListDescription,
+                onSelectColor = viewModel::updateSelectedColor,
+                onSelectIcon = viewModel::updateSelectedIcon
             )
         },
         bottomBar = {
@@ -74,17 +91,18 @@ fun HeaderListCreationView(modifier: Modifier) {
 }
 
 @Composable
-fun ContentListCreationView(modifier: Modifier = Modifier) {
-
-    var name by remember { mutableStateOf("") }
-    var description by remember { mutableStateOf("") }
-    var selectedColor by remember { mutableStateOf(Color(0xFFE3F2FD)) }
-    var selectedIcon by remember { mutableStateOf(Icons.Default.ShoppingCart) }
-
+fun ContentListCreationView(
+    modifier: Modifier = Modifier,
+    state: ListCreationScreenState,
+    onListNameChanged: (String) -> Unit,
+    onListDescriptionChanged: (String) -> Unit,
+    onSelectColor: (ColorState) -> Unit,
+    onSelectIcon: (IconState) -> Unit,
+) {
     Column(modifier = modifier.padding(top = 16.dp)) {
         TextField(
-            value = name,
-            onValueChange = { name = it },
+            value = state.listName,
+            onValueChange = { onListNameChanged(it) },
             label = { Text("Name") },
             modifier = Modifier.fillMaxWidth(),
             colors = TextFieldDefaults.colors(
@@ -100,8 +118,8 @@ fun ContentListCreationView(modifier: Modifier = Modifier) {
         Spacer(modifier = Modifier.height(16.dp))
 
         TextField(
-            value = description,
-            onValueChange = { description = it },
+            value = state.description,
+            onValueChange = { onListDescriptionChanged(it) },
             label = { Text("Description") },
             modifier = Modifier.fillMaxWidth(),
             colors = TextFieldDefaults.colors(
@@ -116,30 +134,21 @@ fun ContentListCreationView(modifier: Modifier = Modifier) {
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        FormSection(sectionName = "Color") {
+        FormSection(sectionName = state.colorPickerState.sectionTitle) {
             Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
 
-                val colors = listOf(
-                    Color(0xFFE3F2FD),
-                    Color(0xFFE8F5E9),
-                    Color(0xFFFFF3E0),
-                    Color(0xFFFCE4EC),
-                    Color(0xFFF3E5F5),
-                    Color(0xFFE0F7FA)
-                )
-
-                colors.forEach { color ->
+                state.colorPickerState.colors.forEach { color ->
                     Box(
                         modifier = Modifier
                             .size(42.dp)
                             .clip(CircleShape)
-                            .background(color)
+                            .background(color = colorResource(color.colorId))
                             .border(
-                                width = if (color == selectedColor) 2.dp else 0.dp,
+                                width = if (color.isSelected) 2.dp else 0.dp,
                                 color = Color.Black,
                                 shape = CircleShape
                             )
-                            .clickable { selectedColor = color }
+                            .clickable { onSelectColor(color) }
                     )
                 }
             }
@@ -147,37 +156,25 @@ fun ContentListCreationView(modifier: Modifier = Modifier) {
 
         Spacer(modifier = Modifier.height(20.dp))
 
-        FormSection(sectionName = "Icon") {
-
-            val icons = listOf(
-                Icons.Default.ShoppingCart,
-                Icons.Default.Home,
-                Icons.Default.Favorite,
-                Icons.Default.Book,
-                Icons.Default.Fastfood,
-                Icons.Default.Medication,
-                Icons.Default.LocalMall,
-                Icons.Default.Pets
-            )
+        FormSection(sectionName = state.iconPickerState.sectionTitle) {
 
             LazyVerticalGrid(
                 columns = GridCells.Fixed(4),
                 verticalArrangement = Arrangement.spacedBy(12.dp),
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                items(icons) { icon ->
-
+                items(state.iconPickerState.icons) { icon ->
                     Box(
                         contentAlignment = Alignment.Center,
                         modifier = Modifier
                             .size(52.dp)
                             .clip(RoundedCornerShape(12.dp))
                             .background(
-                                if (icon == selectedIcon) Color.LightGray else Color.Transparent
+                                if (icon.isSelected) Color.LightGray else Color.Transparent
                             )
-                            .clickable { selectedIcon = icon }
+                            .clickable { onSelectIcon(icon) }
                     ) {
-                        Icon(icon, contentDescription = null)
+                        Icon(painter = painterResource(icon.iconId), contentDescription = null)
                     }
                 }
             }
