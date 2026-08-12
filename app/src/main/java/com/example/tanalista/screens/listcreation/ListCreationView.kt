@@ -27,6 +27,7 @@ import com.example.tanalista.screens.listcreation.model.ListCreationScreenState
 import com.example.tanalista.dsm.colorpicker.model.ColorState
 import com.example.tanalista.dsm.footer.Footer
 import com.example.tanalista.dsm.iconpicker.model.IconState
+import com.example.tanalista.dsm.textfield.TextFieldComponent
 
 @Composable
 fun ListCreationView(viewModel: ListCreationViewModel, onBackAction: () -> Unit) {
@@ -67,7 +68,7 @@ fun ListCreationView(viewModel: ListCreationViewModel, onBackAction: () -> Unit)
         },
         bottomBar = {
             Footer(
-                state = uiState.footer,
+                state = uiState.footerState,
                 onCancelAction = {
                     onBackAction()
                 },
@@ -100,37 +101,12 @@ fun ContentListCreationView(
     onSelectIcon: (IconState) -> Unit,
 ) {
     Column(modifier = modifier.padding(top = 16.dp)) {
-        TextField(
-            value = state.listName,
-            onValueChange = { onListNameChanged(it) },
-            label = { Text("Name") },
-            modifier = Modifier.fillMaxWidth(),
-            colors = TextFieldDefaults.colors(
-                unfocusedContainerColor = colorResource(R.color.backgroundSection),
-                unfocusedIndicatorColor = Color.Transparent,
-                focusedContainerColor = colorResource(R.color.backgroundSection),
-                focusedIndicatorColor = Color.Transparent,
-                disabledIndicatorColor = Color.Transparent
-            ),
-            shape = RoundedCornerShape(16.dp)
-        )
+
+        TextFieldComponent(state.listNameTextFieldState, maxChars = 20) { onListNameChanged(it) }
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        TextField(
-            value = state.description,
-            onValueChange = { onListDescriptionChanged(it) },
-            label = { Text("Description") },
-            modifier = Modifier.fillMaxWidth(),
-            colors = TextFieldDefaults.colors(
-                unfocusedContainerColor = colorResource(R.color.backgroundSection),
-                unfocusedIndicatorColor = Color.Transparent,
-                focusedContainerColor = colorResource(R.color.backgroundSection),
-                focusedIndicatorColor = Color.Transparent,
-                disabledIndicatorColor = Color.Transparent
-            ),
-            shape = RoundedCornerShape(12.dp)
-        )
+        TextFieldComponent(state.listDescriptionTextFieldState) { onListDescriptionChanged(it) }
 
         Spacer(modifier = Modifier.height(20.dp))
 

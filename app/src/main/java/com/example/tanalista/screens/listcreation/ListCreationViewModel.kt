@@ -14,6 +14,7 @@ import com.example.tanalista.dsm.colorpicker.model.ColorState
 import com.example.tanalista.dsm.footer.model.FooterState
 import com.example.tanalista.dsm.iconpicker.model.IconPickerState
 import com.example.tanalista.dsm.iconpicker.model.IconState
+import com.example.tanalista.dsm.textfield.model.TextFieldState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -29,8 +30,6 @@ class ListCreationViewModel @Inject constructor(
 
     fun initializeScreenData() {
         _uiState.value = ListCreationScreenState(
-            listName = "",
-            description = "",
             colorPickerState = ColorPickerState(
                 colors = listOf(
                     ColorState(R.color.light_blue, isSelected = true),
@@ -55,19 +54,43 @@ class ListCreationViewModel @Inject constructor(
                 ),
                 sectionTitle = "Icon",
             ),
-            footer = FooterState (
+            footerState = FooterState(
                 ButtonState(R.string.cancel),
                 ButtonState(R.string.create),
+            ),
+            listNameTextFieldState = TextFieldState(
+                value = "",
+                label = R.string.name,
+                isError = false
+            ),
+            listDescriptionTextFieldState = TextFieldState(
+                value = "",
+                label = R.string.description,
+                isError = false
             )
         )
     }
 
     fun updateListName(value: String) {
-        _uiState.value = _uiState.value.copy(listName = value)
+        _uiState.value = _uiState.value.copy(
+            listNameTextFieldState = _uiState.value.listNameTextFieldState.copy(value = value)
+        )
+
+        _uiState.value = _uiState.value.copy(
+            listNameTextFieldState = _uiState.value.listNameTextFieldState.copy(isError = value.isBlank())
+        )
     }
 
     fun updateListDescription(value: String) {
-        _uiState.value = _uiState.value.copy(description = value)
+        _uiState.value = _uiState.value.copy(
+            listDescriptionTextFieldState = _uiState.value.listDescriptionTextFieldState.copy(value = value)
+        )
+
+        _uiState.value = _uiState.value.copy(
+            listDescriptionTextFieldState = _uiState.value.listDescriptionTextFieldState.copy(
+                isError = value.isBlank()
+            )
+        )
     }
 
     fun updateSelectedColor(color: ColorState) {
@@ -83,17 +106,34 @@ class ListCreationViewModel @Inject constructor(
     }
 
     fun createList() {
-        val name = uiState.value.listName
-        val description = uiState.value.description
+        val name = uiState.value.listNameTextFieldState.value
+        val description = uiState.value.listDescriptionTextFieldState.value
         val colorId = uiState.value.colorPickerState.colors.first { it.isSelected }.colorId
         val iconId = uiState.value.iconPickerState.icons.first { it.isSelected }.iconId
 
-        if (name.isEmpty() || description.isEmpty()) {
+        if (name.isBlank() || description.isBlank()) {
+
+            _uiState.value = _uiState.value.copy(
+                listNameTextFieldState = _uiState.value.listNameTextFieldState.copy(isError = name.isBlank())
+            )
+
+            _uiState.value = _uiState.value.copy(
+                listDescriptionTextFieldState = _uiState.value.listDescriptionTextFieldState.copy(
+                    isError = description.isBlank()
+                )
+            )
             return
         }
+
         viewModelScope.launch {
-            listRepository.createList(name, description, colorId, iconId)
+            listRepository.createList(
+                name.trimStart().trimEnd(),
+                description.trimStart().trimEnd(),
+                colorId,
+                iconId
+            )
         }
+
     }
 
 }

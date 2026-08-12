@@ -21,4 +21,7 @@
     <!--  Footer default strings  -->
     <string name="cancel">Cancel</string>
     <string name="create">Create</string>
+    <!--  TextField default strings  -->
+    <string name="name">Name</string>
+    <string name="description">Description</string>
 </resources>
