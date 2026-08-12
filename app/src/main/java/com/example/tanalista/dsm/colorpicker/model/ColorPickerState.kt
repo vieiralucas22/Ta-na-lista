@@ -1,4 +1,4 @@
-package com.example.tanalista.screens.util.model.colorpicker
+package com.example.tanalista.dsm.colorpicker.model
 
 data class ColorPickerState(
     val colors: List<ColorState>,

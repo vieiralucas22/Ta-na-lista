@@ -12,8 +12,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.lazy.grid.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
@@ -26,8 +24,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.tanalista.R
 import com.example.tanalista.screens.listcreation.model.ListCreationScreenState
-import com.example.tanalista.screens.util.model.colorpicker.ColorState
-import com.example.tanalista.screens.util.model.iconpicker.IconState
+import com.example.tanalista.dsm.colorpicker.model.ColorState
+import com.example.tanalista.dsm.iconpicker.model.IconState
 
 @Composable
 fun ListCreationView(viewModel: ListCreationViewModel, onBackAction: () -> Unit) {

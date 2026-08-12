@@ -1,4 +1,4 @@
-package com.example.tanalista.screens.util.model.colorpicker
+package com.example.tanalista.dsm.colorpicker.model
 
 import androidx.annotation.ColorRes
 

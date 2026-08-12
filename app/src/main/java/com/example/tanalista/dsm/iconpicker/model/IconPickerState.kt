@@ -1,4 +1,4 @@
-package com.example.tanalista.screens.util.model.iconpicker
+package com.example.tanalista.dsm.iconpicker.model
 
 
 data class IconPickerState(

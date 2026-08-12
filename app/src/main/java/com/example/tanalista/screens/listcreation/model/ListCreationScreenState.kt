@@ -2,10 +2,10 @@
 package com.example.tanalista.screens.listcreation.model
 
 import com.example.tanalista.R
-import com.example.tanalista.screens.util.model.colorpicker.ColorPickerState
-import com.example.tanalista.screens.util.model.colorpicker.ColorState
-import com.example.tanalista.screens.util.model.iconpicker.IconPickerState
-import com.example.tanalista.screens.util.model.iconpicker.IconState
+import com.example.tanalista.dsm.colorpicker.model.ColorPickerState
+import com.example.tanalista.dsm.colorpicker.model.ColorState
+import com.example.tanalista.dsm.iconpicker.model.IconPickerState
+import com.example.tanalista.dsm.iconpicker.model.IconState
 
 data class ListCreationScreenState(
     val listName: String,
