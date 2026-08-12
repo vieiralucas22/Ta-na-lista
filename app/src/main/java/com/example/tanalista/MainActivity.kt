@@ -24,32 +24,37 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
 
-        val homeViewModel : HomeViewModel by viewModels()
-        val cartViewModel : CartScreenViewModel by viewModels()
-        val cartDialogViewModel : CartDialogViewModel by viewModels()
-        val listCreationViewModel : ListCreationViewModel by viewModels()
+        val homeViewModel: HomeViewModel by viewModels()
+        val cartViewModel: CartScreenViewModel by viewModels()
+        val cartDialogViewModel: CartDialogViewModel by viewModels()
+        val listCreationViewModel: ListCreationViewModel by viewModels()
 
         setContent {
             val navController = rememberNavController()
 
-            NavHost(navController = navController, startDestination = Routes.LIST_CREATION_SCREEN, builder = {
+            NavHost(
+                navController = navController,
+                startDestination = Routes.LIST_CREATION_SCREEN,
+                builder = {
 
-                composable (Routes.HOME_SCREEN)
-                {
-                    HomeView(homeViewModel)
-                }
+                    composable(Routes.HOME_SCREEN)
+                    {
+                        HomeView(homeViewModel)
+                    }
 
-                composable (Routes.LIST_CREATION_SCREEN)
-                {
-                    ListCreationView(listCreationViewModel)
-                }
+                    composable(Routes.LIST_CREATION_SCREEN)
+                    {
+                        ListCreationView(listCreationViewModel, onBackAction = {
+                            navController.popBackStack()
+                        })
+                    }
 
-                composable (Routes.CART_SCREEN)
-                {
-                    CartView(cartViewModel, cartDialogViewModel)
-                }
+                    composable(Routes.CART_SCREEN)
+                    {
+                        CartView(cartViewModel, cartDialogViewModel)
+                    }
 
-            })
+                })
         }
     }
 

@@ -30,7 +30,7 @@ import com.example.tanalista.screens.util.model.colorpicker.ColorState
 import com.example.tanalista.screens.util.model.iconpicker.IconState
 
 @Composable
-fun ListCreationView(viewModel: ListCreationViewModel) {
+fun ListCreationView(viewModel: ListCreationViewModel, onBackAction: ()-> Unit) {
 
     val uiState = viewModel.uiState.value
 
@@ -73,7 +73,10 @@ fun ListCreationView(viewModel: ListCreationViewModel) {
                         .background(colorResource(R.color.white))
                         .navigationBarsPadding()
                         .padding(horizontal = 24.dp, vertical = 12.dp)
-                        .fillMaxWidth()
+                        .fillMaxWidth(),
+                onBackAction = {
+                    onBackAction()
+                }
             )
         }
     )
@@ -184,13 +187,14 @@ fun ContentListCreationView(
 }
 
 @Composable
-fun FooterListCreationView(modifier: Modifier = Modifier) {
+fun FooterListCreationView(modifier: Modifier = Modifier, onBackAction: () -> Unit) {
     Row(
         modifier = modifier,
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         OutlinedButton(
             onClick = {
+                onBackAction()
             },
             modifier = Modifier
                 .weight(1f)
