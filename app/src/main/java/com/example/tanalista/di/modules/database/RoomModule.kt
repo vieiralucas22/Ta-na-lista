@@ -28,7 +28,9 @@ class RoomModule {
             context,
             ApplicationDatabase::class.java,
             DatabaseConstants.DATABASE_NAME
-        ).build()
+        )
+            .fallbackToDestructiveMigration(dropAllTables = true)
+            .build()
 
     @Provides
     fun provideProductDao(db: ApplicationDatabase): ProductDao =

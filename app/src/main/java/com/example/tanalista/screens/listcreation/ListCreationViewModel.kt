@@ -5,11 +5,13 @@ import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.viewModelScope
 import com.example.tanalista.R
+import com.example.tanalista.dsm.ButtonState
 import com.example.tanalista.model.repository.local.interfaces.ListRepository
 import com.example.tanalista.screens.BaseViewModel
 import com.example.tanalista.screens.listcreation.model.ListCreationScreenState
 import com.example.tanalista.dsm.colorpicker.model.ColorPickerState
 import com.example.tanalista.dsm.colorpicker.model.ColorState
+import com.example.tanalista.dsm.footer.model.FooterState
 import com.example.tanalista.dsm.iconpicker.model.IconPickerState
 import com.example.tanalista.dsm.iconpicker.model.IconState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -52,6 +54,10 @@ class ListCreationViewModel @Inject constructor(
                     IconState(R.drawable.ic_dog_fill, isSelected = false),
                 ),
                 sectionTitle = "Icon",
+            ),
+            footer = FooterState (
+                ButtonState(R.string.cancel),
+                ButtonState(R.string.create),
             )
         )
     }

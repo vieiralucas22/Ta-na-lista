@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.sp
 import com.example.tanalista.R
 import com.example.tanalista.screens.listcreation.model.ListCreationScreenState
 import com.example.tanalista.dsm.colorpicker.model.ColorState
+import com.example.tanalista.dsm.footer.Footer
 import com.example.tanalista.dsm.iconpicker.model.IconState
 
 @Composable
@@ -65,13 +66,8 @@ fun ListCreationView(viewModel: ListCreationViewModel, onBackAction: () -> Unit)
             )
         },
         bottomBar = {
-            FooterListCreationView(
-                modifier =
-                    Modifier
-                        .background(colorResource(R.color.white))
-                        .navigationBarsPadding()
-                        .padding(horizontal = 24.dp, vertical = 12.dp)
-                        .fillMaxWidth(),
+            Footer(
+                state = uiState.footer,
                 onCancelAction = {
                     onBackAction()
                 },
@@ -184,40 +180,6 @@ fun ContentListCreationView(
             }
         }
 
-    }
-}
-
-@Composable
-fun FooterListCreationView(
-    modifier: Modifier = Modifier,
-    onCancelAction: () -> Unit,
-    onConfirmAction: () -> Unit
-) {
-    Row(
-        modifier = modifier,
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
-        OutlinedButton(
-            onClick = {
-                onCancelAction()
-            },
-            modifier = Modifier
-                .weight(1f)
-                .heightIn(min = 50.dp)
-        ) {
-            Text("Cancel")
-        }
-
-        Button(
-            onClick = {
-                onConfirmAction()
-            },
-            modifier = Modifier
-                .weight(1f)
-                .heightIn(min = 50.dp)
-        ) {
-            Text("Create")
-        }
     }
 }
 

@@ -1,20 +1,11 @@
 package com.example.tanalista.screens.cart
 
 import android.app.Application
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.viewModelScope
-import com.example.tanalista.R
-import com.example.tanalista.enums.ProductCategory
 import com.example.tanalista.model.database.model.dto.ListItemDTO
 import com.example.tanalista.model.repository.local.interfaces.ProductListRepository
 import com.example.tanalista.screens.BaseViewModel
-import com.example.tanalista.screens.cart.composable.CartPriceArea
-import com.example.tanalista.screens.cart.model.ButtonState
 import com.example.tanalista.screens.cart.model.CartScreenState
-import com.example.tanalista.screens.cart.model.HeaderToggleButtonState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted

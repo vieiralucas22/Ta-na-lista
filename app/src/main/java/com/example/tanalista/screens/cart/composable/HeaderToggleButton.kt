@@ -23,7 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.tanalista.R
-import com.example.tanalista.screens.cart.model.ButtonState
+import com.example.tanalista.dsm.ButtonState
 import com.example.tanalista.screens.cart.model.HeaderToggleButtonState
 
 @Composable

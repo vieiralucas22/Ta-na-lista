@@ -18,4 +18,7 @@
     <string name="add_item">Add item!</string>
     <string name="update">Update</string>
     <string name="update_item">Update item</string>
+    <!--  Footer default strings  -->
+    <string name="cancel">Cancel</string>
+    <string name="create">Create</string>
 </resources>
