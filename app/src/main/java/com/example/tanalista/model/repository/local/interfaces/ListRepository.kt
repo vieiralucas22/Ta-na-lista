@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface ListRepository {
 
-    suspend fun insertList(name: String)
+    suspend fun createList(name: String, description: String, colorId: Int, iconId: Int)
 
     fun getAllListsFromDatabase() : Flow<List<ListEntity>>
 

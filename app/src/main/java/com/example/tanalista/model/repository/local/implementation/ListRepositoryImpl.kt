@@ -13,11 +13,12 @@ class ListRepositoryImpl @Inject constructor(
     private val coroutineDispatcherProvider: CoroutineDispatcherProvider
 ) : ListRepository {
 
-    override suspend fun insertList(name: String) = withContext(coroutineDispatcherProvider.io) {
-        val newList = ListEntity("Mercado")
+    override suspend fun createList(name: String, description: String, colorId: Int, iconId: Int) =
+        withContext(coroutineDispatcherProvider.io) {
+            val listEntity = ListEntity(name, description, colorId, iconId)
 
-        listDAO.insertList(newList)
-    }
+            listDAO.insertList(listEntity)
+        }
 
     override fun getAllListsFromDatabase(): Flow<List<ListEntity>> = listDAO.getAllLists()
 }

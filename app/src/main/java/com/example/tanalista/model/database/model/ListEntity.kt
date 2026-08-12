@@ -8,6 +8,12 @@ import com.example.tanalista.constants.database.DatabaseConstants
 data class ListEntity(
 
     @ColumnInfo
-    val name : String
+    val name: String,
+    @ColumnInfo
+    val description: String,
+    @ColumnInfo
+    val colorId: Int,
+    @ColumnInfo
+    val iconId: Int
 
 ) : BaseEntity()

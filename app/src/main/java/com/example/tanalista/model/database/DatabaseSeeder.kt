@@ -1,6 +1,7 @@
 package com.example.tanalista.model.database
 
 import android.content.Context
+import com.example.tanalista.R
 import com.example.tanalista.enums.ProductCategory
 import com.example.tanalista.model.database.dao.ListDao
 import com.example.tanalista.model.database.dao.ProductCategoryDao
@@ -54,6 +55,13 @@ class DatabaseSeeder @Inject constructor(
     }
 
     private fun populateLists() {
-        listDao.insertList(ListEntity("Mercado"))
+        listDao.insertList(
+            ListEntity(
+                "Mercado",
+                "Lista do mercado",
+                R.color.light_blue,
+                R.drawable.ic_shopping_cart_fill
+            )
+        )
     }
 }

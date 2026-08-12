@@ -3,9 +3,9 @@ package com.example.tanalista.screens.listcreation
 import android.app.Application
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.viewModelScope
 import com.example.tanalista.R
+import com.example.tanalista.model.repository.local.interfaces.ListRepository
 import com.example.tanalista.screens.BaseViewModel
 import com.example.tanalista.screens.listcreation.model.ListCreationScreenState
 import com.example.tanalista.screens.util.model.colorpicker.ColorPickerState
@@ -13,18 +13,13 @@ import com.example.tanalista.screens.util.model.colorpicker.ColorState
 import com.example.tanalista.screens.util.model.iconpicker.IconPickerState
 import com.example.tanalista.screens.util.model.iconpicker.IconState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.flow.stateIn
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class ListCreationViewModel @Inject constructor(
     application: Application,
+    private val listRepository: ListRepository
 ) : BaseViewModel(application) {
 
     private val _uiState = mutableStateOf(ListCreationScreenState.DEFAULT_STATE)
@@ -79,6 +74,20 @@ class ListCreationViewModel @Inject constructor(
         val iconPickerState = _uiState.value.iconPickerState
         _uiState.value =
             _uiState.value.copy(iconPickerState = iconPickerState.updateSelectedIcon(icon))
+    }
+
+    fun createList() {
+        val name = uiState.value.listName
+        val description = uiState.value.description
+        val colorId = uiState.value.colorPickerState.colors.first { it.isSelected }.colorId
+        val iconId = uiState.value.iconPickerState.icons.first { it.isSelected }.iconId
+
+        if (name.isEmpty() || description.isEmpty()) {
+            return
+        }
+        viewModelScope.launch {
+            listRepository.createList(name, description, colorId, iconId)
+        }
     }
 
 }
