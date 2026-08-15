@@ -21,7 +21,7 @@ fun TextFieldComponent(
     state: TextFieldState,
     modifier: Modifier = Modifier,
     maxChars: Int = MAX_CHARS,
-    maxLines: Int = 3,
+    maxLines: Int = 2 ,
     onValueChange: (String) -> Unit,
 ) {
 

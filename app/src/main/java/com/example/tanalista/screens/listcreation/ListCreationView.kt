@@ -74,6 +74,7 @@ fun ListCreationView(viewModel: ListCreationViewModel, onBackAction: () -> Unit)
                 },
                 onConfirmAction = {
                     viewModel.createList()
+                    onBackAction()
                 }
             )
         }
@@ -102,7 +103,7 @@ fun ContentListCreationView(
 ) {
     Column(modifier = modifier.padding(top = 16.dp)) {
 
-        TextFieldComponent(state.listNameTextFieldState, maxChars = 20) { onListNameChanged(it) }
+        TextFieldComponent(state.listNameTextFieldState, maxChars = 20, maxLines = 1) { onListNameChanged(it) }
 
         Spacer(modifier = Modifier.height(16.dp))
 
