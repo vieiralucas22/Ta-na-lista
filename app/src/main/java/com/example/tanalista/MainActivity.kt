@@ -34,12 +34,20 @@ class MainActivity : ComponentActivity() {
 
             NavHost(
                 navController = navController,
-                startDestination = Routes.LIST_CREATION_SCREEN,
+                startDestination = Routes.HOME_SCREEN,
                 builder = {
 
                     composable(Routes.HOME_SCREEN)
                     {
-                        HomeView(homeViewModel)
+                        HomeView(
+                            viewModel = homeViewModel,
+                            onCreateListAction = {
+                                navController.navigate(Routes.LIST_CREATION_SCREEN)
+                            },
+                            onListClick = {
+                                navController.navigate(Routes.CART_SCREEN)
+                            }
+                        )
                     }
 
                     composable(Routes.LIST_CREATION_SCREEN)

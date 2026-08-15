@@ -1,26 +1,44 @@
 package com.example.tanalista.screens.home
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.material3.*
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.*
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.*
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.example.tanalista.R
 import com.example.tanalista.screens.home.composable.ListComponentItem
+import com.example.tanalista.screens.home.model.HomeUiState
 import com.example.tanalista.screens.home.model.ListComponentState
 
 @Composable
-fun HomeView(viewModel: HomeViewModel) {
+fun HomeView(
+    viewModel: HomeViewModel,
+    onCreateListAction: () -> Unit = {},
+    onListClick: (ListComponentState) -> Unit = {},
+) {
+    val uiState = viewModel.uiState.collectAsState().value
 
     Scaffold(
         topBar = {
@@ -28,91 +46,81 @@ fun HomeView(viewModel: HomeViewModel) {
                 modifier = Modifier
                     .background(colorResource(R.color.white))
                     .statusBarsPadding()
-                    .padding(12.dp)
+                    .padding(16.dp)
             )
+        },
+        floatingActionButton = {
+            FloatingActionButton(
+                onClick = onCreateListAction,
+                containerColor = colorResource(R.color.floatingButton),
+                contentColor = colorResource(R.color.white),
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.ic_plus),
+                    contentDescription = stringResource(R.string.new_list)
+                )
+            }
         },
         content = { paddingValues ->
             ContentHome(
+                state = uiState,
+                onListClick = onListClick,
                 modifier = Modifier
                     .background(colorResource(R.color.white))
                     .padding(paddingValues)
             )
-        })
+        }
+    )
 }
 
 @Composable
 fun HeaderHome(modifier: Modifier = Modifier) {
-    Row(
-        modifier = modifier
-            .fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
+    Column(modifier = modifier.fillMaxWidth()) {
         Text(
-            text = "Smarter shopping starts here!",
-            fontSize = 24.sp,
+            text = stringResource(R.string.app_name),
+            fontSize = 14.sp,
+            color = Color.Gray
+        )
+        Text(
+            text = stringResource(R.string.home_greeting),
+            fontSize = 22.sp,
             fontWeight = FontWeight.Bold
         )
     }
 }
 
 @Composable
-fun ContentHome(modifier: Modifier = Modifier) {
+fun ContentHome(
+    state: HomeUiState,
+    onListClick: (ListComponentState) -> Unit,
+    modifier: Modifier = Modifier
+) {
     Column(
         modifier = modifier
             .fillMaxSize()
-            .padding(16.dp)
+            .padding(horizontal = 16.dp)
     ) {
-
         Text(
-            text = "Quick Access",
+            text = stringResource(R.string.my_lists),
             fontSize = 14.sp,
             color = Color.Gray
         )
 
         Spacer(modifier = Modifier.height(12.dp))
 
-        val items = listOf(
-            ListComponentState(
-                "Receive Payments",
-                "Accept money from anyone anywhere.",
-                Color(0xFFE3F2FD)
-            ) {
-                Icon(painterResource(R.drawable.ic_plus), contentDescription = null)
-            },
-            ListComponentState(
-                "Share Link",
-                "Send a link to get instantly",
-                Color(0xFFE8F5E9)
-            ) {
-                Icon(painterResource(R.drawable.ic_plus), contentDescription = null)
-            },
-            ListComponentState(
-                "View Cards",
-                "Manage your virtual & physical cards.",
-                Color(0xFFF3E5F5)
-            ) {
-                Icon(painterResource(R.drawable.ic_plus), contentDescription = null)
-            },
-            ListComponentState(
-                "Send Money",
-                "Send money locally & globally",
-                Color(0xFFFFF3E0)
-            ) {
-                Icon(painterResource(R.drawable.ic_plus), contentDescription = null)
-            }
-        )
-
         LazyVerticalGrid(
             columns = GridCells.Fixed(2),
             verticalArrangement = Arrangement.spacedBy(12.dp),
             horizontalArrangement = Arrangement.spacedBy(12.dp),
-            modifier = Modifier.height(300.dp)
+            contentPadding = PaddingValues(bottom = 16.dp),
+            modifier = Modifier.fillMaxSize()
         ) {
-            items(items) { item ->
-                ListComponentItem(item)
+            items(state.listState) { list ->
+                ListComponentItem(
+                    listState = list,
+                    onClick = { onListClick(list) }
+                )
             }
         }
     }
 }
-

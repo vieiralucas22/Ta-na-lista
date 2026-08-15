@@ -24,4 +24,12 @@
     <!--  TextField default strings  -->
     <string name="name">Name</string>
     <string name="description">Description</string>
+    <!--  Home screen strings  -->
+    <string name="home_greeting">Smarter shopping starts here!</string>
+    <string name="my_lists">My Lists</string>
+    <string name="empty_lists_title">No lists yet</string>
+    <string name="empty_lists_description">Create your first shopping list to get started</string>
+    <string name="new_list">New list</string>
+    <string name="home">Home</string>
+    <string name="profile">Profile</string>
 </resources>
