@@ -5,9 +5,11 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.viewModels
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.tanalista.screens.Routes
 import com.example.tanalista.screens.cart.CartScreenViewModel
 import com.example.tanalista.screens.cart.CartView
@@ -44,8 +46,8 @@ class MainActivity : ComponentActivity() {
                             onCreateListAction = {
                                 navController.navigate(Routes.LIST_CREATION_SCREEN)
                             },
-                            onListClick = {
-                                navController.navigate(Routes.CART_SCREEN)
+                            onListClick = { listId ->
+                                navController.navigate(Routes.cartScreen(listId))
                             }
                         )
                     }
@@ -57,9 +59,12 @@ class MainActivity : ComponentActivity() {
                         })
                     }
 
-                    composable(Routes.CART_SCREEN)
-                    {
-                        CartView(cartViewModel, cartDialogViewModel)
+                    composable(
+                        Routes.CART_SCREEN,
+                        arguments = listOf(navArgument("listId") { type = NavType.LongType })
+                    ) { backStackEntry ->
+                        cartViewModel.listId = backStackEntry.arguments?.getLong("listId") ?: 0L
+                        CartView( cartViewModel, cartDialogViewModel)
                     }
 
                 })

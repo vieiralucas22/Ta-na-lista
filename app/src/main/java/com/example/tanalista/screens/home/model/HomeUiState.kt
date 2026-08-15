@@ -9,6 +9,7 @@ data class HomeUiState(
         val DEFAULT_STATE = HomeUiState (
             listState = listOf(
                 ListComponentState(
+                    id = 0L,
                     name = "",
                     description = "",
                     colorId = R.color.light_blue,

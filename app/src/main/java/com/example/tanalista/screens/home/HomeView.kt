@@ -30,13 +30,12 @@ import androidx.compose.ui.unit.sp
 import com.example.tanalista.R
 import com.example.tanalista.screens.home.composable.ListComponentItem
 import com.example.tanalista.screens.home.model.HomeUiState
-import com.example.tanalista.screens.home.model.ListComponentState
 
 @Composable
 fun HomeView(
     viewModel: HomeViewModel,
     onCreateListAction: () -> Unit = {},
-    onListClick: (ListComponentState) -> Unit = {},
+    onListClick: (Long) -> Unit = {},
 ) {
     val uiState = viewModel.uiState.collectAsState().value
 
@@ -92,7 +91,7 @@ fun HeaderHome(modifier: Modifier = Modifier) {
 @Composable
 fun ContentHome(
     state: HomeUiState,
-    onListClick: (ListComponentState) -> Unit,
+    onListClick: (Long) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -115,10 +114,10 @@ fun ContentHome(
             contentPadding = PaddingValues(bottom = 16.dp),
             modifier = Modifier.fillMaxSize()
         ) {
-            items(state.listState) { list ->
+            items(state.listState, key = { it.id }) { list ->
                 ListComponentItem(
                     listState = list,
-                    onClick = { onListClick(list) }
+                    onClick = { onListClick(list.id) }
                 )
             }
         }

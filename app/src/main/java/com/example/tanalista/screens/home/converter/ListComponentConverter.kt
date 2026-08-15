@@ -8,6 +8,7 @@ class ListComponentConverter {
     fun convert(allLists: List<ListEntity>): List<ListComponentState> =
         allLists.map { list ->
             ListComponentState(
+                id = list.id,
                 name = list.name,
                 description = list.description,
                 colorId = list.colorId,

@@ -1,8 +1,7 @@
 package com.example.tanalista.screens.home.model
 
-import androidx.compose.runtime.Composable
-
 data class ListComponentState(
+    val id: Long,
     val name: String,
     val description: String,
     val colorId: Int,

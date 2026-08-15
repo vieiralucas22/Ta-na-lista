@@ -23,7 +23,7 @@ class HomeViewModel @Inject constructor(
     private val listComponentConverter: ListComponentConverter
 ) : BaseViewModel(application) {
 
-    val _uiState = MutableStateFlow(HomeUiState.DEFAULT_STATE)
+    private val _uiState = MutableStateFlow(HomeUiState.DEFAULT_STATE)
 
     val uiState: StateFlow<HomeUiState> = _uiState.onStart {
         initializeData()

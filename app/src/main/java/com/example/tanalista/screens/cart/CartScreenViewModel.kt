@@ -23,22 +23,21 @@ class CartScreenViewModel @Inject constructor(
 ) : BaseViewModel(application) {
 
     private val _uiState = MutableStateFlow(CartScreenState.DEFAULT_STATE)
+    var listId: Long = 0L
 
     val uiState: StateFlow<CartScreenState> =
-        _uiState.onStart { 
-            initializeScreenData()
-        }.stateIn(
+        _uiState.stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000),
             initialValue = _uiState.value
         )
 
-    private fun initializeScreenData() {
+    fun loadList() {
         viewModelScope.launch {
-            val allProducts = productListRepository.getAllListProducts(1)
+            val allProducts = productListRepository.getAllListProducts(listId)
 
             _uiState.update { it.copy(allProductsInList = allProducts) }
-            
+
             updateTotalCartValue()
         }
     }
@@ -54,7 +53,7 @@ class CartScreenViewModel @Inject constructor(
 
     fun showAllProductsInList() {
         viewModelScope.launch {
-            val allProducts = productListRepository.getAllListProducts(1, false)
+            val allProducts = productListRepository.getAllListProducts(listId, false)
 
             _uiState.update {
                 it.copy(
@@ -68,7 +67,7 @@ class CartScreenViewModel @Inject constructor(
 
     fun showAllProductsInCart() {
         viewModelScope.launch {
-            val allProducts = productListRepository.getAllListProducts(1, true)
+            val allProducts = productListRepository.getAllListProducts(listId, true)
 
             _uiState.update {
                 it.copy(
@@ -81,7 +80,7 @@ class CartScreenViewModel @Inject constructor(
     }
 
     suspend fun updateTotalCartValue() {
-        productListRepository.getAllListProducts(1, true)
+        productListRepository.getAllListProducts(listId, true)
             .collect { products ->
                 var total = 0.0
                 products.forEach { product ->

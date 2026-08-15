@@ -43,7 +43,7 @@ class ProductListRepositoryImpl @Inject constructor(
 
             val productListEntity =
                 ProductListEntity(
-                    1,
+                    listItemDTO.listId,
                     existingProduct.id,
                     listItemDTO.name,
                     listItemDTO.quantity,

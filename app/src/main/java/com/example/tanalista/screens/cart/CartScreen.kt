@@ -20,6 +20,7 @@ import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.IconToggleButtonColors
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -43,6 +44,10 @@ fun CartView(
     cartDialogViewModel: CartDialogViewModel
 ) {
     val uiState = cartScreenViewModel.uiState.collectAsState().value
+
+    LaunchedEffect(cartScreenViewModel.listId) {
+        cartScreenViewModel.loadList()
+    }
 
     Scaffold(
         floatingActionButton = {
