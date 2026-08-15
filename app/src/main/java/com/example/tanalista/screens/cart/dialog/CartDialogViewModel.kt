@@ -57,6 +57,8 @@ class CartDialogViewModel @Inject constructor(
     var isInvalidPrice by mutableStateOf(false)
     var textButtonDialog by mutableStateOf(getText(R.string.add))
 
+    var listId: Long = 0L
+
     private val _productsSuggestion = MutableLiveData(
         listOf(
             ProductEntity(name = "Arroz", category = "Food"),
@@ -157,6 +159,7 @@ class CartDialogViewModel @Inject constructor(
 
     fun createNewItem(): ListItemDTO {
         return ListItemDTO(
+            listId = this.listId,
             name = productName,
             quantity = quantity.ifEmpty { "0" }.toInt(),
             productPrice = price.ifEmpty { "0.0" }.toDouble(),
@@ -169,7 +172,7 @@ class CartDialogViewModel @Inject constructor(
     fun getItemUpdated(): ListItemDTO {
         return ListItemDTO(
             productId = currentListItem!!.productId,
-            listId = currentListItem!!.listId,
+            listId = this.listId,
             name = productName,
             quantity = quantity.ifEmpty { "0" }.toInt(),
             productPrice = price.ifEmpty { "0.0" }.toDouble(),

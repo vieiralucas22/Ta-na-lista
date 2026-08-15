@@ -63,7 +63,9 @@ class MainActivity : ComponentActivity() {
                         Routes.CART_SCREEN,
                         arguments = listOf(navArgument("listId") { type = NavType.LongType })
                     ) { backStackEntry ->
-                        cartViewModel.listId = backStackEntry.arguments?.getLong("listId") ?: 0L
+                        val listId = backStackEntry.arguments?.getLong("listId") ?: 0L
+                        cartViewModel.listId = listId
+                        cartDialogViewModel.listId = listId
                         CartView( cartViewModel, cartDialogViewModel)
                     }
 
