@@ -1,5 +1,7 @@
 package com.example.tanalista.screens.home.composable
 
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -21,13 +23,21 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.tanalista.screens.home.model.ListComponentState
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ListComponentItem(listState: ListComponentState, onClick: () -> Unit = {}) {
+fun ListComponentItem(
+    listState: ListComponentState,
+    onClick: () -> Unit = {},
+    onLongClick: () -> Unit = {},
+) {
     Card(
-        onClick = onClick,
         modifier = Modifier
             .fillMaxWidth()
-            .heightIn(min = 120.dp),
+            .heightIn(min = 120.dp)
+            .combinedClickable(
+                onClick = onClick,
+                onLongClick = onLongClick
+            ),
         elevation = CardDefaults.elevatedCardElevation(1.dp),
         colors = CardDefaults.cardColors(containerColor = colorResource(listState.colorId)),
         shape = RoundedCornerShape(16.dp)

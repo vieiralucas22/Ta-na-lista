@@ -21,4 +21,8 @@ class ListRepositoryImpl @Inject constructor(
         }
 
     override fun getAllListsFromDatabase(): Flow<List<ListEntity>> = listDAO.getAllLists()
+
+    override suspend fun deleteList(listId: Long) = withContext(coroutineDispatcherProvider.io) {
+        listDAO.deleteListFromDatabase(listId)
+    }
 }

@@ -28,6 +28,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.tanalista.R
+import com.example.tanalista.dsm.bottomsheet.composable.BottomSheetComponent
 import com.example.tanalista.screens.home.composable.ListComponentItem
 import com.example.tanalista.screens.home.model.HomeUiState
 
@@ -64,9 +65,22 @@ fun HomeView(
             ContentHome(
                 state = uiState,
                 onListClick = onListClick,
+                onListLongClick = { listId ->
+                    viewModel.showBottomSheet(listId)
+                },
                 modifier = Modifier
                     .background(colorResource(R.color.white))
                     .padding(paddingValues)
+            )
+
+            BottomSheetComponent(
+                state = uiState.bottomSheetState,
+                onDismissRequest = {
+                    viewModel.dismissBottomSheet()
+                },
+                onBottomSheetButtonAction = {
+                    viewModel.handleWithBottomSheetActions(action = it)
+                }
             )
         }
     )
@@ -92,6 +106,7 @@ fun HeaderHome(modifier: Modifier = Modifier) {
 fun ContentHome(
     state: HomeUiState,
     onListClick: (Long) -> Unit,
+    onListLongClick: (Long) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -117,7 +132,8 @@ fun ContentHome(
             items(state.listState, key = { it.id }) { list ->
                 ListComponentItem(
                     listState = list,
-                    onClick = { onListClick(list.id) }
+                    onClick = { onListClick(list.id) },
+                    onLongClick = { onListLongClick(list.id) }
                 )
             }
         }

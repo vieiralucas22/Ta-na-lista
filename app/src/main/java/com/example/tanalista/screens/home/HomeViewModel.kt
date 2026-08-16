@@ -2,8 +2,14 @@ package com.example.tanalista.screens.home
 
 import android.app.Application
 import androidx.lifecycle.viewModelScope
+import com.example.tanalista.R
+import com.example.tanalista.dsm.bottomsheet.BottomSheetButtonAction
+import com.example.tanalista.dsm.bottomsheet.model.BottomSheetButtonState
+import com.example.tanalista.dsm.bottomsheet.model.BottomSheetState
 import com.example.tanalista.model.repository.local.interfaces.ListRepository
 import com.example.tanalista.screens.BaseViewModel
+import com.example.tanalista.screens.home.action.DeleteAction
+import com.example.tanalista.screens.home.action.EditAction
 import com.example.tanalista.screens.home.converter.ListComponentConverter
 import com.example.tanalista.screens.home.model.HomeUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -37,8 +43,59 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             listRepository.getAllListsFromDatabase().collect { lists ->
                 _uiState.update {
-                    it.copy(listState = listComponentConverter.convert(lists))
+                    it.copy(
+                        listState = listComponentConverter.convert(lists),
+                        bottomSheetState = BottomSheetState(
+                            isVisible = false,
+                            buttonList = emptyList()
+                        )
+                    )
                 }
+            }
+        }
+    }
+
+    private fun getBottomSheetButtons(listId: Long): List<BottomSheetButtonState> {
+        return listOf(
+            BottomSheetButtonState(
+                titleId = R.string.edit,
+                iconId = R.drawable.ic_edit,
+                action = EditAction(listId)
+            ),
+            BottomSheetButtonState(
+                titleId = R.string.delete,
+                iconId = R.drawable.ic_trash,
+                action = DeleteAction(listId)
+            )
+        )
+    }
+
+    fun dismissBottomSheet() {
+        _uiState.update {
+            it.copy(bottomSheetState = it.bottomSheetState.copy(isVisible = false))
+        }
+    }
+
+    fun showBottomSheet(listId: Long) {
+        _uiState.update {
+            it.copy(
+                bottomSheetState = it.bottomSheetState.copy(
+                    isVisible = true,
+                    buttonList = getBottomSheetButtons(listId)
+                )
+            )
+        }
+    }
+
+    fun handleWithBottomSheetActions(action: BottomSheetButtonAction) {
+        viewModelScope.launch {
+            when (action) {
+                is EditAction -> {}
+                is DeleteAction -> {
+                    listRepository.deleteList(action.listId)
+                }
+
+                else -> Unit
             }
         }
     }

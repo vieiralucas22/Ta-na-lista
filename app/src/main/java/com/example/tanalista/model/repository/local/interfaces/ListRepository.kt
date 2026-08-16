@@ -9,4 +9,6 @@ interface ListRepository {
 
     fun getAllListsFromDatabase() : Flow<List<ListEntity>>
 
+    suspend fun deleteList(listId: Long)
+
 }

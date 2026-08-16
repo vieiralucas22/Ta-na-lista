@@ -56,6 +56,7 @@ dependencies {
     implementation(libs.androidx.compose.material3.adaptive.navigation.suite)
     implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.compose.runtime.livedata)
+    implementation(libs.androidx.room.ktx)
     implementation(libs.gson)
     implementation(libs.accompanist.systemuicontroller)
     implementation(libs.coil.compose)

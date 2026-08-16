@@ -18,6 +18,7 @@ runtimeLivedata = "1.9.4"
 foundation = "1.9.5"
 dagger-hilt = "2.57.1"
 ksp = "2.0.21-1.0.28"
+roomKtx = "2.8.4"
 
 [libraries]
 accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanistSystemuicontroller" }
@@ -45,6 +46,7 @@ androidx-compose-material3 = { group = "androidx.compose.material3", name = "mat
 androidx-compose-foundation = { group = "androidx.compose.foundation", name = "foundation", version.ref = "foundation" }
 dagger-hilt = {module = "com.google.dagger:hilt-android", version.ref ="dagger-hilt"}
 hilt-compiler = {module = "com.google.dagger:hilt-android-compiler", version.ref ="dagger-hilt"}
+androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "roomKtx" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
