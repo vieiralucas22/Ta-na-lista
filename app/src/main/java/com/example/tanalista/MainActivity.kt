@@ -43,17 +43,19 @@ class MainActivity : ComponentActivity() {
                     {
                         HomeView(
                             viewModel = homeViewModel,
-                            onCreateListAction = {
-                                navController.navigate(Routes.LIST_CREATION_SCREEN)
-                            },
-                            onListClick = { listId ->
-                                navController.navigate(Routes.cartScreen(listId))
-                            }
+                            navController = navController
                         )
                     }
 
-                    composable(Routes.LIST_CREATION_SCREEN)
-                    {
+                    composable(
+                        Routes.LIST_CREATION_SCREEN,
+                        arguments = listOf(navArgument("listId") {
+                            type = NavType.LongType
+                            defaultValue = 0L
+                        })
+                    ) { backStackEntry ->
+                        val listId = backStackEntry.arguments?.getLong("listId") ?: 0L
+                        listCreationViewModel.listId = listId
                         ListCreationView(listCreationViewModel, onBackAction = {
                             navController.popBackStack()
                         })

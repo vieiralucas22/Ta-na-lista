@@ -25,50 +25,71 @@ class ListCreationViewModel @Inject constructor(
     private val listRepository: ListRepository
 ) : BaseViewModel(application) {
 
+    var listId: Long = 0L
+
     private val _uiState = mutableStateOf(ListCreationScreenState.DEFAULT_STATE)
     val uiState: State<ListCreationScreenState> = _uiState
 
+    private val colorOptions = listOf(
+        R.color.light_blue,
+        R.color.light_green,
+        R.color.light_yellow,
+        R.color.light_red,
+        R.color.light_pink,
+        R.color.light_aqua_green,
+    )
+
+    private val iconOptions = listOf(
+        R.drawable.ic_shopping_cart_fill,
+        R.drawable.ic_home_fill,
+        R.drawable.ic_heart_fill,
+        R.drawable.ic_book_open_cover_fill,
+        R.drawable.ic_hamburger_fill,
+        R.drawable.ic_medicine_fill,
+        R.drawable.ic_shopping_bag_fill,
+        R.drawable.ic_dog_fill,
+    )
+
     fun initializeScreenData() {
-        _uiState.value = ListCreationScreenState(
-            colorPickerState = ColorPickerState(
-                colors = listOf(
-                    ColorState(R.color.light_blue, isSelected = true),
-                    ColorState(R.color.light_green, isSelected = false),
-                    ColorState(R.color.light_yellow, isSelected = false),
-                    ColorState(R.color.light_red, isSelected = false),
-                    ColorState(R.color.light_pink, isSelected = false),
-                    ColorState(R.color.light_aqua_green, isSelected = false),
+        viewModelScope.launch {
+
+            val existingList = listRepository.getListById(listId)
+
+            _uiState.value = ListCreationScreenState(
+                colorPickerState = ColorPickerState(
+                    colors = colorOptions.map { colorId ->
+                        ColorState(
+                            colorId,
+                            isSelected = colorId == (existingList?.colorId ?: colorOptions.first())
+                        )
+                    },
+                    sectionTitle = "Color",
                 ),
-                sectionTitle = "Color",
-            ),
-            iconPickerState = IconPickerState(
-                icons = listOf(
-                    IconState(R.drawable.ic_shopping_cart_fill, isSelected = true),
-                    IconState(R.drawable.ic_home_fill, isSelected = false),
-                    IconState(R.drawable.ic_heart_fill, isSelected = false),
-                    IconState(R.drawable.ic_book_open_cover_fill, isSelected = false),
-                    IconState(R.drawable.ic_hamburger_fill, isSelected = false),
-                    IconState(R.drawable.ic_medicine_fill, isSelected = false),
-                    IconState(R.drawable.ic_shopping_bag_fill, isSelected = false),
-                    IconState(R.drawable.ic_dog_fill, isSelected = false),
+                iconPickerState = IconPickerState(
+                    icons = iconOptions.map { iconId ->
+                        IconState(
+                            iconId,
+                            isSelected = iconId == (existingList?.iconId ?: iconOptions.first())
+                        )
+                    },
+                    sectionTitle = "Icon",
                 ),
-                sectionTitle = "Icon",
-            ),
-            footerState = FooterState(
-                ButtonState(R.string.cancel),
-                ButtonState(R.string.create),
-            ),
-            listNameTextFieldState = TextFieldState(
-                value = "",
-                label = R.string.name,
-                isError = false
-            ),
-            listDescriptionTextFieldState = TextFieldState(
-                value = "",
-                label = R.string.description,
-                isError = false
+                footerState = FooterState(
+                    ButtonState(R.string.cancel),
+                    ButtonState(if (existingList != null) R.string.update else R.string.create),
+                ),
+                listNameTextFieldState = TextFieldState(
+                    value = existingList?.name ?: "",
+                    label = R.string.name,
+                    isError = false
+                ),
+                listDescriptionTextFieldState = TextFieldState(
+                    value = existingList?.description ?: "",
+                    label = R.string.description,
+                    isError = false
+                )
             )
-        )
+        }
     }
 
     fun updateListName(value: String) {
@@ -105,7 +126,7 @@ class ListCreationViewModel @Inject constructor(
             _uiState.value.copy(iconPickerState = iconPickerState.updateSelectedIcon(icon))
     }
 
-    fun createList() {
+    fun saveList() {
         val name = uiState.value.listNameTextFieldState.value
         val description = uiState.value.listDescriptionTextFieldState.value
         val colorId = uiState.value.colorPickerState.colors.first { it.isSelected }.colorId
@@ -125,15 +146,24 @@ class ListCreationViewModel @Inject constructor(
             return
         }
 
-        viewModelScope.launch {
-            listRepository.createList(
-                name.trimStart().trimEnd(),
-                description.trimStart().trimEnd(),
-                colorId,
-                iconId
-            )
-        }
+        val trimmedName = name.trimStart().trimEnd()
+        val trimmedDescription = description.trimStart().trimEnd()
 
+        viewModelScope.launch {
+            if (isEditing()) {
+                listRepository.updateList(
+                    listId,
+                    trimmedName,
+                    trimmedDescription,
+                    colorId,
+                    iconId
+                )
+            } else {
+                listRepository.createList(trimmedName, trimmedDescription, colorId, iconId)
+            }
+        }
     }
+
+    fun isEditing() : Boolean = listId != 0L
 
 }

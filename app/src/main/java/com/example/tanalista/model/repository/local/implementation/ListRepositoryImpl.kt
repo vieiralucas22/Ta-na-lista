@@ -20,6 +20,23 @@ class ListRepositoryImpl @Inject constructor(
             listDAO.insertList(listEntity)
         }
 
+    override suspend fun updateList(
+        listId: Long,
+        name: String,
+        description: String,
+        colorId: Int,
+        iconId: Int
+    ) = withContext(coroutineDispatcherProvider.io) {
+        val listEntity = ListEntity(name, description, colorId, iconId).apply { id = listId }
+
+        listDAO.updateList(listEntity)
+    }
+
+    override suspend fun getListById(listId: Long): ListEntity? =
+        withContext(coroutineDispatcherProvider.io) {
+            listDAO.getListById(listId)
+        }
+
     override fun getAllListsFromDatabase(): Flow<List<ListEntity>> = listDAO.getAllLists()
 
     override suspend fun deleteList(listId: Long) = withContext(coroutineDispatcherProvider.io) {

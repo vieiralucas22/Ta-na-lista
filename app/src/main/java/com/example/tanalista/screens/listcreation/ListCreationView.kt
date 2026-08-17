@@ -1,9 +1,7 @@
 package com.example.tanalista.screens.listcreation
 
-import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -19,6 +17,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -35,13 +34,13 @@ fun ListCreationView(viewModel: ListCreationViewModel, onBackAction: () -> Unit)
     val uiState = viewModel.uiState.value
 
     LaunchedEffect(viewModel) {
-        Log.d("Lucas", "LaunchedEffect")
         viewModel.initializeScreenData()
     }
 
     Scaffold(
         topBar = {
             HeaderListCreationView(
+                isEditing = viewModel.isEditing(),
                 modifier =
                     Modifier
                         .background(colorResource(R.color.white))
@@ -73,7 +72,7 @@ fun ListCreationView(viewModel: ListCreationViewModel, onBackAction: () -> Unit)
                     onBackAction()
                 },
                 onConfirmAction = {
-                    viewModel.createList()
+                    viewModel.saveList()
                     onBackAction()
                 }
             )
@@ -82,10 +81,10 @@ fun ListCreationView(viewModel: ListCreationViewModel, onBackAction: () -> Unit)
 }
 
 @Composable
-fun HeaderListCreationView(modifier: Modifier) {
+fun HeaderListCreationView(modifier: Modifier, isEditing: Boolean = false) {
     Row(modifier = modifier, horizontalArrangement = Arrangement.Center) {
         Text(
-            "Create a new list",
+            text = getTitle(isEditing),
             fontSize = 18.sp,
             fontWeight = FontWeight.Bold
         )
@@ -103,7 +102,11 @@ fun ContentListCreationView(
 ) {
     Column(modifier = modifier.padding(top = 16.dp)) {
 
-        TextFieldComponent(state.listNameTextFieldState, maxChars = 20, maxLines = 1) { onListNameChanged(it) }
+        TextFieldComponent(
+            state.listNameTextFieldState,
+            maxChars = 20,
+            maxLines = 1
+        ) { onListNameChanged(it) }
 
         Spacer(modifier = Modifier.height(16.dp))
 
@@ -183,3 +186,7 @@ fun FormSection(
         }
     }
 }
+
+@Composable
+fun getTitle(isEditing: Boolean): String =
+    if (isEditing) stringResource(R.string.edit_list) else stringResource(R.string.create_a_new_list)

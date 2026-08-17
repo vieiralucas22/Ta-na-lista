@@ -27,16 +27,19 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.tanalista.R
 import com.example.tanalista.dsm.bottomsheet.composable.BottomSheetComponent
+import com.example.tanalista.screens.Routes
+import com.example.tanalista.screens.home.action.DeleteAction
+import com.example.tanalista.screens.home.action.EditAction
 import com.example.tanalista.screens.home.composable.ListComponentItem
 import com.example.tanalista.screens.home.model.HomeUiState
 
 @Composable
 fun HomeView(
     viewModel: HomeViewModel,
-    onCreateListAction: () -> Unit = {},
-    onListClick: (Long) -> Unit = {},
+    navController: NavController,
 ) {
     val uiState = viewModel.uiState.collectAsState().value
 
@@ -51,7 +54,9 @@ fun HomeView(
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = onCreateListAction,
+                onClick = {
+                    navController.navigate(Routes.listCreationScreen(0L))
+                },
                 containerColor = colorResource(R.color.floatingButton),
                 contentColor = colorResource(R.color.white),
             ) {
@@ -64,7 +69,9 @@ fun HomeView(
         content = { paddingValues ->
             ContentHome(
                 state = uiState,
-                onListClick = onListClick,
+                onListClick = { listId ->
+                    navController.navigate(Routes.cartScreen(listId))
+                },
                 onListLongClick = { listId ->
                     viewModel.showBottomSheet(listId)
                 },
@@ -78,8 +85,18 @@ fun HomeView(
                 onDismissRequest = {
                     viewModel.dismissBottomSheet()
                 },
-                onBottomSheetButtonAction = {
-                    viewModel.handleWithBottomSheetActions(action = it)
+                onBottomSheetButtonAction = { action ->
+                    when (action) {
+                        is EditAction -> {
+                            navController.navigate(Routes.listCreationScreen(action.listId))
+                            viewModel.dismissBottomSheet()
+                        }
+                        is DeleteAction -> {
+                            viewModel.deleteList(action.listId)
+                        }
+
+                        else -> Unit
+                    }
                 }
             )
         }

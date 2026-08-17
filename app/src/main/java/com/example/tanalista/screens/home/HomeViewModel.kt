@@ -87,16 +87,9 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun handleWithBottomSheetActions(action: BottomSheetButtonAction) {
+    fun deleteList(listId: Long) {
         viewModelScope.launch {
-            when (action) {
-                is EditAction -> {}
-                is DeleteAction -> {
-                    listRepository.deleteList(action.listId)
-                }
-
-                else -> Unit
-            }
+                    listRepository.deleteList(listId)
         }
     }
 }
