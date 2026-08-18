@@ -27,9 +27,10 @@ data class ListCreationScreenState(
             ),
             iconPickerState = IconPickerState(
                 icons = listOf(
-                    IconState(R.drawable.ic_shopping_cart_fill, isSelected = false),
+                    IconState(R.drawable.ic_shopping_cart_fill),
                 ),
-                sectionTitle = "Icon",
+                iconSelected = IconState(IconPickerState.DEFAULT_ICONS[0]),
+                sectionTitle = R.string.icon,
             ),
             footerState = FooterState(
                 ButtonState(R.string.cancel),

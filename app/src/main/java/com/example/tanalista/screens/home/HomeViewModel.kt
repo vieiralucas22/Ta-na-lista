@@ -89,7 +89,7 @@ class HomeViewModel @Inject constructor(
 
     fun deleteList(listId: Long) {
         viewModelScope.launch {
-                    listRepository.deleteList(listId)
+            listRepository.deleteList(listId)
         }
     }
 }

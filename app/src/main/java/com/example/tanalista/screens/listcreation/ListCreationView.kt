@@ -17,6 +17,7 @@ import com.example.tanalista.dsm.colorpicker.ColorPiker
 import com.example.tanalista.screens.listcreation.model.ListCreationScreenState
 import com.example.tanalista.dsm.colorpicker.model.ColorState
 import com.example.tanalista.dsm.footer.Footer
+import com.example.tanalista.dsm.iconpicker.IconPicker
 import com.example.tanalista.dsm.iconpicker.model.IconState
 import com.example.tanalista.dsm.textfield.TextFieldComponent
 
@@ -112,29 +113,9 @@ fun ContentListCreationView(
 
         Spacer(modifier = Modifier.height(20.dp))
 
-//        FormSection(sectionName = state.iconPickerState.sectionTitle) {
-//
-//            LazyVerticalGrid(
-//                columns = GridCells.Fixed(4),
-//                verticalArrangement = Arrangement.spacedBy(12.dp),
-//                horizontalArrangement = Arrangement.spacedBy(12.dp)
-//            ) {
-//                items(state.iconPickerState.icons) { icon ->
-//                    Box(
-//                        contentAlignment = Alignment.Center,
-//                        modifier = Modifier
-//                            .size(52.dp)
-//                            .clip(RoundedCornerShape(12.dp))
-//                            .background(
-//                                if (icon.isSelected) Color.LightGray else Color.Transparent
-//                            )
-//                            .clickable { onSelectIcon(icon) }
-//                    ) {
-//                        Icon(painter = painterResource(icon.iconId), contentDescription = null)
-//                    }
-//                }
-//            }
-//        }
+        IconPicker(state.iconPickerState) { icon ->
+            onSelectIcon(icon)
+        }
 
     }
 }

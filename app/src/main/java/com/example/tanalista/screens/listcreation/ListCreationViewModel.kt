@@ -30,17 +30,6 @@ class ListCreationViewModel @Inject constructor(
     private val _uiState = mutableStateOf(ListCreationScreenState.DEFAULT_STATE)
     val uiState: State<ListCreationScreenState> = _uiState
 
-    private val iconOptions = listOf(
-        R.drawable.ic_shopping_cart_fill,
-        R.drawable.ic_home_fill,
-        R.drawable.ic_heart_fill,
-        R.drawable.ic_book_open_cover_fill,
-        R.drawable.ic_hamburger_fill,
-        R.drawable.ic_medicine_fill,
-        R.drawable.ic_shopping_bag_fill,
-        R.drawable.ic_dog_fill,
-    )
-
     fun initializeScreenData() {
         viewModelScope.launch {
 
@@ -49,9 +38,7 @@ class ListCreationViewModel @Inject constructor(
             _uiState.value = ListCreationScreenState(
                 colorPickerState = ColorPickerState(
                     colors = ColorPickerState.DEFAULT_COLORS.map { colorId ->
-                        ColorState(
-                            colorId = colorId,
-                        )
+                        ColorState(colorId = colorId)
                     },
                     colorSelected = if (existingList != null) ColorState(existingList.colorId) else ColorState(
                         ColorPickerState.DEFAULT_COLORS[0]
@@ -59,13 +46,11 @@ class ListCreationViewModel @Inject constructor(
                     sectionTitle = R.string.color,
                 ),
                 iconPickerState = IconPickerState(
-                    icons = iconOptions.map { iconId ->
-                        IconState(
-                            iconId,
-                            isSelected = iconId == (existingList?.iconId ?: iconOptions.first())
-                        )
-                    },
-                    sectionTitle = "Icon",
+                    icons = IconPickerState.DEFAULT_ICONS.map { iconId -> IconState( iconId = iconId) },
+                    iconSelected = if (existingList != null) IconState(existingList.iconId) else IconState(
+                        IconPickerState.DEFAULT_ICONS[0]
+                    ),
+                    sectionTitle = R.string.icon,
                 ),
                 footerState = FooterState(
                     ButtonState(R.string.cancel),
@@ -116,14 +101,14 @@ class ListCreationViewModel @Inject constructor(
     fun updateSelectedIcon(icon: IconState) {
         val iconPickerState = _uiState.value.iconPickerState
         _uiState.value =
-            _uiState.value.copy(iconPickerState = iconPickerState.updateSelectedIcon(icon))
+            _uiState.value.copy(iconPickerState = iconPickerState.copy(iconSelected = icon))
     }
 
     fun saveList() {
         val name = uiState.value.listNameTextFieldState.value
         val description = uiState.value.listDescriptionTextFieldState.value
         val colorId = uiState.value.colorPickerState.colorSelected.colorId
-        val iconId = uiState.value.iconPickerState.icons.first { it.isSelected }.iconId
+        val iconId = uiState.value.iconPickerState.iconSelected.iconId
 
         if (name.isBlank() || description.isBlank()) {
 
