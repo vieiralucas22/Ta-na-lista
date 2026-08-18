@@ -37,4 +37,6 @@
     <!--  List creation screen strings  -->
     <string name="edit_list">Edit list</string>
     <string name="create_a_new_list">Create a new list</string>
+    <string name="color">Color</string>
+    <string name="icon">Icon</string>
 </resources>

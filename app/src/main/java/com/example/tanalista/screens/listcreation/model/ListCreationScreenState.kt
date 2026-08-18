@@ -22,7 +22,7 @@ data class ListCreationScreenState(
                 colors = listOf(
                     ColorState(R.color.light_blue, isSelected = false),
                 ),
-                sectionTitle = "Color",
+                sectionTitle = R.string.color,
             ),
             iconPickerState = IconPickerState(
                 icons = listOf(

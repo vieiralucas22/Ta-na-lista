@@ -30,15 +30,6 @@ class ListCreationViewModel @Inject constructor(
     private val _uiState = mutableStateOf(ListCreationScreenState.DEFAULT_STATE)
     val uiState: State<ListCreationScreenState> = _uiState
 
-    private val colorOptions = listOf(
-        R.color.light_blue,
-        R.color.light_green,
-        R.color.light_yellow,
-        R.color.light_red,
-        R.color.light_pink,
-        R.color.light_aqua_green,
-    )
-
     private val iconOptions = listOf(
         R.drawable.ic_shopping_cart_fill,
         R.drawable.ic_home_fill,
@@ -57,13 +48,14 @@ class ListCreationViewModel @Inject constructor(
 
             _uiState.value = ListCreationScreenState(
                 colorPickerState = ColorPickerState(
-                    colors = colorOptions.map { colorId ->
+                    colors = ColorPickerState.DEFAULT_COLORS.map { colorId ->
                         ColorState(
-                            colorId,
-                            isSelected = colorId == (existingList?.colorId ?: colorOptions.first())
+                            colorId = colorId,
+                            isSelected = colorId == (existingList?.colorId
+                                ?: ColorPickerState.DEFAULT_COLORS[0])
                         )
                     },
-                    sectionTitle = "Color",
+                    sectionTitle = R.string.color,
                 ),
                 iconPickerState = IconPickerState(
                     icons = iconOptions.map { iconId ->
@@ -164,6 +156,6 @@ class ListCreationViewModel @Inject constructor(
         }
     }
 
-    fun isEditing() : Boolean = listId != 0L
+    fun isEditing(): Boolean = listId != 0L
 
 }
