@@ -51,10 +51,11 @@ class ListCreationViewModel @Inject constructor(
                     colors = ColorPickerState.DEFAULT_COLORS.map { colorId ->
                         ColorState(
                             colorId = colorId,
-                            isSelected = colorId == (existingList?.colorId
-                                ?: ColorPickerState.DEFAULT_COLORS[0])
                         )
                     },
+                    colorSelected = if (existingList != null) ColorState(existingList.colorId) else ColorState(
+                        ColorPickerState.DEFAULT_COLORS[0]
+                    ),
                     sectionTitle = R.string.color,
                 ),
                 iconPickerState = IconPickerState(
@@ -109,7 +110,7 @@ class ListCreationViewModel @Inject constructor(
     fun updateSelectedColor(color: ColorState) {
         val colorPickerState = _uiState.value.colorPickerState
         _uiState.value =
-            _uiState.value.copy(colorPickerState = colorPickerState.updateSelectedColor(color))
+            _uiState.value.copy(colorPickerState = colorPickerState.copy(colorSelected = color))
     }
 
     fun updateSelectedIcon(icon: IconState) {
@@ -121,7 +122,7 @@ class ListCreationViewModel @Inject constructor(
     fun saveList() {
         val name = uiState.value.listNameTextFieldState.value
         val description = uiState.value.listDescriptionTextFieldState.value
-        val colorId = uiState.value.colorPickerState.colors.first { it.isSelected }.colorId
+        val colorId = uiState.value.colorPickerState.colorSelected.colorId
         val iconId = uiState.value.iconPickerState.icons.first { it.isSelected }.iconId
 
         if (name.isBlank() || description.isBlank()) {

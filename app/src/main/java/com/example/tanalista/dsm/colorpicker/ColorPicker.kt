@@ -22,22 +22,30 @@ import com.example.tanalista.dsm.formsection.FormSection
 fun ColorPiker(state: ColorPickerState, onSelectColor: (ColorState) -> Unit) {
     FormSection(sectionName = state.sectionTitle) {
         Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+            state.colors.forEach { colorState ->
+                val isSelected = state.colorSelected == colorState
 
-            state.colors.forEach { color ->
-                Box(
-                    modifier = Modifier
-                        .size(42.dp)
-                        .clip(CircleShape)
-                        .background(color = colorResource(color.colorId))
-                        .border(
-                            width = if (color.isSelected) 2.dp else 0.dp,
-                            color = Color.Black,
-                            shape = CircleShape
-                        )
-                        .clickable { onSelectColor(color) }
-                )
+                ColorButton(colorState, isSelected) {
+                    onSelectColor(colorState)
+                }
             }
         }
     }
+}
+
+@Composable
+fun ColorButton(state: ColorState, isSelected: Boolean, onSelect: () -> Unit) {
+    Box(
+        modifier = Modifier
+            .size(42.dp)
+            .clip(CircleShape)
+            .background(color = colorResource(state.colorId))
+            .border(
+                width = if (isSelected) 2.dp else 0.dp,
+                color = Color.Black,
+                shape = CircleShape
+            )
+            .clickable { onSelect() }
+    )
 }
 

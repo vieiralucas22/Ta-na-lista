@@ -20,9 +20,10 @@ data class ListCreationScreenState(
         val DEFAULT_STATE = ListCreationScreenState(
             colorPickerState = ColorPickerState(
                 colors = listOf(
-                    ColorState(R.color.light_blue, isSelected = false),
+                    ColorState(R.color.light_blue),
                 ),
                 sectionTitle = R.string.color,
+                colorSelected = ColorState(ColorPickerState.DEFAULT_COLORS[0])
             ),
             iconPickerState = IconPickerState(
                 icons = listOf(
