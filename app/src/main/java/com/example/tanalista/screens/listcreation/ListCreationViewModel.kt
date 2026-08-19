@@ -104,7 +104,7 @@ class ListCreationViewModel @Inject constructor(
             _uiState.value.copy(iconPickerState = iconPickerState.copy(iconSelected = icon))
     }
 
-    fun saveList() {
+    fun saveList() : Boolean {
         val name = uiState.value.listNameTextFieldState.value
         val description = uiState.value.listDescriptionTextFieldState.value
         val colorId = uiState.value.colorPickerState.colorSelected.colorId
@@ -121,7 +121,7 @@ class ListCreationViewModel @Inject constructor(
                     isError = description.isBlank()
                 )
             )
-            return
+            return false
         }
 
         val trimmedName = name.trimStart().trimEnd()
@@ -140,6 +140,7 @@ class ListCreationViewModel @Inject constructor(
                 listRepository.createList(trimmedName, trimmedDescription, colorId, iconId)
             }
         }
+        return true
     }
 
     fun isEditing(): Boolean = listId != 0L

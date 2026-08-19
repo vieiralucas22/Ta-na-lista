@@ -65,8 +65,8 @@ fun ListCreationView(viewModel: ListCreationViewModel, onBackAction: () -> Unit)
                     onBackAction()
                 },
                 onConfirmAction = {
-                    viewModel.saveList()
-                    //onBackAction()
+                    if (viewModel.saveList())
+                        onBackAction()
                 }
             )
         }
